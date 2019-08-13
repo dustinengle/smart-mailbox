@@ -1,21 +1,23 @@
-import * as WebBrowser from 'expo-web-browser'
+
+import { connect } from 'react-redux'
+import { fetchLogin } from '../lib/Actions'
 import React from 'react'
 import {
   Alert,
   Button,
-  Image,
-  Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native'
 
 import { MonoText } from '../components/StyledText'
 
-export default class RegisterScreen extends React.Component {
+class RegisterScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  }
+
   constructor(props) {
     super(props)
     this.state = { 
@@ -47,14 +49,18 @@ export default class RegisterScreen extends React.Component {
     this._onSetActive('mailbox')
   }
 
-  _onSubmitLogin = () => {
-    Alert.alert('Success', 'Login information submitted successfully.')
-    this._onSetActive('gateway')
-  }
-
   _onSubmitMailbox = () => {
     Alert.alert('Success', 'Mailbox information submitted successfully.')
     this.props.navigation.navigate('Dashboard')
+  }
+
+  _onSubmitRegister = () => {
+    this.props.login(this.state.email, this.state.pass)
+      .then(res => {
+        Alert.alert('Success', 'Login information submitted successfully.')
+        this._onSetActive('gateway')
+      })
+      .catch(err => Alert.alert('Error', err))
   }
 
   render() {
@@ -66,26 +72,30 @@ export default class RegisterScreen extends React.Component {
           { this.state.active.login && 
             <View>
               <MonoText>Login Information</MonoText>
+              <MonoText>{ this.props.email }</MonoText>
               <TextInput 
                 autoCompleteType="email"
                 keyboardType="email-address"
                 onChangeText={ email => this.setState({ email }) } 
                 placeholder="Email Address"
-                style={ styles.input } />
+                style={ styles.input }
+                value={ this.state.email } />
               <TextInput 
                 autoCompleteType="password" 
                 onChangeText={ pass => this.setState({ pass }) } 
                 placeholder="Password"
                 secureTextEntry={ true }
-                style={ styles.input } />
+                style={ styles.input }
+                value={ this.state.pass } />
               <TextInput 
                 autoCompleteType="password"
                 onChangeText={ confirm => this.setState({ confirm }) } 
                 placeholder="Confirm Password"
                 secureTextEntry={ true }
-                style={ styles.input } />
+                style={ styles.input }
+                value={ this.state.confirm } />
               <Button
-                onPress={ this._onSubmitLogin }
+                onPress={ this._onSubmitRegister }
                 style={ styles.button }
                 title="Create Login" />
             </View>
@@ -124,10 +134,6 @@ export default class RegisterScreen extends React.Component {
   }
 }
 
-RegisterScreen.navigationOptions = {
-  header: null,
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -150,3 +156,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 })
+
+const mapDispatchToProps = dispatch => ({
+  login: (email, pass) => fetchLogin(email, pass)(dispatch),
+})
+
+const mapStateToProps = state => ({
+  email: state.email,
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen)
