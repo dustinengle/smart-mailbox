@@ -1,12 +1,31 @@
 
 import Storage from '../constants/Storage'
 
+import { getItem } from '../lib/Storage'
+
 const checkForError = response => {
     return response.json()
 }
 
-const fixOptions = options => {
-    token = Storage.getItem(Storage.TOKEN)
+const expandQueryParams = (url, options = {}) => {
+    let query = ''
+    if (!options.query) return url
+
+    for(let [k, v] in Object.entries(options)) {
+        query += `${k}=${encodeURIComponent(v)}&`
+    }
+
+    if (query[query.length - 1] === '&') {
+        query = query.substr(0, query.length - 1)
+    }
+
+    return `${url}?${query}`
+}
+
+const fixOptions = async (options) => {
+    delete options['query']
+
+    token = await getItem(Storage.TOKEN)
     
     return { 
         ...options, 
@@ -20,39 +39,62 @@ const fixOptions = options => {
     }
 }
 
-export const Delete = (url, options = {}) => {
-    options = fixOptions(options)
-    options.method = 'DELETE'
+export const Delete = async (url, options = {}) => {
+    const opts = await fixOptions(options)
+    opts.method = 'DELETE'
 
-    return fetch(url, options)
+    url = expandQueryParams(url, options)
+
+    console.log('Delete', url, opts)
+    return fetch(url, opts)
         .then(checkForError)
 }
 
-export const Get = (url, options = {}) => {
-    options = fixOptions(options)
+export const Get = async (url, options = {}) => {
+    const opts = await fixOptions(options)
 
-    return fetch(url, options)
+    url = expandQueryParams(url, opts)
+
+    console.log('Get', url, opts)
+    return fetch(url, opts)
         .then(checkForError)
 }
 
-export const Post = (url, data, options = {}) => {
-    options = fixOptions(options)
-    options.body = JSON.stringify(data)
-    options.method = 'POST'
+export const Post = async (url, data, options = {}) => {
+    const opts = await fixOptions(options)
+    opts.body = JSON.stringify(data)
+    opts.method = 'POST'
 
-    console.log('Post', url, options)
-    return fetch(url, options)
+    url = expandQueryParams(url, options)
+
+    console.log('Post', url, opts)
+    return fetch(url, opts)
         .then(checkForError)   
 }
 
-export const PostNoAuth = (url, data, options = {}) => {
-    options = fixOptions(options)
-    options.body = JSON.stringify(data)
-    options.headers.Authorization = undefined
-    options.method = 'POST'
+export const PostNoAuth = async (url, data, options = {}) => {
+    const opts = await fixOptions(options)
+    opts.body = JSON.stringify(data)
+    opts.method = 'POST'
+
+    delete opts.headers['Authorization']
     
-    console.log('PostNoAuth', url, options)
-    return fetch(url, options)
+    url = expandQueryParams(url, options)
+
+    console.log('PostNoAuth', url, opts)
+    return fetch(url, opts)
+        .then(checkForError)   
+}
+
+export const Put = async (url, data, options = {}) => {
+    const opts = await fixOptions(options)
+    opts.body = JSON.stringify(data)
+    opts.method = 'PUT'
+
+    url = expandQueryParams(url, options)
+
+    console.log('Put', url, opts)
+    return fetch(url, opts)
         .then(checkForError)   
 }
 
@@ -60,4 +102,5 @@ export default {
     Delete,
     Get,
     Post,
+    Put,
 }

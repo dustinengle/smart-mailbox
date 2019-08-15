@@ -3,7 +3,7 @@ import Colors from '../constants/Colors'
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { fetchChannels, fetchThings } from '../lib/Actions'
+import { fetchChannels } from '../lib/Actions'
 
 import {
   StyleSheet,
@@ -13,15 +13,13 @@ import {
 } from 'react-native'
 import Toolbar from '../components/Toolbar'
 
-class DashboardScreen extends React.Component {
+class ChannelsScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
   }
 
-  async componentDidMount() {
-    await this.props.load()
-  }
+  _onRefresh = async () => await this.props.load()
 
   render() {
     return (
@@ -34,7 +32,6 @@ class DashboardScreen extends React.Component {
         </View>
         <View style={ styles.contentContainer }>
           <Text>Channels: { this.props.channels.length }</Text>
-          <Text>Things: { this.props.things.length }</Text>
         </View>
       </View>
     )
@@ -60,24 +57,17 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
+    flexDirection: 'column',
     padding: 30,
   },
 })
 
 const mapDispatchToProps = dispatch => ({
-  load: async () => {
-    return Promise.all([
-      fetchChannels()(dispatch),
-      fetchThings()(dispatch),
-    ])
-  },
+  load: () => fetchChannels()(dispatch),
 })
 
 const mapStateToProps = state => ({
   channels: state.channels,
-  email: state.email,
-  messages: state.messages,
-  things: state.things,
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelsScreen)

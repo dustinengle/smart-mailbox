@@ -1,17 +1,19 @@
 
-import { connect } from 'react-redux'
-import { fetchLogin } from '../lib/Actions'
+import Colors from '../constants/Colors'
 import React from 'react'
+
+import { connect } from 'react-redux'
+import { fetchCheckEmail, fetchRegister } from '../lib/Actions'
+
 import {
   Alert,
   Button,
   ScrollView,
   StyleSheet,
+  Text,
   TextInput,
   View,
 } from 'react-native'
-
-import { MonoText } from '../components/StyledText'
 
 class RegisterScreen extends React.Component {
   static navigationOptions = {
@@ -21,46 +23,41 @@ class RegisterScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = { 
-      active: {
-        login: true,
-        gateway: false,
-        mailbox: false,
-      },
       confirm: '', 
       email: '', 
-      gateway: '',
+      errors: { confirm: null, email: null, pass: null },
       pass: '', 
-      sn: 0,
     }
   }
 
-  _onSetActive = (section) => {
-    const active = {
-      login: false,
-      gateway: false,
-      mailbox: false,
-    }
-    active[section] = true
-    this.setState({ active })
-  }
-
-  _onSubmitGateway = () => {
-    Alert.alert('Success', 'Gateway information submitted successfully.')
-    this._onSetActive('mailbox')
-  }
-
-  _onSubmitMailbox = () => {
-    Alert.alert('Success', 'Mailbox information submitted successfully.')
-    this.props.navigation.navigate('Dashboard')
-  }
+  _onChange = (k, v) => this.setState({ [k]: v }, this._validate)
 
   _onSubmitRegister = () => {
-    this.props.login(this.state.email, this.state.pass)
-      .then(res => {
-        Alert.alert('Success', 'Login information submitted successfully.')
-        this._onSetActive('gateway')
-      })
-      .catch(err => Alert.alert('Error', err))
+    this._validate(() => {
+      const { confirm, email, pass } = this.state.errors
+      if (confirm || email || pass) return
+
+      this.props.register(this.state.email, this.state.pass)
+        .then(res => {
+          Alert.alert('Success', 'New account created.')
+          this.props.navigation.navigate('Dashboard')
+        })
+        .catch(err => Alert.alert('Error', err))
+    })
+  }
+
+  _validate = (cb) => {
+    const errors = { confirm: null, email: null, pass: null }
+    if (!this.state.confirm || this.state.confirm !== this.state.pass) {
+      errors.confirm = 'Passwords do not match.'
+    }
+    if (!this.state.email) {
+      errors.email = 'Email address required.'
+    }
+    if (!this.state.pass) {
+      errors.pass = 'Password is required.'
+    }
+    this.setState({ errors }, cb)
   }
 
   render() {
@@ -69,65 +66,43 @@ class RegisterScreen extends React.Component {
         <ScrollView
           style={ styles.container }
           contentContainerStyle={ styles.contentContainer }>
-          { this.state.active.login && 
             <View>
-              <MonoText>Login Information</MonoText>
-              <MonoText>{ this.props.email }</MonoText>
+              <Text>Register Account</Text>
               <TextInput 
                 autoCompleteType="email"
                 keyboardType="email-address"
-                onChangeText={ email => this.setState({ email }) } 
+                onChangeText={ v => this._onSubmitEmail(v) } 
                 placeholder="Email Address"
-                style={ styles.input }
+                style={ this.state.errors.email ? styles.inputWithError : styles.input }
                 value={ this.state.email } />
+              { this.state.errors.email && 
+                <Text style={ styles.inputErrorText }>{ this.state.errors.email }</Text> 
+              }
               <TextInput 
                 autoCompleteType="password" 
-                onChangeText={ pass => this.setState({ pass }) } 
+                onChangeText={ v => this._onChange('pass', v) } 
                 placeholder="Password"
                 secureTextEntry={ true }
                 style={ styles.input }
                 value={ this.state.pass } />
+              { this.state.errors.pass && 
+                <Text style={ styles.inputErrorText }>{ this.state.errors.pass }</Text> 
+              }  
               <TextInput 
                 autoCompleteType="password"
-                onChangeText={ confirm => this.setState({ confirm }) } 
+                onChangeText={ v => this._onChange('confirm', v) } 
                 placeholder="Confirm Password"
                 secureTextEntry={ true }
                 style={ styles.input }
                 value={ this.state.confirm } />
+              { this.state.errors.confirm && 
+                <Text style={ styles.inputErrorText }>{ this.state.errors.confirm }</Text> 
+              }
               <Button
                 onPress={ this._onSubmitRegister }
                 style={ styles.button }
-                title="Create Login" />
+                title="Register Account" />
             </View>
-          }
-          { this.state.active.gateway &&
-            <View>
-              <MonoText>Gateway Registration</MonoText>
-              <TextInput 
-                keyboardType="ascii-capable"
-                onChangeText={ gateway => this.setState({ gateway }) } 
-                placeholder="Gateway ID"
-                style={ styles.input } />
-              <Button
-                onPress={ this._onSubmitGateway }
-                style={ styles.button }
-                title="Register Gateway" />
-            </View>
-          }
-          { this.state.active.mailbox && 
-            <View>
-              <MonoText>Mailbox Registration</MonoText>
-              <TextInput 
-                keyboardType="number-pad"
-                onChangeText={ sn => this.setState({ sn }) } 
-                placeholder="Serial Number"
-                style={ styles.input } />
-              <Button
-                onPress={ this._onSubmitMailbox }
-                style={ styles.button }
-                title="Register Mailbox" />
-            </View>
-          }
         </ScrollView>
       </View>
     )
@@ -155,14 +130,24 @@ const styles = StyleSheet.create({
   input: {
     padding: 10,
   },
+  inputErrorText: {
+    color: 'red',
+    padding: 2,
+  },
+  inputWithError: {
+    color: Colors.errorText,
+    backgroundColor: Colors.errorBackground,
+    borderColor: Colors.errorBackground,
+    padding: 10,
+  },
 })
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, pass) => fetchLogin(email, pass)(dispatch),
+  checkEmail: email => fetchCheckEmail(email)(dispatch),
+  register: (email, pass) => fetchRegister(email, pass)(dispatch),
 })
 
 const mapStateToProps = state => ({
-  email: state.email,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen)

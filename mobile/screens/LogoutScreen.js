@@ -1,46 +1,65 @@
-import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+
+import Colors from '../constants/Colors'
+import React from 'react'
+import Storage from '../constants/Storage'
+
+import { clearItem } from '../lib/Storage'
+
 import {
-  Image,
-  Platform,
-  ScrollView,
+  Button,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-} from 'react-native';
+} from 'react-native'
 
-import { MonoText } from '../components/StyledText';
+export default class LogoutScreen extends React.Component {
+  _onLogout = () => {
+    clearItem(Storage.TOKEN)
+    this.props.navigation.navigate('AuthLoadingScreen')
+  }
 
-export default function LogoutScreen() {
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <MonoText>Logout</MonoText>
-      </ScrollView>
-    </View>
-  );
+  render() {
+    return (
+      <View style={ styles.container }>
+        <View style={styles.contentContainer}>
+          <Text>
+            If you logout you will need to login again to access your data.  
+            Are you sure you want to logout?
+          </Text>
+          <Button
+            onPress={ ev => this._onLogout() }
+            style={ styles.button }
+            title='Yes' />
+        </View>
+      </View>
+    )
+  }
 }
 
 LogoutScreen.navigationOptions = {
-  header: null,
-};
+  title: 'Logout',
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
+    flexDirection: 'column',
+    marginTop: 24,
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  actionContainer: {
+    backgroundColor: Colors.actionBackground,
+    flexDirection: 'row',
+    paddingLeft: 10,
+  },
+  actionText: {
+    color: Colors.tintColor,
+    fontSize: 12,
+    height: 28,
+    lineHeight: 28,
   },
   contentContainer: {
-    paddingTop: 30,
+    flex: 1,
+    flexDirection: 'column',
+    padding: 30,
   },
-});
+})

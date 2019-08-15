@@ -6,7 +6,7 @@ exports[`App renders the loading screen 1`] = `
   onFinish={[Function]}
   startAsync={[Function]}
 />
-`;
+`
 
 exports[`App renders the root without loading screen 1`] = `
 <View
@@ -19,4 +19,4 @@ exports[`App renders the root without loading screen 1`] = `
 >
   <AppNavigator />
 </View>
-`;
+`

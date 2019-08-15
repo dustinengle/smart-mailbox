@@ -1,13 +1,9 @@
 
-export const CHANNELS = 'CHANNELS'
-export const EMAIL = 'EMAIL'
-export const LOADING = 'LOADING'
-export const MESSAGES = 'MESSAGES'
-export const THINGS = 'THINGS'
+import Reducers from '../constants/Reducers'
 
 const channels = (state = [], action) => {
     switch(action.type) {
-        case CHANNELS:
+        case Reducers.CHANNELS:
             return [...action.payload]
         default:
             return state
@@ -16,7 +12,7 @@ const channels = (state = [], action) => {
 
 const email = (state = null, action) => {
     switch(action.type) {
-        case EMAIL:
+        case Reducers.EMAIL:
             return action.payload
         default:
             return state
@@ -25,7 +21,7 @@ const email = (state = null, action) => {
 
 const loading = (state = false, action) => {
     switch(action.type) {
-        case LOADING:
+        case Reducers.LOADING:
             return action.payload
         default:
             return state
@@ -34,7 +30,7 @@ const loading = (state = false, action) => {
 
 const messages = (state = [], action) => {
     switch(action.type) {
-        case MESSAGES:
+        case Reducers.MESSAGES:
             return [...action.payload]
         default:
             return state
@@ -43,27 +39,17 @@ const messages = (state = [], action) => {
 
 const things = (state = [], action) => {
     switch(action.type) {
-        case THINGS:
+        case Reducers.THINGS:
             return [...action.payload]
         default:
             return state
     }
 }
 
-export const Reducers = {
+export default {
     channels,
     email, 
     loading,
     messages,
     things,
-}
-
-export default {
-    CHANNELS,
-    EMAIL,
-    LOADING,
-    MESSAGES,
-    THINGS,
-
-    Reducers,
 }

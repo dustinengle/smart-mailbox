@@ -1,5 +1,5 @@
 
-const API_URL = 'https://streamiot.dev' // 165.22.158.157
+export const API_URL = 'https://streamiot.dev' // 165.22.158.157
 
 export const ACCOUNT_BALANCE = '/api/returnbalance' // POST
 export const ACCOUNT_CHANNELS = '/channels' // GET
@@ -12,9 +12,9 @@ export const ACCOUNT_TOTALS = '/api/devicetotal' // POST
 export const CHECK_EMAIL = '/api/emailcheck' // POST
 export const CREATE_ACCOUNT = '/api/trigxaccount' // POST
 
-export const getURL = route => `${API_URL}${route}`
-
 export default {
+    API_URL,
+    
     ACCOUNT_BALANCE,
     ACCOUNT_CHANNELS,
     ACCOUNT_LOGIN,
@@ -24,6 +24,4 @@ export default {
 
     CHECK_EMAIL,
     CREATE_ACCOUNT,
-
-    getURL,
 }

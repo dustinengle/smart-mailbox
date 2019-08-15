@@ -1,17 +1,17 @@
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'
 
-import { AppLoading } from 'expo';
-import { Asset } from 'expo-asset';
-import * as Font from 'expo-font';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AppLoading } from 'expo'
+import { Asset } from 'expo-asset'
+import * as Font from 'expo-font'
+import { Platform, StatusBar, StyleSheet, View } from 'react-native'
 
-import AppNavigator from './navigation/AppNavigator';
+import AppNavigator from './navigation/AppNavigator'
 
 const SmartMailbox = props => {
-    const [isLoadingComplete, setLoadingComplete] = useState(false);
+    const [isLoadingComplete, setLoadingComplete] = useState(false)
   
     if (!isLoadingComplete && !props.skipLoadingScreen) {
       return (
@@ -20,14 +20,14 @@ const SmartMailbox = props => {
           onError={handleLoadingError}
           onFinish={() => handleFinishLoading(setLoadingComplete)}
         />
-      );
+      )
     } else {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <AppNavigator />
         </View>
-      );
+      )
     }
 }
   
@@ -44,17 +44,17 @@ async function loadResourcesAsync() {
         // remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
-    ]);
+    ])
 }
 
 function handleLoadingError(error) {
     // In this case, you might want to report the error to your error reporting
     // service, for example Sentry
-    console.warn(error);
+    console.warn(error)
 }
 
 function handleFinishLoading(setLoadingComplete) {
-    setLoadingComplete(true);
+    setLoadingComplete(true)
 }
 
 function mapStateToProps(state) {
@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
     },
-});
+})
 
 export default connect(mapStateToProps)(SmartMailbox)

@@ -1,12 +1,30 @@
-import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import MainTabNavigator from './MainTabNavigator';
+import React from 'react'
+
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+
+import AppDrawerNavigator from './AppDrawerNavigator'
+import AuthLoadingScreen from '../screens/AuthLoadingScreen'
+import AuthTabNavigator from './AuthTabNavigator'
 
 export default createAppContainer(
-  createSwitchNavigator({
-    // You could add another route here for authentication.
-    // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-    Main: MainTabNavigator,
-  })
-);
+  createSwitchNavigator(
+    {
+      App: AppDrawerNavigator,
+      AuthLoadingScreen,
+      Auth: AuthTabNavigator,
+    },
+    {
+      defaultNavigationOptions: {
+        headerStyle: {
+          backgroundColor: '#f4511e',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      },
+      initialRouteName: 'AuthLoadingScreen',
+    }
+  )
+)
