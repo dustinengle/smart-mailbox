@@ -1,0 +1,37 @@
+
+#ifndef MAILBOX_H
+#define MAILBOX_H
+
+#include <Arduino.h>
+
+// Crypto
+void get_checksum(const unsigned char *key, const unsigned char *data, size_t size, unsigned char *buffer);
+void get_hash(const unsigned char *key, const unsigned char *data, size_t size, unsigned char *buffer);
+
+// File
+int file_init();
+int file_exists(const char *path);
+int file_remove(const char *path);
+int file_write(const char *path, unsigned char *buffer, size_t size);
+
+// LoRa
+int lora_init();
+int lora_conf(int sync_word);
+void lora_on_recv(int size);
+int lora_recv();
+int lora_send(unsigned char *buffer, size_t size);
+
+// OTP
+int otp_init();
+int otp_del(uint16_t pin);
+int otp_get(uint16_t pin);
+int otp_set(uint16_t pin);
+
+// Sensors
+uint8_t get_flag();
+uint8_t get_lock();
+uint8_t get_package();
+uint8_t get_power();
+int set_lock(uint8_t lock);
+
+#endif
