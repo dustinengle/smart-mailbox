@@ -15,9 +15,21 @@ int lora_init() {
     return E_OK;
 }
 
+void print_packet(unsigned char *buffer, int size) {
+    for (int i = 0; i < size; i++) {
+        Serial.print(buffer[i]);
+        Serial.print(" ");
+    }
+    Serial.println();
+}
+
 int lora_handle(const uint8_t *data, int size) {
     uint8_t op = data[0];
     if (op >= OP_END) return E_LORA_OP_CODE;
+    if (DEBUG) {
+        Serial.print("LORA: recieved OP code ");
+        Serial.println(op, HEX);
+    }
 
     uint16_t pin;
     int result = E_OK;
@@ -39,7 +51,8 @@ int lora_handle(const uint8_t *data, int size) {
             break;
         case OP_REGISTER:
             if (size != OP_REGISTER_SIZE) return E_LORA_MAX_SIZE;
-            LoRa.setSyncWord((int)data[1]);
+            if (DEBUG) Serial.println("LORA: setting sync word");
+            LoRa.setSyncWord((int)data[3]);
             break;
         case OP_STATUS:
             if (size != OP_STATUS_SIZE) return E_LORA_MAX_SIZE;
@@ -60,13 +73,9 @@ int lora_handle(const uint8_t *data, int size) {
             return E_LORA_OP_CODE;
     }
 
-    unsigned char *buffer_p;
-    int buffer_size;
     if (op == OP_CONNECT) {
         if (DEBUG) Serial.println("LORA: building CONNECT reply");
-        buffer_size = OP_CONNECT_SIZE;
-        unsigned char buffer[buffer_size] = {0};
-        buffer_p = buffer;
+        unsigned char buffer[OP_CONNECT_SIZE] = {0};
 
         buffer[0] = OP_CONNECT;
         buffer[1] = get_flag();
@@ -75,39 +84,36 @@ int lora_handle(const uint8_t *data, int size) {
         buffer[4] = get_power();
         
         unsigned char hash[HASH_SIZE];
-        get_hash(key, buffer, buffer_size, hash);
+        get_hash(key, buffer, OP_CONNECT_SIZE, hash);
         for (int i = 0; i < HASH_SIZE; i++) {
-            buffer[4 + 1] = hash[i];
+            buffer[i + 5] = hash[i];
         }
+
+        print_packet(buffer, OP_CONNECT_SIZE);
+        result = lora_send(buffer, OP_CONNECT_SIZE);
     } else {
         if (DEBUG) Serial.println("LORA: building ACK reply");
-        buffer_size = OP_ACK_SIZE + 1;
-        unsigned char buffer[buffer_size] = {0};
-        buffer_p = buffer;
+        unsigned char buffer[OP_ACK_SIZE] = {0};
 
         buffer[0] = OP_ACK;
+
+        unsigned char checksum[CHECKSUM_SIZE];
+        get_checksum(key, buffer, OP_ACK_SIZE, checksum);
+        for (int i = 0; i < CHECKSUM_SIZE; i++) {
+            buffer[i + 1] = checksum[i];
+        }
+        
         buffer[9] = get_flag();
         buffer[10] = get_lock();
         buffer[11] = get_package();
         buffer[12] = get_power();
-        buffer[13] = result;
-
-        unsigned char checksum[CHECKSUM_SIZE];
-        get_checksum(key, buffer, buffer_size, checksum);
-        for (int i = 0; i < CHECKSUM_SIZE; i++) {
-            buffer[i + 1] = checksum[i];
-        }
-    }
-    if (DEBUG) {
-        Serial.print("BUFFER: ");
-        Serial.print(buffer_size, DEC);
-        Serial.print(" ");
-        Serial.write(buffer_p, buffer_size);
-        Serial.println();
+        buffer[13] = (uint8_t)result;
+        
+        print_packet(buffer, OP_ACK_SIZE);
+        result = lora_send(buffer, OP_ACK_SIZE);
     }
 
-    if(lora_send(buffer_p, buffer_size)) return E_LORA_SEND;
-    return E_OK;
+    return result;
 }
 
 int lora_recv() {

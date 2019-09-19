@@ -43,7 +43,11 @@ void setup() {
 }
 
 void loop() {
-    if (lora_recv()) Serial.println("ERROR: lora recv");
+    int error = lora_recv();
+    if (error) {
+        Serial.print("ERROR: ");
+        Serial.println(error, HEX);
+    }
     // TODO: monitor for changes in sensors
     //test();
 }
