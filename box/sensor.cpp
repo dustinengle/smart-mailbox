@@ -24,7 +24,6 @@ uint8_t get_power() {
 }
 
 int set_lock(uint8_t lock) {
-    if (lock != LOCK_NO || lock != LOCK_YES) return E_LOCK_SET;
     locked_ = lock;
     return E_OK;
 }

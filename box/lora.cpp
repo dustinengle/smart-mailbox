@@ -17,7 +17,7 @@ int lora_init() {
 
 void print_packet(unsigned char *buffer, int size) {
     for (int i = 0; i < size; i++) {
-        Serial.print(buffer[i]);
+        Serial.print(buffer[i], HEX);
         Serial.print(" ");
     }
     Serial.println();
@@ -46,7 +46,7 @@ int lora_handle(const uint8_t *data, int size) {
             break;
         case OP_OTP:
             if (size != OP_OTP_SIZE) return E_LORA_MAX_SIZE;
-            pin = data[15] | (data[14] << 8);
+            pin = data[14] | (data[13] << 8);
             result = otp_set(pin);
             break;
         case OP_REGISTER:
@@ -62,7 +62,7 @@ int lora_handle(const uint8_t *data, int size) {
             break;
         case OP_UNAUTH:
             if (size != OP_UNAUTH_SIZE) return E_LORA_MAX_SIZE;
-            pin = data[15] | (data[14] << 8);
+            pin = data[14] | (data[13] << 8);
             result = otp_del(pin);
             break;
         case OP_UNLOCK:

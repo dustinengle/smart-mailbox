@@ -23,9 +23,13 @@ lock[0] = config.OP_LOCK
 
 otp = bytearray(config.OP_OTP_SIZE)
 otp[0] = config.OP_OTP
+otp[13] = 0x0b # 2827
+otp[14] = 0x0b
 
 unauth = bytearray(config.OP_UNAUTH_SIZE)
 unauth[0] = config.OP_UNAUTH
+unauth[13] = 0x0b # 2827
+unauth[14] = 0x0b
 
 packets = [
     register,
