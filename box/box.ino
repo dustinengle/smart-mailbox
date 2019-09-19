@@ -8,27 +8,6 @@ void stop(String msg) {
         ;
 }
 
-void test() {
-    uint8_t buffer[OP_STATUS_SIZE];
-    buffer[0] = OP_STATUS;
-    buffer[9] = get_flag();
-    buffer[10] = get_lock();
-    buffer[11] = get_package();
-    buffer[12] = get_power();
-    if (DEBUG) {
-        Serial.print("SENDING: ");
-        Serial.print(sizeof(buffer), DEC);
-        Serial.print(" ");
-        Serial.write(buffer, sizeof(buffer));
-        Serial.println();
-    }
-    if (lora_send((unsigned char *)buffer, OP_STATUS_SIZE)) {
-        Serial.println("ERROR: unable to send loop status packet");
-    }
-
-    delay(5000);
-}
-
 void setup() {
     Serial.begin(SERIAL_BAUD);
     if (DEBUG) {
@@ -45,9 +24,9 @@ void setup() {
 void loop() {
     int error = lora_recv();
     if (error) {
-        Serial.print("ERROR: ");
+        Serial.print("ERROR: lora recv ");
         Serial.println(error, HEX);
     }
+    
     // TODO: monitor for changes in sensors
-    //test();
 }

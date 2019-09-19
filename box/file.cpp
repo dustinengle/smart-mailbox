@@ -28,12 +28,12 @@ int file_exists(const char *path) {
 }
 
 int file_remove(const char *path) {
-    list_files();
+    if (DEBUG) list_files();
     if (!SPIFFS.remove(path)) return E_FILE_REMOVE;
     return E_OK;
 }
 
-int file_write(const char *path, unsigned char *buffer, size_t size) {
+int file_write(const char *path, unsigned char *buffer, int size) {
     File file = SPIFFS.open(path, FILE_WRITE);
 
     for (int i = 0; i < size; i++) {
@@ -41,6 +41,6 @@ int file_write(const char *path, unsigned char *buffer, size_t size) {
     }
 
     file.close();
-    list_files();
+    if (DEBUG) list_files();
     return E_OK;
 }

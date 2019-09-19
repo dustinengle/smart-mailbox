@@ -6,6 +6,14 @@
 
 unsigned char key[] = SECRET_KEY;
 
+void print_packet(unsigned char *buffer, int size) {
+    for (int i = 0; i < size; i++) {
+        Serial.print(buffer[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println();
+}
+
 int lora_init() {
     LoRa.setPins(LORA_SS_PIN, LORA_RST_PIN, LORA_DIO0_PIN);
     if (!LoRa.begin(LORA_FREQUENCY)) return E_LORA;
@@ -15,21 +23,9 @@ int lora_init() {
     return E_OK;
 }
 
-void print_packet(unsigned char *buffer, int size) {
-    for (int i = 0; i < size; i++) {
-        Serial.print(buffer[i], HEX);
-        Serial.print(" ");
-    }
-    Serial.println();
-}
-
 int lora_handle(const uint8_t *data, int size) {
     uint8_t op = data[0];
     if (op >= OP_END) return E_LORA_OP_CODE;
-    if (DEBUG) {
-        Serial.print("LORA: recieved OP code ");
-        Serial.println(op, HEX);
-    }
 
     uint16_t pin;
     int result = E_OK;
@@ -89,7 +85,7 @@ int lora_handle(const uint8_t *data, int size) {
             buffer[i + 5] = hash[i];
         }
 
-        print_packet(buffer, OP_CONNECT_SIZE);
+        if (DEBUG) print_packet(buffer, OP_CONNECT_SIZE);
         result = lora_send(buffer, OP_CONNECT_SIZE);
     } else {
         if (DEBUG) Serial.println("LORA: building ACK reply");
@@ -109,7 +105,7 @@ int lora_handle(const uint8_t *data, int size) {
         buffer[12] = get_power();
         buffer[13] = (uint8_t)result;
         
-        print_packet(buffer, OP_ACK_SIZE);
+        if (DEBUG) print_packet(buffer, OP_ACK_SIZE);
         result = lora_send(buffer, OP_ACK_SIZE);
     }
 
@@ -120,6 +116,7 @@ int lora_recv() {
     int size = LoRa.parsePacket();
     if (!size) return E_OK;
     if (DEBUG) {
+        Serial.println();
         Serial.print("LORA: received packet ");
         Serial.println(size, DEC);
     }
@@ -130,18 +127,12 @@ int lora_recv() {
         data[i] = (uint8_t)LoRa.read();
     }
 
+    if (DEBUG) print_packet(data, size);
     int result = lora_handle(data, size);
     return result;
 }
 
-int lora_send(unsigned char *buffer, size_t size) {
-    if (DEBUG) {
-        Serial.print("SEND: ");
-        Serial.print(size, DEC);
-        Serial.print(" ");
-        Serial.write(buffer, size);
-        Serial.println();
-    }
+int lora_send(unsigned char *buffer, int size) {
     if (!LoRa.beginPacket()) return E_LORA_BEGIN_PACKET;
 
     size_t size_wrote = LoRa.write(buffer, size);

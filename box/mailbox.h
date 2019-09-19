@@ -12,14 +12,14 @@ void get_hash(const unsigned char *key, const unsigned char *data, size_t size, 
 int file_init();
 int file_exists(const char *path);
 int file_remove(const char *path);
-int file_write(const char *path, unsigned char *buffer, size_t size);
+int file_write(const char *path, unsigned char *buffer, int size);
 
 // LoRa
 int lora_init();
 int lora_conf(int sync_word);
 void lora_on_recv(int size);
 int lora_recv();
-int lora_send(unsigned char *buffer, size_t size);
+int lora_send(unsigned char *buffer, int size);
 
 // OTP
 int otp_init();
