@@ -7,6 +7,10 @@
 // Crypto
 void get_checksum(const unsigned char *key, const unsigned char *data, size_t size, unsigned char *buffer);
 void get_hash(const unsigned char *key, const unsigned char *data, size_t size, unsigned char *buffer);
+int load_gw_key(unsigned char *buffer);
+int load_key(unsigned char *buffer);
+int save_gw_key(unsigned char *buffer);
+int save_key(unsigned char *buffer);
 
 // File
 int file_init();
@@ -18,6 +22,7 @@ int file_write(const char *path, unsigned char *buffer, int size);
 int lora_init();
 int lora_conf(int sync_word);
 void lora_on_recv(int size);
+int file_read(const char *path, unsigned char *buffer);
 int lora_recv();
 int lora_send(unsigned char *buffer, int size);
 

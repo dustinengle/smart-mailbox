@@ -4,7 +4,10 @@
 #include "config.h"
 #include "mailbox.h"
 
-unsigned char key[] = SECRET_KEY;
+unsigned char gw_key[HASH_SIZE] = {0};
+bool gw_key_loaded = false;
+unsigned char key[HASH_SIZE] = {0};
+bool key_loaded = false;
 
 void print_packet(unsigned char *buffer, int size) {
     for (int i = 0; i < size; i++) {
@@ -15,6 +18,33 @@ void print_packet(unsigned char *buffer, int size) {
 }
 
 int lora_init() {
+    int error = load_gw_key(gw_key);
+    if (!error) {
+        gw_key_loaded = true;
+        if (DEBUG) {
+            Serial.print("LORA: loaded key ");
+            print_packet(gw_key, HASH_SIZE);
+        }
+    }
+    
+    error = load_key(key);
+    if (!error) {
+        key_loaded = true;
+        if (DEBUG) {
+            Serial.print("LORA: loaded key ");
+            print_packet(key, HASH_SIZE);
+        }
+    } else {
+        unsigned char secret[] = SECRET_KEY;
+        int size = sizeof(SECRET_KEY);
+        if (size > HASH_SIZE) size = HASH_SIZE;
+        memcpy(key, secret, size);
+        if (DEBUG) {
+            Serial.print("LORA: loaded secret ");
+            print_packet(key, HASH_SIZE);
+        }
+    }
+    
     LoRa.setPins(LORA_SS_PIN, LORA_RST_PIN, LORA_DIO0_PIN);
     if (!LoRa.begin(LORA_FREQUENCY)) return E_LORA;
 
@@ -70,6 +100,12 @@ int lora_handle(const uint8_t *data, int size) {
     }
 
     if (op == OP_CONNECT) {
+        //if (!gw_key_loaded) {
+            if (DEBUG) Serial.println("LORA: saving new gw key");
+            result = save_gw_key(gw_key);
+            if (result) return result;
+        //}
+        
         if (DEBUG) Serial.println("LORA: building CONNECT reply");
         unsigned char buffer[OP_CONNECT_SIZE] = {0};
 
@@ -78,11 +114,17 @@ int lora_handle(const uint8_t *data, int size) {
         buffer[2] = get_lock();
         buffer[3] = get_package();
         buffer[4] = get_power();
-        
-        unsigned char hash[HASH_SIZE];
-        get_hash(key, buffer, OP_CONNECT_SIZE, hash);
+
+        // SECRET_KEY will be used as the initial hash value
+        // with remaining checksums using the hash of it.
+        if (!key_loaded) get_hash(key, buffer, OP_CONNECT_SIZE, key);
         for (int i = 0; i < HASH_SIZE; i++) {
-            buffer[i + 5] = hash[i];
+            buffer[i + 5] = key[i];
+        }
+
+        if (!key_loaded) {
+            result = save_key(key);
+            if (result) return result;
         }
 
         if (DEBUG) print_packet(buffer, OP_CONNECT_SIZE);

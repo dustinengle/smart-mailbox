@@ -19,6 +19,7 @@ void list_files() {
 
 int file_init() {
     if (!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED)) return E_FILE_BEGIN;
+    if (DEBUG) list_files();
     return E_OK;
 }
 
@@ -27,9 +28,21 @@ int file_exists(const char *path) {
     return E_OK;
 }
 
+int file_read(const char *path, unsigned char *buffer) {
+    File file = SPIFFS.open(path, FILE_READ);
+
+    int size = 0;
+    while (file.available()) {
+        buffer[size++] = file.read();
+    }
+
+    file.close();
+    return size;
+}
+
 int file_remove(const char *path) {
-    if (DEBUG) list_files();
     if (!SPIFFS.remove(path)) return E_FILE_REMOVE;
+    if (DEBUG) list_files();
     return E_OK;
 }
 

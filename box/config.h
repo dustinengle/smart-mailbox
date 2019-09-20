@@ -7,7 +7,9 @@
 #define CHECKSUM_SIZE           8
 #define DEBUG                   true
 #define FORMAT_SPIFFS_IF_FAILED true
+#define GW_PATH                 "/gw"
 #define HASH_SIZE               32
+#define KEY_PATH                "/key"
 #define SECRET_KEY              "SomePassword!2#4Here!2#4Here!2#"
 
 // Error Codes
@@ -31,6 +33,8 @@
 #define E_LORA_CHECKSUM     0x45
 #define E_LORA_MAX_SIZE     0x46
 #define E_LORA_SEND         0x47
+#define E_LORA_GW_KEY       0x48
+#define E_LORA_KEY          0x49
 #define E_OP                0x50
 #define E_OP_SIZE           0x51
 #define E_POWER             0x60

@@ -1,42 +1,38 @@
+#!/usr/bin/env python
 
-import lora
+import multiprocessing as mp
+import os
+import signal
+import sys
 import time
 
-running = True
-timeout = time.time() + 10
+# Internal
+from kit.controller import Controller
+import kit.env as env
+from kit.logger import error, info
 
-def close():
-    print('Stopping...')
-    running = False
-    lora.close()
+# Define the controller.
+controller = Controller()
 
-def init():
-    lora.init()
+# Handle SIGNIT and close the controller.
+def signal_handler(sig, frame):
+    info('main', 'sigint')
+    controller.stop()
+    time.sleep(1)
+    print 'Goodbye.'
+    sys.exit(0)
 
-def recv():
-    lora.recv()
-
-def send():
-    packet = bytearray([6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 100])
-    lora.send(packet)
-
+# Main!
 if __name__ == '__main__':
-    try:
-        print('Initializing...')
-        init()
+    signal.signal(signal.SIGINT, signal_handler)
 
-        print('Starting...')
-        while running:
-            try:
-                recv()
+    # Load the configuration dictionary.
+    print 'info:main: loading .env file'
+    env.load('.env')
 
-                t = time.time()
-                if timeout <= t:
-                    send()
-                    timeout = time.time() + 10
-            except KeyboardInterrupt:
-                print('Stopping...')
-                close()
-                exit(0)
-    except Exception as ex:
-        print('Error:', ex)
+    # Setup our controller object and start it.
+    controller.setup()
+    controller.start()
+
+    # Wait for SIGINT.
+    signal.pause()
