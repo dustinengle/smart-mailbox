@@ -8,7 +8,7 @@ from logger import error, info
 
 # Decrypt data using password.
 def decrypt(cipher, pw):
-    aes = AES.new(hash(pw)[:32])
+    aes = AES.new(hash(pw)[:32], AES.MODE_CBC, hash(pw)[:16])
     text = str(cipher)
     info('decrypt', 'text: '+text)
     x = base64.decodestring(aes.decrypt(text).rstrip('\0'))
@@ -17,9 +17,9 @@ def decrypt(cipher, pw):
 
 # Encrypt data using password.
 def encrypt(plain, pw):
-    aes = AES.new(hash(pw)[:32])
+    aes = AES.new(hash(pw)[:32], AES.MODE_CBC, hash(pw)[:16])
     text = base64.encodestring(str(plain))
-    info('decrypt', 'text: '+text)
+    info('encrypt', 'text: '+text)
     x = text + ((AES.block_size - len(text) % AES.block_size) * '\0')
     info('encrypt', x)
     return aes.encrypt(x)

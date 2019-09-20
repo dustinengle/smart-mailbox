@@ -4,6 +4,7 @@ from getpass import getpass
 import os
 import sys
 import time
+import traceback
 
 from codec import decode, encode
 from crypto import decrypt, encrypt, hash
@@ -127,6 +128,7 @@ class Account():
 
             self.check()
         except Exception as ex:
+            traceback.print_exc()
             error('account', 'load error: '+str(ex))
 
     def file_save(self):

@@ -14,7 +14,7 @@ sys.path.insert(0, pwd)
 from kit.crypto import encrypt
 from kit.file import write_file
 from kit.logger import error
-from sdk.keypair import Keypair
+from stellar_base.keypair import Keypair
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='keypair arguments')

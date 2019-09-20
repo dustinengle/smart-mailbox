@@ -23,10 +23,12 @@ sudo apt update && \
 sudo apt install -y git python-spidev vim && \
 
 # Install redis server for PubSub.
-echo "Installing Redis server..." && \
-sudo apt install -y redis-server && \
-sudo systemctl start redis
-sudo systemctl enable redis
+if [ -z "$(which redis-server)"]; then
+    echo "Installing Redis server..." && \
+    sudo apt install -y redis-server && \
+    sudo systemctl start redis && \
+    sudo systemctl enable redis
+fi
 
 # Lock down redis configuration /etc/redis to local only.
 # Already set by default "protected-mode = yes".
@@ -37,21 +39,23 @@ sleep 5s && \
 sudo raspi-config
 
 # Installing SPI
-echo "Installing SPI interface..." && \
-git clone https://github.com/Freenove/SPI-Py && \
-cd SPI-Py && \
-sudo python setup.py install && \
+if [ ! -d "SPI-Py" ]; then
+    echo "Installing SPI interface..." && \
+    git clone https://github.com/Freenove/SPI-Py && \
+    cd SPI-Py && \
+    sudo python setup.py install
+fi
 
 # Packages needed for SDK
 echo "Installing Kit modules..." && \
-python -m pip install mnemonic && \
-python -m pip install pycrypto && \
-python -m pip install pure25519 && \
-python -m pip install paho-mqtt && \
-python -m pip install redis && \
-python -m pip install requests && \
-python -m pip install stellar-sdk && \
-python -m pip install toml && \
+python -m pip install --user mnemonic && \
+python -m pip install --user pycrypto && \
+python -m pip install --user pure25519 && \
+python -m pip install --user paho-mqtt && \
+python -m pip install --user redis && \
+python -m pip install --user requests && \
+python -m pip install --user stellar-sdk && \
+python -m pip install --user toml && \
 
 # Packages needed to build
 #echo "Installing build tool..." && \

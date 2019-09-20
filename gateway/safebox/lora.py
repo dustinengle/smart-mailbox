@@ -6,6 +6,24 @@ import time
 def close():
     PyLora.close()
 
+def handle(packet):
+    op = packet[0]
+    size = len(packet)
+
+    if op == config.OP_ACK:
+        if size != config.OP_ACK_SIZE:
+            raise Exception('invalid ACK packet size {}'.format(size))
+    elif op == config.OP_CONNECT:
+        if size != config.OP_CONNECT_SIZE:
+            raise Exception('invalid CONNECT packet size {}'.format(size))
+    elif op == config.OP_STATUS:
+        if size != config.OP_STATUS_SIZE:
+            raise Exception('invalid STATUS packet size {}'.format(size))
+    else:
+        raise Exception('invalid OP packet {}'.format(op))
+
+    return packet
+
 def init():
     PyLora.set_pins(cs_pin=config.LORA_SS_PIN, rst_pin=config.LORA_RST_PIN, irq_pin=config.LORA_DIO0_PIN)
     PyLora.init()
@@ -17,10 +35,10 @@ def init():
 def recv():
     PyLora.receive()
     if not PyLora.packet_available():
-        return
+        return None
 
     packet = PyLora.receive_packet()
-    return packet
+    return handle(packet)
 
 def recv_wait():
     PyLora.receive()
@@ -28,7 +46,7 @@ def recv_wait():
         time.sleep(0)
 
     packet = PyLora.receive_packet()
-    return packet
+    return handle(packet)
 
 def send(packet):
     PyLora.send_packet(packet)

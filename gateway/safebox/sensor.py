@@ -17,11 +17,13 @@ if '/safebox' in pwd:
 sys.path.insert(0, pwd)
 
 import kit.env as env
+from kit.logger import error, info
 from kit.message import Message
 from kit.pubsub import get_message, subscribe, unsubscribe, publish
 
 def destroy():
     unsubscribe()
+    lora.close()
 
 def get_topic():
     # Handle topics string or slice.
@@ -34,28 +36,37 @@ def get_topic():
 
 def handle(msg):
     try:
-        print('Handle:', msg)
+        info('handle', msg)
 
         #add custom msg handling
         #if msg.get_name() == 'CustomCommand' and msg.get_unit() 'Custom' and msg.get_str():
         #   global example = msg.get_str
     except Exception as ex:
-        print(ex)
+        error('handle', ex)
 
 def loop():
     try:
-        data = [{'bn':'Gateway_', 'n': 'TEST', 'u': 'Cel', 'v': 30.0}, {'u': 'V', 'v': 1.0}]
+        packet = bytearray(config.OP_STATUS_SIZE)
+        packet[0] = config.OP_STATUS
+        lora.send(packet)
+        info('loop', 'send packet {}'.format(packet))
+
+        packet = lora.recv_wait()
+        info('loop', 'recv packet {}'.format(packet))
+
+        data = [{'bn':'Mailbox_', 'n': 'Status', 'u': 'Cel', 'v': 30.0}, {'u': 'V', 'v': 1.0}]
         msg = Message(get_topic(), data)
-        print(msg)
+        info('loop', 'message {}'.format(msg))
         publish(msg)
-    except:
-        pass
+    except Exception as ex:
+        error('loop', ex)
     finally:
         time.sleep(1)
 
 def setup():
     print('Program is starting ... ')
     print('Press Ctrl-C to exit.')
+    lora.init()
 
 if __name__ == '__main__':
     setup()
