@@ -32,6 +32,12 @@ def init():
     PyLora.set_frequency(config.LORA_FREQUENCY)
     PyLora.set_sync_word(config.LORA_SYNC_WORD)
 
+def packet_str(packet):
+    s = ''
+    for b in packet:
+        s += str(b)
+    return s
+
 def recv():
     PyLora.receive()
     if not PyLora.packet_available():

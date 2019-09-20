@@ -3,7 +3,6 @@
 #include "mailbox.h"
 
 int button = 0;
-int led = LED_BUILTIN;
 
 void stop(String msg) {
     Serial.println(msg);
@@ -11,7 +10,6 @@ void stop(String msg) {
         ;
 
     pinMode(button, INPUT);
-    pinMode(led, OUTPUT);
 }
 
 void setup() {
@@ -37,8 +35,16 @@ void loop() {
     
     int val = digitalRead(button);
     if (val == LOW && !sending) {
-        digitalWrite(led, HIGH);
         sending = true;
+        
+        uint8_t locked = get_lock();
+        error = set_lock(locked == LOCK_YES ? LOCK_NO : LOCK_YES);
+        if (error) {
+            Serial.print("ERROR: setting lock state ");
+            Serial.println(error, HEX);
+            sending = false;
+            return;
+        }
         
         unsigned char buffer[OP_STATUS_SIZE] = {0};
         buffer[0] = OP_STATUS;
@@ -46,6 +52,13 @@ void loop() {
         buffer[10] = get_lock();
         buffer[11] = get_package();
         buffer[12] = get_power();
+        
+        unsigned char checksum[CHECKSUM_SIZE];
+        unsigned char key[] = SECRET_KEY;
+        get_checksum(key, buffer, sizeof(buffer), checksum);
+        for (int i = 0; i < sizeof(checksum); i++) {
+            buffer[i + 1] = checksum[i];
+        }
 
         if (DEBUG) {
             Serial.print("BUTTON: packet ");
@@ -65,7 +78,5 @@ void loop() {
         }
         delay(1000);
         sending = false;
-    } else {
-        digitalWrite(led, LOW);
     }
 }

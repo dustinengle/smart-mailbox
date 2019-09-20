@@ -17,6 +17,8 @@ if '/safebox' in pwd:
 sys.path.insert(0, pwd)
 
 import kit.env as env
+from kit.crypto import decrypt, encrypt
+from kit.file import read_file, write_file
 from kit.logger import error, info
 from kit.message import Message
 from kit.pubsub import get_message, subscribe, unsubscribe, publish
@@ -36,32 +38,59 @@ def get_topic():
 
 def handle(msg):
     try:
-        info('handle', msg)
+        info('handle', str(msg))
 
         #add custom msg handling
         #if msg.get_name() == 'CustomCommand' and msg.get_unit() 'Custom' and msg.get_str():
         #   global example = msg.get_str
     except Exception as ex:
-        error('handle', ex)
+        error('handle', str(ex))
 
 def loop():
     try:
-        packet = bytearray(config.OP_STATUS_SIZE)
-        packet[0] = config.OP_STATUS
-        lora.send(packet)
-        info('loop', 'send packet {}'.format(packet))
-
         packet = lora.recv_wait()
-        info('loop', 'recv packet {}'.format(packet))
+        info('loop', 'recv packet {}'.format(lora.packet_str(packet)))
 
-        data = [{'bn':'Mailbox_', 'n': 'Status', 'u': 'Cel', 'v': 30.0}, {'u': 'V', 'v': 1.0}]
-        msg = Message(get_topic(), data)
-        info('loop', 'message {}'.format(msg))
-        publish(msg)
+        data = []
+        op = packet[0]
+        size = len(packet)
+        if op == config.OP_ACK:
+            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
+            data.append({'n': 'Lock', 'u': 'Lock', 'v': packet[10]})
+            data.append({'n': 'Package', 'u': 'Package', 'v': packet[11]})
+            data.append({'n': 'Power', 'u': 'Power', 'v': packet[12]})
+            data.append({'n': 'Error', 'u': 'Error', 'v': packet[13]})
+
+            box_checksum = packet[1:9]
+            info('loop', 'box checksum {}'.format(lora.packet_str(box_checksum)))
+        elif op == config.OP_CONNECT:
+            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
+            data.append({'n': 'Lock', 'u': 'Lock', 'v': packet[1]})
+            data.append({'n': 'Package', 'u': 'Package', 'v': packet[2]})
+            data.append({'n': 'Power', 'u': 'Power', 'v': packet[3]})
+            data.append({'n': 'Error', 'u': 'Error', 'v': packet[4]})
+
+            box_key = packet[5:]
+            info('loop', 'box key {}'.format(lora.packet_str(box_key)))
+        elif op == config.OP_STATUS:
+            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
+            data.append({'n': 'Lock', 'u': 'Lock', 'v': packet[10]})
+            data.append({'n': 'Package', 'u': 'Package', 'v': packet[11]})
+            data.append({'n': 'Power', 'u': 'Power', 'v': packet[12]})
+
+            box_checksum = packet[1:9]
+            info('loop', 'box checksum {}'.format(lora.packet_str(box_checksum)))
+        else:
+            raise Exception('invalid OP packet {}'.format(op))
+
+        if len(data) > 1:
+            msg = Message(get_topic(), data)
+            info('loop', 'message {}'.format(msg))
+            publish(msg)
     except Exception as ex:
-        error('loop', ex)
+        error('loop', str(ex))
     finally:
-        time.sleep(1)
+        time.sleep(0)
 
 def setup():
     print('Program is starting ... ')
