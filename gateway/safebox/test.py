@@ -70,18 +70,6 @@ def recv(index):
     if valid[0] != packet[0]:
         print('ERROR: invalid OP code', index, valid[0], packet[0])
 
-    if index == 1:
-        box_key = packet[5:]
-    else:
-        tmp = packet[:]
-        for i in range(8):
-            print(i)
-            tmp[i + 1] = 0
-        print('tmp:', tmp)
-        box_checksum = packet[1:9]
-        checksum = crypto.get_checksum(tmp)
-        print(box_checksum, '=', checksum)
-
 def send(index):
     packet = packets[index]
     print('TEST: sending packet', packet)

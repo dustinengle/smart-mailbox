@@ -1,7 +1,7 @@
 
 import config
 import hashlib
-from mbedtls import hmac
+import hmac
 
 secret = bytes(config.SECRET_KEY).encode('ascii')
 
@@ -11,7 +11,7 @@ def get_checksum(packet, key=secret):
     return hash[:config.CHECKSUM_SIZE]
 
 def get_hash(packet, key=secret):
-    m = hmac.new(key, 'sha256')
+    m = hmac.new(key, digestmod=hashlib.sha256)
     m.update(packet)
     hash = m.digest()
     if config.DEBUG: print('hash=', hash)
