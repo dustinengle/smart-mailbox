@@ -55,6 +55,8 @@ def recv_wait():
     return handle(packet)
 
 def send(packet):
+    PyLora.idle()
+    time.sleep(1)
     PyLora.send_packet(packet)
 
 def sync_word(word):

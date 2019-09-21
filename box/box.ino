@@ -27,12 +27,7 @@ void setup() {
 
 bool sending = false;
 void loop() {
-    int error = lora_recv();
-    if (error) {
-        Serial.print("ERROR: lora recv ");
-        Serial.println(error, HEX);
-    }
-    
+    int error = E_OK;
     int val = digitalRead(button);
     if (val == LOW && !sending) {
         sending = true;
@@ -78,5 +73,11 @@ void loop() {
         }
         delay(1000);
         sending = false;
+    }
+    
+    error = lora_recv();
+    if (error) {
+        Serial.print("ERROR: lora recv ");
+        Serial.println(error, HEX);
     }
 }

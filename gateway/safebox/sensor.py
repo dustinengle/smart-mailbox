@@ -84,6 +84,19 @@ def loop():
             raise Exception('invalid OP packet {}'.format(op))
 
         if len(data) > 1:
+            info('send', 'ACK')
+            packet = bytearray(config.OP_ACK_SIZE)
+            packet[0] = config.OP_ACK
+            packet[1:9] = crypto.get_checksum(packet)
+            packet[9] = 1
+            packet[10] = 1
+            packet[11] = 1
+            packet[12] = 100
+            packet[13] = config.E_OK
+
+            lora.send(packet)
+            info('send', 'ACK {}'.format(lora.packet_str(packet)))
+
             msg = Message(get_topic(), data)
             info('loop', 'message {}'.format(msg))
             publish(msg)
@@ -96,6 +109,18 @@ def setup():
     print('Program is starting ... ')
     print('Press Ctrl-C to exit.')
     lora.init()
+
+    info('send', 'STATUS')
+    packet = bytearray(config.OP_STATUS_SIZE)
+    packet[0] = config.OP_STATUS
+    packet[1:9] = crypto.get_checksum(packet)
+    packet[9] = 1
+    packet[10] = 1
+    packet[11] = 1
+    packet[12] = 1
+
+    lora.send(packet)
+    info('send', 'ACK {}'.format(lora.packet_str(packet)))
 
 if __name__ == '__main__':
     setup()
