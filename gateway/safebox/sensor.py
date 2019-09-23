@@ -48,7 +48,8 @@ def handle(msg):
 
 def loop():
     try:
-        packet = lora.recv_wait()
+        packet = lora.recv()
+        if not packet: return
         info('loop', 'recv packet {}'.format(lora.packet_str(packet)))
 
         data = []
@@ -128,7 +129,7 @@ if __name__ == '__main__':
 
     try:
         env.load(envPath)
-        subscribe(fn=handle)
+        subscribe(fn=handle, channel='inbound')
 
         while looping:
             get_message()

@@ -5,6 +5,7 @@ import random
 
 from logger import error, info
 from message import Message
+from pubsub import publish
 
 MQTT_ERR_SUCCESS = 0
 
@@ -82,10 +83,16 @@ class MQTT:
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
         info('mqtt', 'on_message:'+msg.topic+': '+str(msg.payload))
-        if self.queue:
-            m = Message(msg.topic, msg.payload)
-            if m.is_valid() and m.for_device() and not m.get_name() in ['CONNECTED', 'REGISTERED', 'TX']:
-                self.queue.put(m)
+        try:
+            if self.queue:
+                m = Message(msg.topic, msg.payload)
+                if m.is_valid():
+                    if m.for_device() and not m.get_name() in ['CONNECTED', 'REGISTERED', 'TX']:
+                        self.queue.put(m)
+                    else:
+                        publish(m, channel='inbound')
+        except Exception as ex:
+            error('mqtt', 'on_message: '+str(ex))
 
     # When a message has been published.
     def on_publish(self, client, userdata, mid):
