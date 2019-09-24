@@ -45,14 +45,19 @@ def handle(msg):
         name = msg.get_name()
         if name == 'Allow':
             print('allow', name, str(msg))
+            lora.send_allow(msg.get_value())
         elif name == 'Deny':
             print('deny', name, str(msg))
+            lora.send_deny(msg.get_value())
         elif name == 'Lock':
             print('lock', name, str(msg))
+            lora.send_lock()
         elif name == 'Status':
             print('status', name, str(msg))
+            lora.send_status()
         elif name == 'Unlock':
             print('unlock', name, str(msg))
+            lora.send_unlock()
     except Exception as ex:
         error('handle', str(ex))
 
@@ -75,7 +80,7 @@ def loop():
             box_checksum = packet[1:9]
             info('loop', 'box checksum {}'.format(lora.packet_str(box_checksum)))
         elif op == config.OP_CONNECT:
-            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
+            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[0]})
             data.append({'n': 'Lock', 'u': 'Lock', 'v': packet[1]})
             data.append({'n': 'Package', 'u': 'Package', 'v': packet[2]})
             data.append({'n': 'Power', 'u': 'Power', 'v': packet[3]})

@@ -15,15 +15,22 @@ if __name__ == "__main__":
 
         print('Create Box')
         db.create_box('SOME_TEST_KEY')
-        print('Create Packet')
-        db.create_packet(status)
-        print('Create PIN')
-        db.create_pin('CONTACT_ID', 1234)
-
         print('Read Box')
         print(db.read_box())
+
+        print('Create Packet')
+        db.create_packet(status)
         print('Read Packet')
         print(db.read_packet())
+
+        print('Create PIN')
+        db.create_pin('CONTACT_1', 1111)
+        db.create_pin('CONTACT_2', 2222)
+        db.create_pin('CONTACT_3', 3333)
+        print('Read PIN')
+        print(db.read_pin())
+        print('Delete PIN')
+        db.delete_pin('CONTACT_2')
         print('Read PIN')
         print(db.read_pin())
     except Exception as ex:

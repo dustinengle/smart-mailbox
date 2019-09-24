@@ -22,13 +22,17 @@ def create_box(key):
     conn.commit()
 
 def create_packet(packet):
-    op = binascii.hexlify(str(packet[0])
+    op = binascii.hexlify(str(packet[0]))
     data = binascii.hexlify(packet[1:])
-    cur.execute('INSERT INTO packets VALUES (?, ?, ?)', (op), data, int(time.time()),))
+    cur.execute('INSERT INTO packets VALUES (?, ?, ?)', (op, data, int(time.time()),))
     conn.commit()
 
 def create_pin(contact, pin):
     cur.execute('INSERT INTO pins VALUES (?, ?)', (contact, pin,))
+    conn.commit()
+
+def delete_pin(contact, pin=0):
+    cur.execute('DELETE FROM pins WHERE contact = ?', (contact,))
     conn.commit()
 
 def read_box():

@@ -57,7 +57,7 @@ int lora_handle(const uint8_t *data, int size) {
     uint8_t op = data[0];
     if (op >= OP_END) return E_LORA_OP_CODE;
 
-    uint16_t pin;
+    uint16_t pin = 0;
     int result = E_OK;
     switch (op) {
         case OP_ACK:
@@ -65,7 +65,7 @@ int lora_handle(const uint8_t *data, int size) {
             return E_OK;
         case OP_ALLOW:
             if (size != OP_ALLOW_SIZE) return E_LORA_MAX_SIZE;
-            pin = data[14] | (data[13] << 8);
+            pin = (data[13] << 8) | data[14];
             result = allow_set(pin);
             break;
         case OP_CONNECT:
@@ -73,7 +73,7 @@ int lora_handle(const uint8_t *data, int size) {
             break;
         case OP_DENY:
             if (size != OP_DENY_SIZE) return E_LORA_MAX_SIZE;
-            pin = data[14] | (data[13] << 8);
+            pin = (data[13] << 8) | data[14];
             result = allow_del(pin);
             break;
         case OP_LOCK:

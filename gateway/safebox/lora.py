@@ -2,6 +2,7 @@
 import config
 import crypto
 import PyLora
+import struct
 import time
 
 def close():
@@ -64,20 +65,44 @@ def send_allow(pin):
     packet = bytearray(config.OP_ALLOW_SIZE)
     packet[0] = config.OP_ALLOW
     packet[1:9] = crypto.get_checksum(packet)
-    packet[13:15] = str(pin)
+    packet[13:15] = struct.pack('>H', pin)
     send(packet)
 
-def send_deny():
+def send_deny(pin):
     packet = bytearray(config.OP_DENY_SIZE)
     packet[0] = config.OP_DENY
     packet[1:9] = crypto.get_checksum(packet)
-    packet[13:15] = str(pin)
+    packet[13:15] = struct.pack('>H', pin)
     send(packet)
 
 def send_connect():
     packet = bytearray(config.OP_CONNECT_SIZE)
     packet[0] = config.OP_CONNECT
     packet[5:] = crypto.get_hash(packet)
+    send(packet)
+
+def send_lock():
+    packet = bytearray(config.OP_LOCK_SIZE)
+    packet[0] = config.OP_LOCK
+    packet[5:] = crypto.get_checksum(packet)
+    send(packet)
+
+def send_register():
+    packet = bytearray(config.OP_REGISTER_SIZE)
+    packet[0] = config.OP_REGISTER
+    packet[5:] = crypto.get_checksum(packet)
+    send(packet)
+
+def send_status():
+    packet = bytearray(config.OP_STATUS_SIZE)
+    packet[0] = config.OP_STATUS
+    packet[1:9] = crypto.get_checksum(packet)
+    send(packet)
+
+def send_unlock():
+    packet = bytearray(config.OP_UNLOCK_SIZE)
+    packet[0] = config.OP_UNLOCK
+    packet[5:] = crypto.get_checksum(packet)
     send(packet)
 
 def sync_word(word):
