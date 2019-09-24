@@ -1,5 +1,6 @@
 
 import config
+import crypto
 import PyLora
 import time
 
@@ -58,6 +59,26 @@ def send(packet):
     PyLora.idle()
     time.sleep(1)
     PyLora.send_packet(packet)
+
+def send_allow(pin):
+    packet = bytearray(config.OP_ALLOW_SIZE)
+    packet[0] = config.OP_ALLOW
+    packet[1:9] = crypto.get_checksum(packet)
+    packet[13:15] = str(pin)
+    send(packet)
+
+def send_deny():
+    packet = bytearray(config.OP_DENY_SIZE)
+    packet[0] = config.OP_DENY
+    packet[1:9] = crypto.get_checksum(packet)
+    packet[13:15] = str(pin)
+    send(packet)
+
+def send_connect():
+    packet = bytearray(config.OP_CONNECT_SIZE)
+    packet[0] = config.OP_CONNECT
+    packet[5:] = crypto.get_hash(packet)
+    send(packet)
 
 def sync_word(word):
     PyLora.set_sync_word(word)

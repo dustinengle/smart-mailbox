@@ -39,10 +39,20 @@ def get_topic():
 def handle(msg):
     try:
         info('handle', str(msg))
+        if msg.get_base_name() != 'Mailbox_':
+            return
 
-        #add custom msg handling
-        #if msg.get_name() == 'CustomCommand' and msg.get_unit() 'Custom' and msg.get_str():
-        #   global example = msg.get_str
+        name = msg.get_name()
+        if name == 'Allow':
+            print('allow', name, str(msg))
+        elif name == 'Deny':
+            print('deny', name, str(msg))
+        elif name == 'Lock':
+            print('lock', name, str(msg))
+        elif name == 'Status':
+            print('status', name, str(msg))
+        elif name == 'Unlock':
+            print('unlock', name, str(msg))
     except Exception as ex:
         error('handle', str(ex))
 

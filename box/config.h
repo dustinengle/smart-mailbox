@@ -43,25 +43,25 @@
 
 // OP Codes
 #define OP_ACK      0x01
-#define OP_CONNECT  0x02
-#define OP_LOCK     0x03
-#define OP_OTP      0x04
-#define OP_REGISTER 0x05
-#define OP_STATUS   0x06
-#define OP_TIME     0x07
-#define OP_UNAUTH   0x08
+#define OP_ALLOW    0x02
+#define OP_CONNECT  0x03
+#define OP_DENY     0x04
+#define OP_LOCK     0x05
+#define OP_REGISTER 0x06
+#define OP_STATUS   0x07
+#define OP_TIME     0x08
 #define OP_UNLOCK   0x09
-#define OP_END      0x10
+#define OP_END      0x0A
 
 // OP Packet Sizes
 #define OP_ACK_SIZE      14
+#define OP_ALLOW_SIZE    15
 #define OP_CONNECT_SIZE  37
+#define OP_DENY_SIZE     15
 #define OP_LOCK_SIZE     10
-#define OP_OTP_SIZE      15
 #define OP_REGISTER_SIZE 4
 #define OP_STATUS_SIZE   13
 #define OP_TIME_SIZE     13
-#define OP_UNAUTH_SIZE   15
 #define OP_UNLOCK_SIZE   10
 
 // LoRa

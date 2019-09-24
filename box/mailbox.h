@@ -26,11 +26,11 @@ int file_read(const char *path, unsigned char *buffer);
 int lora_recv();
 int lora_send(unsigned char *buffer, int size);
 
-// OTP
-int otp_init();
-int otp_del(uint16_t pin);
-int otp_get(uint16_t pin);
-int otp_set(uint16_t pin);
+// ALLOW
+int allow_init();
+int allow_del(uint16_t pin);
+int allow_get(uint16_t pin);
+int allow_set(uint16_t pin);
 
 // Sensors
 uint8_t get_flag();

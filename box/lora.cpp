@@ -26,7 +26,7 @@ int lora_init() {
             print_packet(gw_key, HASH_SIZE);
         }
     }
-    
+
     error = load_key(key);
     if (!error) {
         key_loaded = true;
@@ -44,7 +44,7 @@ int lora_init() {
             print_packet(key, HASH_SIZE);
         }
     }
-    
+
     LoRa.setPins(LORA_SS_PIN, LORA_RST_PIN, LORA_DIO0_PIN);
     if (!LoRa.begin(LORA_FREQUENCY)) return E_LORA;
 
@@ -63,17 +63,22 @@ int lora_handle(const uint8_t *data, int size) {
         case OP_ACK:
             if (size != OP_ACK_SIZE) return E_LORA_MAX_SIZE;
             return E_OK;
+        case OP_ALLOW:
+            if (size != OP_ALLOW_SIZE) return E_LORA_MAX_SIZE;
+            pin = data[14] | (data[13] << 8);
+            result = allow_set(pin);
+            break;
         case OP_CONNECT:
             if (size != OP_CONNECT_SIZE) return E_LORA_MAX_SIZE;
+            break;
+        case OP_DENY:
+            if (size != OP_DENY_SIZE) return E_LORA_MAX_SIZE;
+            pin = data[14] | (data[13] << 8);
+            result = allow_del(pin);
             break;
         case OP_LOCK:
             if (size != OP_LOCK_SIZE) return E_LORA_MAX_SIZE;
             result = set_lock(LOCK_YES);
-            break;
-        case OP_OTP:
-            if (size != OP_OTP_SIZE) return E_LORA_MAX_SIZE;
-            pin = data[14] | (data[13] << 8);
-            result = otp_set(pin);
             break;
         case OP_REGISTER:
             if (size != OP_REGISTER_SIZE) return E_LORA_MAX_SIZE;
@@ -85,11 +90,6 @@ int lora_handle(const uint8_t *data, int size) {
             break;
         case OP_TIME:
             if (size != OP_TIME_SIZE) return E_LORA_MAX_SIZE;
-            break;
-        case OP_UNAUTH:
-            if (size != OP_UNAUTH_SIZE) return E_LORA_MAX_SIZE;
-            pin = data[14] | (data[13] << 8);
-            result = otp_del(pin);
             break;
         case OP_UNLOCK:
             if (size != OP_UNLOCK_SIZE) return E_LORA_MAX_SIZE;
@@ -105,7 +105,7 @@ int lora_handle(const uint8_t *data, int size) {
             result = save_gw_key(gw_key);
             if (result) return result;
         //}
-        
+
         if (DEBUG) Serial.println("LORA: building CONNECT reply");
         unsigned char buffer[OP_CONNECT_SIZE] = {0};
 
@@ -140,13 +140,13 @@ int lora_handle(const uint8_t *data, int size) {
         for (int i = 0; i < CHECKSUM_SIZE; i++) {
             buffer[i + 1] = checksum[i];
         }
-        
+
         buffer[9] = get_flag();
         buffer[10] = get_lock();
         buffer[11] = get_package();
         buffer[12] = get_power();
         buffer[13] = (uint8_t)result;
-        
+
         if (DEBUG) print_packet(buffer, OP_ACK_SIZE);
         result = lora_send(buffer, OP_ACK_SIZE);
     }

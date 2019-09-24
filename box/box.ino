@@ -21,7 +21,7 @@ void setup() {
     }
 
     if (file_init()) stop("ERROR: file init");
-    if (otp_init()) stop("ERROR: otp init");
+    if (allow_init()) stop("ERROR: allow init");
     if (lora_init()) stop("ERROR: lora init");
 }
 
@@ -31,7 +31,7 @@ void loop() {
     int val = digitalRead(button);
     if (val == LOW && !sending) {
         sending = true;
-        
+
         uint8_t locked = get_lock();
         error = set_lock(locked == LOCK_YES ? LOCK_NO : LOCK_YES);
         if (error) {
@@ -40,14 +40,14 @@ void loop() {
             sending = false;
             return;
         }
-        
+
         unsigned char buffer[OP_STATUS_SIZE] = {0};
         buffer[0] = OP_STATUS;
         buffer[9] = get_flag();
         buffer[10] = get_lock();
         buffer[11] = get_package();
         buffer[12] = get_power();
-        
+
         unsigned char checksum[CHECKSUM_SIZE];
         unsigned char key[] = SECRET_KEY;
         get_checksum(key, buffer, sizeof(buffer), checksum);
@@ -63,7 +63,7 @@ void loop() {
             }
             Serial.println();
         }
-        
+
         error = lora_send(buffer, sizeof(buffer));
         if (error) {
             Serial.print("ERROR: lora button send ");
@@ -74,7 +74,7 @@ void loop() {
         delay(1000);
         sending = false;
     }
-    
+
     error = lora_recv();
     if (error) {
         Serial.print("ERROR: lora recv ");

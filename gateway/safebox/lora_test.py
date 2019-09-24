@@ -27,26 +27,26 @@ lock = bytearray(config.OP_LOCK_SIZE)
 lock[0] = config.OP_LOCK
 lock[1:9] = crypto.get_checksum(lock)
 
-otp = bytearray(config.OP_OTP_SIZE)
-otp[0] = config.OP_OTP
-otp[1:9] = crypto.get_checksum(otp)
-otp[13] = 0x0b # 2827
-otp[14] = 0x0b
+allow = bytearray(config.OP_ALLOW_SIZE)
+allow[0] = config.OP_ALLOW
+allow[1:9] = crypto.get_checksum(allow)
+allow[13] = 0x0b # 2827
+allow[14] = 0x0b
 
-unauth = bytearray(config.OP_UNAUTH_SIZE)
-unauth[0] = config.OP_UNAUTH
-unauth[1:9] = crypto.get_checksum(unauth)
-unauth[13] = 0x0b # 2827
-unauth[14] = 0x0b
+deny = bytearray(config.OP_DENY_SIZE)
+deny[0] = config.OP_DENY
+deny[1:9] = crypto.get_checksum(deny)
+deny[13] = 0x0b # 2827
+deny[14] = 0x0b
 
 packets = [
     register,
     connect,
-    status,
     unlock,
     lock,
-    otp,
-    unauth,
+    allow,
+    deny,
+    status,
 ]
 validations = [
     [config.OP_ACK, config.OP_ACK_SIZE],
