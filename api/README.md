@@ -29,10 +29,11 @@
 {
   "accountId": 1,
   "deviceId": "UUIDv4",
+  "deviceKey": "UUIDv4",
   "id": 1,
   "mailboxId": 1,
   "publicKey": "GD04...",
-  "sn": 34252452534,
+  "sn": "34252452534",
   "status": "AWAITING_SETUP"
 }
 ```
@@ -49,7 +50,7 @@
   "gatewayId": 1,
   "id": 1,
   "name": "Custom Mailbox Name",
-  "sn": 34252452534,
+  "sn": "234234234234",
   "status": "AWAITING_SETUP"
 }
 ```
