@@ -2,7 +2,7 @@
 
 - All models will also contain `createdAt`, `deletedAt`, and `updatedAt` fields in addition to those listed below.
 
-### Account
+## Account
 
 ```json
 {
@@ -21,7 +21,7 @@
 - `publicKey` - The blockchain public key that is used for the StreamIOT account.
 - `token` - The account login token to use while active.
 
-### Gateway
+## Gateway
 
 ```json
 {
@@ -40,7 +40,7 @@
 - `publicKey` - The blockchain public key that is used for the starter kit account.
 - `sn` - The gateway serial number that was scanned by the mobile app during mailbox setup.
 
-### Mailbox
+## Mailbox
 
 ```json
 {
@@ -55,7 +55,7 @@
 
 - `sn` - The mailbox serial number that was scanned by the mobile app during mailbox setup.
 
-### PINs
+## PINs
 
 ```json
 {
@@ -76,7 +76,7 @@
 
 _Note: If `single` and `timeout` are provided then the PIN will be removed when it expires or is used, whichever comes first._
 
-### User
+## User
 
 ```json
 {

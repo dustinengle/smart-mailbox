@@ -1,5 +1,11 @@
 # SafeBox - LoRa Protocol
 
+## Features
+
+* Every packet will be cryptography signed with a per packet incrementing nonce setup at random.
+* General flow is request and reply with acknowledgement packets.
+* Devices will automatically configure themselves and setup a unique network configuration.
+
 ## Security
 
 * The secret key will consist of the unique identifier of the device with a nonce that will be hashed using SHA256.

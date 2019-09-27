@@ -1,6 +1,6 @@
 # SafeBox - API
 
-### Public
+## Public
 
 The following routes are open to the public.
 
@@ -12,7 +12,7 @@ The following routes are open to the public.
   - Setup an account on StreamIOT.
   - Setup a `safebox` channel on StreamIOT.
 
-### Private
+## Private
 
 Requires authentication token to access these endpoints.
 
