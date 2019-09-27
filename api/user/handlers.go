@@ -9,6 +9,10 @@ func DeleteUser(c *gin.Context) {
 	common.ReplyOK(c, gin.H{"OK": "DeleteUser"})
 }
 
+func GetUser(c *gin.Context) {
+	common.ReplyOK(c, gin.H{"OK": "GetUser"})
+}
+
 func PostLogin(c *gin.Context) {
 	common.ReplyOK(c, gin.H{"OK": "PostLogin"})
 }

@@ -1,4 +1,4 @@
-package pin
+package mailbox
 
 import "time"
 
@@ -14,14 +14,4 @@ type PIN struct {
 	Single    bool       `gorm:"" json:"single"`
 	Timeout   time.Time  `gorm:"" json:"timeout"`
 	UpdatedAt time.Time  `gorm:"" json:"updatedAt"`
-}
-
-func New(accountID, mailboxID uint, number uint32) (p *PIN) {
-	p = &PIN{
-		AccountID: accountID,
-		CreatedAt: time.Now().UTC(),
-		MailboxID: mailboxID,
-		Number:    number,
-	}
-	return
 }

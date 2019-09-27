@@ -5,6 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func GetAccount(c *gin.Context) {
+	common.ReplyOK(c, gin.H{"OK": "GetAccount"})
+}
+
 func GetBalance(c *gin.Context) {
 	common.ReplyOK(c, gin.H{"OK": "GetBalance"})
 }

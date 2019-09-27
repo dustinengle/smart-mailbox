@@ -13,6 +13,10 @@ func GetBalance(c *gin.Context) {
 	common.ReplyOK(c, gin.H{"OK": "GetBalance"})
 }
 
+func GetGateway(c *gin.Context) {
+	common.ReplyOK(c, gin.H{"OK": "GetGateway"})
+}
+
 func PostActivate(c *gin.Context) {
 	common.ReplyOK(c, gin.H{"OK": "PostActivate"})
 }

@@ -22,3 +22,13 @@ func New(accountID uint, name, sn string) (m *Mailbox) {
 	}
 	return
 }
+
+func (m *Mailbox) NewPIN(accountID, mailboxID uint, number uint32) (p *PIN) {
+	p = &PIN{
+		AccountID: accountID,
+		CreatedAt: time.Now().UTC(),
+		MailboxID: mailboxID,
+		Number:    number,
+	}
+	return
+}

@@ -13,6 +13,10 @@ func DeletePIN(c *gin.Context) {
 	common.ReplyOK(c, gin.H{"OK": "DeletePIN"})
 }
 
+func GetMailbox(c *gin.Context) {
+	common.ReplyOK(c, gin.H{"OK": "GetMailbox"})
+}
+
 func PostLock(c *gin.Context) {
 	common.ReplyOK(c, gin.H{"OK": "PostLock"})
 }
