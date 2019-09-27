@@ -150,18 +150,3 @@ __User__
   - If the user has PIN access then the code will be emailed or sent in SMS to the user directly from the phone.
 * `PUT /user` - Update a user's information.
   - If their access level changes to allow mobile login then send either the email or SMS.
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
-* `/` -
