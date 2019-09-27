@@ -31,7 +31,7 @@
   "deviceId": "UUIDv4",
   "id": 1,
   "mailboxId": 1,
-  "publicKey": "GD03...",
+  "publicKey": "GD04...",
   "sn": 34252452534,
   "status": "AWAITING_SETUP"
 }
