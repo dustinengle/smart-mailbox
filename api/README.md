@@ -31,12 +31,14 @@
   "deviceId": "UUIDv4",
   "id": 1,
   "mailboxId": 1,
+  "publicKey": "GD03...",
   "sn": 34252452534,
   "status": "AWAITING_SETUP"
 }
 ```
 
 - `deviceId` - The id of the device on StreamIOT.
+- `publicKey` - The blockchain public key that is used for the starter kit account.
 - `sn` - The gateway serial number that was scanned by the mobile app during mailbox setup.
 
 ### Mailbox
