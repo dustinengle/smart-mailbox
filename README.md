@@ -3,15 +3,15 @@
 __Cloud__
 
 * [API](docs/API.md)
-* [Blockchain](#)
+* [Blockchain](docs/Blockchain.md)
 * [Models](docs/Models.md)
-* [StreamIOT](#)
+* [StreamIOT](docs/StreamIOT.md)
 
 __Gateway__
 
-* [Firmware](#)
-* [Hardware](#)
-* [Starter Kit](#)
+* [Firmware](docs/Firmware.md)
+* [Hardware](docs/Hardware.md)
+* [StreamIOT Kit](gateway/README.md)
 
 __LoRa__
 
@@ -19,9 +19,9 @@ __LoRa__
 
 __Mailbox__
 
-* [Firmware](#)
-* [Hardware](#)
+* [Firmware](docs/Firmware.md)
+* [Hardware](docs/Hardware.md)
 
 __Mobile App__
 
-* [Overview](#)
+* [Overview](docs/Mobile.md)
