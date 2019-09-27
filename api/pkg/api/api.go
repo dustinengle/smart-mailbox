@@ -1,11 +1,11 @@
 package api
 
 import (
-	"github.com/dustinengle/smart-mailbox/account"
-	"github.com/dustinengle/smart-mailbox/common"
-	"github.com/dustinengle/smart-mailbox/gateway"
-	"github.com/dustinengle/smart-mailbox/mailbox"
-	"github.com/dustinengle/smart-mailbox/user"
+	"github.com/dustinengle/smart-mailbox/pkg/account"
+	"github.com/dustinengle/smart-mailbox/pkg/common"
+	"github.com/dustinengle/smart-mailbox/pkg/gateway"
+	"github.com/dustinengle/smart-mailbox/pkg/mailbox"
+	"github.com/dustinengle/smart-mailbox/pkg/user"
 	"github.com/gin-gonic/gin"
 )
 
@@ -65,7 +65,7 @@ func routes(r *gin.Engine) {
 	}
 }
 
-func New(addr string) (err error) {
+func Run(addr string) (err error) {
 	api = gin.New()
 	routes(api)
 
