@@ -16,6 +16,10 @@ func Close() (err error) {
 	return
 }
 
+func DB() *gorm.DB {
+	return db
+}
+
 func Open(path string) (err error) {
 	if db, err = gorm.Open("sqlite3", path); err != nil {
 		return
