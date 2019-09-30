@@ -4,8 +4,6 @@ import (
 	"fmt"
 )
 
-type Balance map[string]float64
-
 type Total struct {
 	Balance   string `json:"balance"`
 	Device    string `json:"deviceId"`
@@ -41,11 +39,10 @@ func (u User) String() (s string) {
 	return
 }
 
-func UserBalance(token, email string) (res Balance, err error) {
-	res = *new(Balance)
+func UserBalance(token, email string) (res string, err error) {
 	data := &User{Email: email}
 	url := URL(PostBalance)
-	err = Post(url, token, data, &res)
+	res, err = PostText(url, token, data)
 	return
 }
 

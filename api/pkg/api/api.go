@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/dustinengle/smart-mailbox/pkg/account"
-	"github.com/dustinengle/smart-mailbox/pkg/common"
 	"github.com/dustinengle/smart-mailbox/pkg/gateway"
 	"github.com/dustinengle/smart-mailbox/pkg/mailbox"
 	"github.com/dustinengle/smart-mailbox/pkg/user"
@@ -12,7 +11,7 @@ import (
 var api *gin.Engine
 
 func routes(r *gin.Engine) {
-	common.Middleware(r)
+	middleware(r)
 
 	// Public
 
@@ -25,7 +24,7 @@ func routes(r *gin.Engine) {
 
 	a := r.Group("/account")
 	{
-		a.Use(common.Authorize)
+		a.Use(authorize)
 		a.GET("/balance", account.GetBalance)
 		a.GET("/messages", account.GetMessages)
 		a.GET("/", account.GetAccount)
@@ -33,7 +32,7 @@ func routes(r *gin.Engine) {
 
 	g := r.Group("/gateway")
 	{
-		g.Use(common.Authorize)
+		g.Use(authorize)
 		g.GET("/balance", gateway.GetBalance)
 		g.DELETE("/", gateway.DeleteGateway)
 		g.GET("/", gateway.GetGateway)
@@ -43,7 +42,7 @@ func routes(r *gin.Engine) {
 
 	m := r.Group("/mailbox")
 	{
-		m.Use(common.Authorize)
+		m.Use(authorize)
 		m.POST("/lock", mailbox.PostLock)
 		m.DELETE("/pin", mailbox.DeletePIN)
 		m.POST("/pin", mailbox.PostPIN)
@@ -57,7 +56,7 @@ func routes(r *gin.Engine) {
 
 	u := r.Group("/user")
 	{
-		u.Use(common.Authorize)
+		u.Use(authorize)
 		u.DELETE("/", user.DeleteUser)
 		u.GET("/", user.GetUser)
 		u.POST("/", user.PostUser)

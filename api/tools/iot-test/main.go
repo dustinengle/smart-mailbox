@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/dustinengle/smart-mailbox/pkg/client"
 )
@@ -12,6 +14,7 @@ import (
 var _token string
 
 func main() {
+	fcreate := flag.Bool("create", false, "create new items in the process")
 	femail := flag.String("email", "", "login email address")
 	fpassword := flag.String("password", "", "login password for given email")
 	flag.Parse()
@@ -21,9 +24,13 @@ func main() {
 	}
 
 	// Register
-	fmt.Printf("\n*** REGISTER ***\n\n")
-	if err := client.UserRegister(*femail, *fpassword); err != nil {
-		log.Fatal(err)
+	if *fcreate {
+		fmt.Printf("\n*** REGISTER ***\n\n")
+		if err := client.UserRegister(*femail, *fpassword); err != nil {
+			log.Fatal(err)
+		}
+
+		time.Sleep(300)
 	}
 
 	// Login
@@ -36,9 +43,13 @@ func main() {
 	_token = token.Token
 
 	// Create channel
-	fmt.Printf("\n*** CHANNEL ***\n\n")
-	if err = client.ChannelCreate(_token, "test-1"); err != nil {
-		log.Fatal(err)
+	if *fcreate {
+		fmt.Printf("\n*** CHANNEL ***\n\n")
+		if err = client.ChannelCreate(_token, "test-1"); err != nil {
+			log.Fatal(err)
+		}
+
+		time.Sleep(300)
 	}
 
 	// List channels
@@ -48,11 +59,16 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(channels)
+	channel := channels.Channels[0]
 
 	// Create thing
-	fmt.Printf("\n*** THING ***\n\n")
-	if err = client.ThingCreate(_token, "app-1", "app"); err != nil {
-		log.Fatal(err)
+	if *fcreate {
+		fmt.Printf("\n*** THING ***\n\n")
+		if err = client.ThingCreate(_token, "app-1", "app"); err != nil {
+			log.Fatal(err)
+		}
+
+		time.Sleep(300)
 	}
 
 	// List things
@@ -62,13 +78,16 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(things)
+	thing := things.Things[0]
 
 	// Connect channel and thing
-	fmt.Printf("\n*** CONNECT ***\n\n")
-	channel := channels.Channels[0]
-	thing := things.Things[0]
-	if err = client.ChannelConnect(_token, channel.ID, thing.ID); err != nil {
-		log.Fatal(err)
+	if *fcreate {
+		fmt.Printf("\n*** CONNECT ***\n\n")
+		if err = client.ChannelConnect(_token, channel.ID, thing.ID); err != nil {
+			log.Fatal(err)
+		}
+
+		time.Sleep(300)
 	}
 
 	// Post a test message to the channel under the thing.
@@ -84,6 +103,8 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(data)
+
+	time.Sleep(1000)
 
 	// List all messages per channel
 	fmt.Printf("\n*** MESSAGES ***\n\n")
@@ -121,7 +142,11 @@ func main() {
 		// Only print this as it is returned as text.
 		fmt.Println(err)
 	}
-	fmt.Println(balance)
+	balance = strings.ReplaceAll(balance, "{", "")
+	balance = strings.ReplaceAll(balance, "}", "")
+	balance = strings.ReplaceAll(balance, ":", "")
+	parts := strings.Split(balance, " ")
+	fmt.Printf("%s = %s\n", parts[0], parts[1])
 
 	// List the device totals.
 	fmt.Printf("\n*** TOTALS ***\n\n")

@@ -1,4 +1,4 @@
-package common
+package api
 
 import (
 	"time"
@@ -7,12 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Authorize(c *gin.Context) {
+func authorize(c *gin.Context) {
 	// TODO: validate authorization header token
 	c.Next()
 }
 
-func Middleware(r *gin.Engine) {
+func middleware(r *gin.Engine) {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(cors.New(cors.Config{

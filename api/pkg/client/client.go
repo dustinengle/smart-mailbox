@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/ddliu/go-httpclient"
 )
@@ -48,12 +49,17 @@ func Post(url, token string, data, body interface{}) (err error) {
 		return
 	}
 	if body != nil {
-		buf := make([]byte, 0)
-		if buf, err = res.ReadAll(); err != nil {
-			return
+		contentType := res.Header.Get("Content-Type")
+		if strings.Contains(contentType, "text/html") {
+			body, err = res.ToString()
+		} else {
+			buf := make([]byte, 0)
+			if buf, err = res.ReadAll(); err != nil {
+				return
+			}
+			r := bytes.NewReader(buf)
+			err = json.NewDecoder(r).Decode(body)
 		}
-		r := bytes.NewReader(buf)
-		err = json.NewDecoder(r).Decode(body)
 	}
 	return
 }
@@ -75,6 +81,17 @@ func PostSenML(url, token string, data, body interface{}) (err error) {
 		r := bytes.NewReader(buf)
 		err = json.NewDecoder(r).Decode(body)
 	}
+	return
+}
+
+func PostText(url, token string, data interface{}) (body string, err error) {
+	cli := client.WithHeader("Authorization", token)
+
+	var res *httpclient.Response
+	if res, err = cli.Begin().PostJson(url, data); err != nil && err != io.EOF {
+		return
+	}
+	body, err = res.ToString()
 	return
 }
 
