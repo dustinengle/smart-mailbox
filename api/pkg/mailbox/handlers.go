@@ -6,37 +6,37 @@ import (
 )
 
 func DeleteMailbox(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "DeleteMailbox"})
+	reply.OK(c, gin.H{"OK": "DeleteMailbox"})
 }
 
 func DeletePIN(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "DeletePIN"})
+	reply.OK(c, gin.H{"OK": "DeletePIN"})
 }
 
 func GetMailbox(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "GetMailbox"})
+	reply.OK(c, gin.H{"OK": "GetMailbox"})
 }
 
 func PostLock(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostLock"})
+	reply.OK(c, gin.H{"OK": "PostLock"})
 }
 
 func PostMailbox(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostMailbox"})
+	reply.OK(c, gin.H{"OK": "PostMailbox"})
 }
 
 func PostPIN(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostPIN"})
+	reply.OK(c, gin.H{"OK": "PostPIN"})
 }
 
 func PostStatus(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostStatus"})
+	reply.OK(c, gin.H{"OK": "PostStatus"})
 }
 
 func PostUnlock(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostUnlock"})
+	reply.OK(c, gin.H{"OK": "PostUnlock"})
 }
 
 func PutMailbox(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PutMailbox"})
+	reply.OK(c, gin.H{"OK": "PutMailbox"})
 }

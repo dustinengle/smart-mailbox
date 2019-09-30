@@ -6,25 +6,25 @@ import (
 )
 
 func DeleteGateway(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "DeleteGateway"})
+	reply.OK(c, gin.H{"OK": "DeleteGateway"})
 }
 
 func GetBalance(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "GetBalance"})
+	reply.OK(c, gin.H{"OK": "GetBalance"})
 }
 
 func GetGateway(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "GetGateway"})
+	reply.OK(c, gin.H{"OK": "GetGateway"})
 }
 
 func PostActivate(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostActivate"})
+	reply.OK(c, gin.H{"OK": "PostActivate"})
 }
 
 func PostGateway(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostGateway"})
+	reply.OK(c, gin.H{"OK": "PostGateway"})
 }
 
 func PutGateway(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PutGateway"})
+	reply.OK(c, gin.H{"OK": "PutGateway"})
 }

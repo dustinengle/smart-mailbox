@@ -6,17 +6,17 @@ import (
 )
 
 func GetAccount(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "GetAccount"})
+	reply.OK(c, gin.H{"OK": "GetAccount"})
 }
 
 func GetBalance(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "GetBalance"})
+	reply.OK(c, gin.H{"OK": "GetBalance"})
 }
 
 func GetMessages(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "GetMessages"})
+	reply.OK(c, gin.H{"OK": "GetMessages"})
 }
 
 func PostRegister(c *gin.Context) {
-	common.ReplyOK(c, gin.H{"OK": "PostRegister"})
+	reply.OK(c, gin.H{"OK": "PostRegister"})
 }
