@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"github.com/dustinengle/smart-mailbox/pkg/api"
-	"github.com/dustinengle/smart-mailbox/pkg/client"
+	_ "github.com/dustinengle/smart-mailbox/pkg/client"
 	"github.com/dustinengle/smart-mailbox/pkg/db"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -24,9 +24,6 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-
-	iot := os.Getenv("IOT_ADDR")
-	client.Setup(iot)
 
 	go func() {
 		addr := os.Getenv("API_ADDR")
