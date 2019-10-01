@@ -10,7 +10,6 @@ The following routes are open to the public.
 * `POST /oauth` - Handle Google OAuth 2 redirect.
 * `POST /register` - Create a new account using Google OAuth2 or email and password combination.
   - Setup an account on StreamIOT.
-  - Setup a `safebox` channel on StreamIOT.
 
 ## Private
 
@@ -45,6 +44,7 @@ __Mailbox__
 * `POST /mailbox` - Register a mailbox with the logged in account.
   - This should start the connect and register flow in the starter kit and StreamIOT.  The gateway should make sure that this is accomplished on its own.
   - The identification information for the gateway and mailbox should be included in order to allow for easy activation with an activation code that will be provided on success.
+  - Setup a matching channel on StreamIOT.
 * `PUT /mailbox` - Update a mailbox on the account.  Pretty
 much just change its type and name.
 
