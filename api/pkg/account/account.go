@@ -3,7 +3,6 @@ package account
 import "time"
 
 type Account struct {
-	ChannelID string     `gorm:"unique" json:"channelId"`
 	CreatedAt time.Time  `gorm:"" json:"createdAt"`
 	DeletedAt *time.Time `gorm:"" json:"deletedAt,omitempty"`
 	Email     string     `gorm:"unique" json:"email"`

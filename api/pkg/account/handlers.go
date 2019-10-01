@@ -1,7 +1,7 @@
 package account
 
 import (
-	"github.com/dustinengle/smart-mailbox/pkg/common"
+	"github.com/dustinengle/smart-mailbox/pkg/reply"
 	"github.com/gin-gonic/gin"
 )
 

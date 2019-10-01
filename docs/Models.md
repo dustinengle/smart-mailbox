@@ -6,7 +6,6 @@
 
 ```json
 {
-  "channelId": "UUIDv4",
   "id": 1,
   "email": "john.doe@email.com",
   "password": "password!1",
@@ -15,7 +14,6 @@
 }
 ```
 
-- `channelId` - The channel id for usage with StreamIOT.
 - `email` - The StreamIOT account email address.
 - `password` - The StreamIOT account password.
 - `publicKey` - The blockchain public key that is used for the StreamIOT account.
@@ -26,6 +24,7 @@
 ```json
 {
   "accountId": 1,
+  "channelId": "UUIDv4",
   "deviceId": "UUIDv4",
   "deviceKey": "UUIDv4",
   "id": 1,
@@ -36,6 +35,7 @@
 }
 ```
 
+- `channelId` - The channel id for usage with StreamIOT.
 - `deviceId` - The id of the device on StreamIOT.
 - `publicKey` - The blockchain public key that is used for the starter kit account.
 - `sn` - The gateway serial number that was scanned by the mobile app during mailbox setup.

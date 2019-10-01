@@ -4,6 +4,7 @@ import "time"
 
 type Gateway struct {
 	AccountID uint       `gorm:"" json:"accountId"`
+	ChannelID string     `gorm:"unique" json:"channelId"`
 	CreatedAt time.Time  `gorm:"" json:"createdAt"`
 	DeletedAt *time.Time `gorm:"" json:"deletedAt,omitempty"`
 	DeviceID  string     `gorm:"unique" json:"deviceId"`
