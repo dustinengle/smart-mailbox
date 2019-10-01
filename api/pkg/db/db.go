@@ -1,10 +1,6 @@
 package db
 
 import (
-	"github.com/dustinengle/smart-mailbox/pkg/account"
-	"github.com/dustinengle/smart-mailbox/pkg/gateway"
-	"github.com/dustinengle/smart-mailbox/pkg/mailbox"
-	"github.com/dustinengle/smart-mailbox/pkg/user"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -16,19 +12,39 @@ func Close() (err error) {
 	return
 }
 
+func Create(v interface{}) (err error) {
+	err = db.Create(v).Error
+	return
+}
+
 func DB() *gorm.DB {
 	return db
+}
+
+func Find(vs interface{}, query string, args ...interface{}) (err error) {
+	err = db.Where(query, args...).Find(vs).Error
+	return
+}
+
+func Migrate(vs []interface{}) {
+	for _, v := range vs {
+		db.AutoMigrate(v)
+	}
 }
 
 func Open(path string) (err error) {
 	if db, err = gorm.Open("sqlite3", path); err != nil {
 		return
 	}
+	return
+}
 
-	db.AutoMigrate(&account.Account{})
-	db.AutoMigrate(&gateway.Gateway{})
-	db.AutoMigrate(&mailbox.Mailbox{})
-	db.AutoMigrate(&mailbox.PIN{})
-	db.AutoMigrate(&user.User{})
+func Save(v interface{}) (err error) {
+	err = db.Save(v).Error
+	return
+}
+
+func Single(v interface{}) (err error) {
+	err = db.Where(v).First(v).Error
 	return
 }

@@ -26,16 +26,17 @@ func routes(r *gin.Engine) {
 	{
 		a.Use(authorize)
 		a.GET("/balance", account.GetBalance)
-		a.GET("/messages", account.GetMessages)
+		a.DELETE("/", account.DeleteAccount)
 		a.GET("/", account.GetAccount)
 	}
 
 	g := r.Group("/gateway")
 	{
 		g.Use(authorize)
-		g.GET("/balance", gateway.GetBalance)
+		g.POST("/all", gateway.PostGateways)
+		g.POST("/balance", gateway.PostBalance)
+		g.POST("/messages", gateway.PostMessages)
 		g.DELETE("/", gateway.DeleteGateway)
-		g.GET("/", gateway.GetGateway)
 		g.POST("/", gateway.PostGateway)
 		g.PUT("/", gateway.PutGateway)
 	}
@@ -43,8 +44,9 @@ func routes(r *gin.Engine) {
 	m := r.Group("/mailbox")
 	{
 		m.Use(authorize)
+		m.POST("/all", mailbox.PostMailboxes)
 		m.POST("/lock", mailbox.PostLock)
-		m.DELETE("/pin", mailbox.DeletePIN)
+		m.DELETE("/pin/", mailbox.DeletePIN)
 		m.POST("/pin", mailbox.PostPIN)
 		m.POST("/status", mailbox.PostStatus)
 		m.POST("/unlock", mailbox.PostUnlock)

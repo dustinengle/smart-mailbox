@@ -7,8 +7,8 @@ type Account struct {
 	DeletedAt *time.Time `gorm:"" json:"deletedAt,omitempty"`
 	Email     string     `gorm:"unique" json:"email"`
 	ID        uint       `gorm:"primary_key" json:"id,omitempty"`
-	Password  string     `gorm:"" json:"-"`
-	PublicKey string     `gorm:"unique" json:"publicKey"`
+	Password  string     `gorm:"" json:"password,omitempty"`
+	PublicKey string     `gorm:"unique" json:"publicKey,omitempty"`
 	Token     string     `gorm:"" json:"-"`
 	UpdatedAt time.Time  `gorm:"" json:"updatedAt,omitempty"`
 }
