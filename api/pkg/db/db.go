@@ -21,8 +21,17 @@ func DB() *gorm.DB {
 	return db
 }
 
+func Delete(v interface{}) (err error) {
+	err = db.Delete(v).Error
+	return
+}
+
 func Find(vs interface{}, query string, args ...interface{}) (err error) {
-	err = db.Where(query, args...).Find(vs).Error
+	d := db
+	if query != "" {
+		d = d.Where(query, args...)
+	}
+	err = d.Find(vs).Error
 	return
 }
 

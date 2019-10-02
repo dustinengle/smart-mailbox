@@ -24,6 +24,7 @@ __Account__
 __Gateway__
 
 * `GET /gateway/balance` - Get the balance of the gateway starter kit blockchain account balance.
+* `POST /gateway/message` - Send a message on the gateway and mailbox channel.
 * `DELETE /gateway` - Remove the gateway from account.
   - Remove mailbox associations and starter kit funds should return to main account on StreamIOT.
 * `GET /gateway` - Returns the list of gateways on the account.
@@ -32,11 +33,8 @@ __Gateway__
 
 __Mailbox__
 
-* `POST /mailbox/lock` - Send a lock command to the mailbox.
 * `DELETE /mailbox/pin` - Remove a pin from the mailbox.
 * `POST /mailbox/pin` - Send a new pin number to the mailbox to provide access.
-* `POST /mailbox/status` - Request a status update from the mailbox.
-* `POST /mailbox/unlock` - Send an unlock command to the mailbox.
 * `DELETE /mailbox` - Remove a mailbox from the account.
   - Funds for the starter kit account should be moved back into the main account.
   - Mailbox history will be kept but hidden from general queries.

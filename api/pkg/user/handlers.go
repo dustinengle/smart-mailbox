@@ -2,10 +2,12 @@ package user
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/dustinengle/smart-mailbox/pkg/db"
 	"github.com/dustinengle/smart-mailbox/pkg/reply"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -31,21 +33,38 @@ func UUIDv4() (s string) {
 }
 
 func DeleteUser(c *gin.Context) {
-	// Delete the currently logged in user from JWT.
-
-	reply.OK(c, gin.H{"OK": "DeleteUser"})
+	reply.Error(c, fmt.Errorf("Forbidden"), http.StatusForbidden)
 }
 
 func GetUser(c *gin.Context) {
-	// Return the current logged in user.
+	user := &User{ID: c.MustGet("userID").(uint)}
+	if err := c.BindJSON(user); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "GetUser"})
+	reply.OK(c, user)
 }
 
 func PostLogin(c *gin.Context) {
-	// Attempt to login and return a token.
+	user := new(User)
+	if err := c.BindJSON(user); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PostLogin"})
+	if err := db.Single(user); err != nil {
+		reply.Error(c, err, http.StatusUnauthorized)
+		return
+	}
+
+	token, err := createToken(user.ID, user.AccountID)
+	if err != nil {
+		reply.Error(c, err, http.StatusUnauthorized)
+		return
+	}
+
+	reply.OK(c, token)
 }
 
 func PostOAuth(c *gin.Context) {
@@ -55,15 +74,31 @@ func PostOAuth(c *gin.Context) {
 }
 
 func PostUser(c *gin.Context) {
-	// Add a new user to an account.
+	user := new(User)
+	if err := c.BindJSON(user); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	// Send the welcome email with mobile.
+	if err := db.Create(user); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PostUser"})
+	reply.OK(c, user)
 }
 
 func PutUser(c *gin.Context) {
-	// Update a user in an account.
+	user := new(User)
+	if err := c.BindJSON(user); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PutUser"})
+	if err := db.Save(user); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
+
+	reply.OK(c, user)
 }

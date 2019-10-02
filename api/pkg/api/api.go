@@ -24,7 +24,7 @@ func routes(r *gin.Engine) {
 
 	a := r.Group("/account")
 	{
-		a.Use(authorize)
+		a.Use(authorize, accountToken)
 		a.GET("/balance", account.GetBalance)
 		a.DELETE("/", account.DeleteAccount)
 		a.GET("/", account.GetAccount)
@@ -32,9 +32,10 @@ func routes(r *gin.Engine) {
 
 	g := r.Group("/gateway")
 	{
-		g.Use(authorize)
+		g.Use(authorize, accountToken)
 		g.POST("/all", gateway.PostGateways)
 		g.POST("/balance", gateway.PostBalance)
+		g.POST("/message", gateway.PostMessage)
 		g.POST("/messages", gateway.PostMessages)
 		g.DELETE("/", gateway.DeleteGateway)
 		g.POST("/", gateway.PostGateway)
@@ -43,13 +44,10 @@ func routes(r *gin.Engine) {
 
 	m := r.Group("/mailbox")
 	{
-		m.Use(authorize)
+		m.Use(authorize, accountToken)
 		m.POST("/all", mailbox.PostMailboxes)
-		m.POST("/lock", mailbox.PostLock)
 		m.DELETE("/pin/", mailbox.DeletePIN)
 		m.POST("/pin", mailbox.PostPIN)
-		m.POST("/status", mailbox.PostStatus)
-		m.POST("/unlock", mailbox.PostUnlock)
 		m.DELETE("/", mailbox.DeleteMailbox)
 		m.GET("/", mailbox.GetMailbox)
 		m.POST("/", mailbox.PostMailbox)
@@ -58,7 +56,7 @@ func routes(r *gin.Engine) {
 
 	u := r.Group("/user")
 	{
-		u.Use(authorize)
+		u.Use(authorize, accountToken)
 		u.DELETE("/", user.DeleteUser)
 		u.GET("/", user.GetUser)
 		u.POST("/", user.PostUser)

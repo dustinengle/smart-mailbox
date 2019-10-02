@@ -1,34 +1,45 @@
 package account
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/dustinengle/smart-mailbox/pkg/client"
 	"github.com/dustinengle/smart-mailbox/pkg/db"
 	"github.com/dustinengle/smart-mailbox/pkg/reply"
 	"github.com/dustinengle/smart-mailbox/pkg/user"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 )
 
 func DeleteAccount(c *gin.Context) {
-	// Read the user account id from JWT token.
-
-	// Mark the account as deleted.
-
-	reply.OK(c, gin.H{"OK": "DeleteAccount"})
+	reply.Error(c, fmt.Errorf("Forbidden"), http.StatusForbidden)
 }
 
 func GetAccount(c *gin.Context) {
-	// Read the user id from the JWT token.
+	account := new(Account)
+	if err := c.BindJSON(account); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	// Fetch the user from the database and return.
-
-	reply.OK(c, gin.H{"OK": "GetAccount"})
+	reply.OK(c, account)
 }
 
 func GetBalance(c *gin.Context) {
-	// Return the balance of the account from streamiot.
+	account := new(Account)
+	if err := c.BindJSON(account); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "GetBalance"})
+	balance, err := client.UserBalance(account.Token, account.Email)
+	if err != nil {
+		reply.Error(c, err, http.StatusBadGateway)
+		return
+	}
+
+	reply.OK(c, balance)
 }
 
 func PostRegister(c *gin.Context) {
@@ -39,6 +50,19 @@ func PostRegister(c *gin.Context) {
 	}
 
 	// Create an account in streamiot.
+	if err := client.UserRegister(account.Email, account.Password); err != nil {
+		reply.Error(c, err, http.StatusBadGateway)
+		return
+	}
+
+	// Login to get the token.
+	token, err := client.UserLogin(account.Email, account.Password)
+	if err != nil {
+		reply.Error(c, err, http.StatusUnauthorized)
+		return
+	}
+
+	account.Token = token.Token
 
 	// Save the account to the database.
 	if err := db.Create(account); err != nil {
@@ -48,9 +72,11 @@ func PostRegister(c *gin.Context) {
 
 	// Save the user to the database.
 	user := &user.User{
-		AccountID: account.ID,
-		Email:     account.Email,
-		Password:  account.Password,
+		AccountID:    account.ID,
+		Email:        account.Email,
+		Password:     account.Password,
+		RefreshToken: uuid.NewV4().String(),
+		Token:        uuid.NewV4().String(),
 	}
 	if err := db.Create(user); err != nil {
 		reply.Error(c, err, http.StatusBadRequest)
@@ -59,5 +85,5 @@ func PostRegister(c *gin.Context) {
 
 	// Send welcome email.
 
-	reply.OK(c, account)
+	reply.OK(c, user)
 }

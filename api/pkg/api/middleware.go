@@ -7,16 +7,31 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/dustinengle/smart-mailbox/pkg/db"
+	"github.com/dustinengle/smart-mailbox/pkg/reply"
+
 	"github.com/dgrijalva/jwt-go"
+	"github.com/dustinengle/smart-mailbox/pkg/account"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
+func accountToken(c *gin.Context) {
+	account := &account.Account{ID: c.MustGet("accountID").(uint)}
+	if err := db.Single(account); err != nil {
+		reply.Error(c, err, http.StatusUnauthorized)
+		return
+	}
+
+	c.Set("accountToken", account.Token)
+	c.Next()
+}
+
 func authorize(c *gin.Context) {
 	auth := c.GetHeader("Authorization")
 	if auth == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		reply.Error(c, fmt.Errorf("Unauthorized"), http.StatusUnauthorized)
 		return
 	}
 
@@ -28,25 +43,28 @@ func authorize(c *gin.Context) {
 		return secret, nil
 	})
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
 
 	claims, ok := token.Claims.(jwt.StandardClaims)
-	if !ok || !token.Valid {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+	if !ok {
+		reply.Error(c, fmt.Errorf("claims not valid %v", claims), http.StatusUnauthorized)
+		return
+	} else if !token.Valid {
+		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
 
 	accountID, err := strconv.ParseUint(claims.Id, 10, 64)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
 
 	userID, err := strconv.ParseUint(claims.Subject, 10, 64)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
 

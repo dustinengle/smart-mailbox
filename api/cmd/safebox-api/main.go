@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"os/user"
 	"syscall"
 
 	"github.com/dustinengle/smart-mailbox/pkg/account"
@@ -14,6 +13,7 @@ import (
 	"github.com/dustinengle/smart-mailbox/pkg/db"
 	"github.com/dustinengle/smart-mailbox/pkg/gateway"
 	"github.com/dustinengle/smart-mailbox/pkg/mailbox"
+	"github.com/dustinengle/smart-mailbox/pkg/user"
 	_ "github.com/joho/godotenv/autoload"
 )
 

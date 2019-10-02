@@ -13,8 +13,8 @@ type User struct {
 	Password     string     `gorm:"" json:"password,omitempty"`
 	Phone        string     `gorm:"unique" json:"phone,omitempty"`
 	PushToken    string     `gorm:"unique" json:"pushToken,omitempty"`
-	Token        string     `gorm:"unique" json:"token,omitempty"`
 	RefreshToken string     `gorm:"unique" json:"refreshToken,omitempty"`
+	Token        string     `gorm:"unique" json:"token,omitempty"`
 	UpdatedAt    time.Time  `gorm:"" json:"updatedAt,omitempty"`
 }
 

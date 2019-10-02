@@ -1,66 +1,121 @@
 package mailbox
 
 import (
+	"net/http"
+
+	"github.com/dustinengle/smart-mailbox/pkg/client"
+	"github.com/dustinengle/smart-mailbox/pkg/db"
 	"github.com/dustinengle/smart-mailbox/pkg/reply"
 	"github.com/gin-gonic/gin"
 )
 
 func DeleteMailbox(c *gin.Context) {
-	// Delete the mailbox by id.
+	mailbox := new(Mailbox)
+	if err := c.BindJSON(mailbox); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "DeleteMailbox"})
+	if err := db.Delete(mailbox); err != nil {
+		reply.Error(c, err, http.StatusInternalServerError)
+		return
+	}
+
+	reply.OK(c, "OK")
 }
 
 func DeletePIN(c *gin.Context) {
-	// Delete the pin by id.
+	pin := new(PIN)
+	if err := c.BindJSON(pin); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "DeletePIN"})
+	if err := db.Delete(pin); err != nil {
+		reply.Error(c, err, http.StatusInternalServerError)
+		return
+	}
+
+	reply.OK(c, "OK")
 }
 
 func GetMailbox(c *gin.Context) {
-	// Return the mailbox by id.
+	mailbox := new(Mailbox)
+	if err := c.BindJSON(mailbox); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "GetMailbox"})
-}
-
-func PostLock(c *gin.Context) {
-	// Send a lock message to a mailbox.
-
-	reply.OK(c, gin.H{"OK": "PostLock"})
+	reply.OK(c, mailbox)
 }
 
 func PostMailbox(c *gin.Context) {
-	// Add a new mailbox to the account from request.
+	mailbox := new(Mailbox)
+	if err := c.BindJSON(mailbox); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PostMailbox"})
+	token := c.MustGet("accountToken").(string)
+	if err := client.ThingCreate(token, mailbox.Name, "device"); err != nil {
+		reply.Error(c, err, http.StatusBadGateway)
+		return
+	}
+
+	if err := db.Create(mailbox); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
+
+	reply.OK(c, mailbox)
 }
 
 func PostMailboxes(c *gin.Context) {
-	// Search and returned all.
+	mailboxes := make([]*Mailbox, 0)
+	if err := db.Find(mailboxes, ""); err != nil {
+		reply.Error(c, err, http.StatusInternalServerError)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PostMailboxes"})
+	reply.OK(c, mailboxes)
 }
 
 func PostPIN(c *gin.Context) {
-	// Add a new pin to a mailbox defined in the request.
+	pin := new(PIN)
+	if err := c.BindJSON(pin); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PostPIN"})
+	if err := db.Create(pin); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
+
+	reply.OK(c, pin)
 }
 
-func PostStatus(c *gin.Context) {
-	// Post a status message to a mailbox.
+func PostPINs(c *gin.Context) {
+	pins := make([]*PIN, 0)
+	if err := db.Find(pins, ""); err != nil {
+		reply.Error(c, err, http.StatusInternalServerError)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PostStatus"})
-}
-
-func PostUnlock(c *gin.Context) {
-	// Post unlock message to a mailbox.
-
-	reply.OK(c, gin.H{"OK": "PostUnlock"})
+	reply.OK(c, pins)
 }
 
 func PutMailbox(c *gin.Context) {
-	// Update the mailbox from the request.
+	mailbox := new(Mailbox)
+	if err := c.BindJSON(mailbox); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
 
-	reply.OK(c, gin.H{"OK": "PutMailbox"})
+	if err := db.Save(mailbox); err != nil {
+		reply.Error(c, err, http.StatusBadRequest)
+		return
+	}
+
+	reply.OK(c, mailbox)
 }
