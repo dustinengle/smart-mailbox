@@ -49,20 +49,22 @@ func PostRegister(c *gin.Context) {
 		return
 	}
 
-	// Create an account in streamiot.
-	if err := client.UserRegister(account.Email, account.Password); err != nil {
-		reply.Error(c, err, http.StatusBadGateway)
-		return
-	}
+	/*
+		// Create an account in streamiot.
+		if err := client.UserRegister(account.Email, account.Password); err != nil {
+		  reply.Error(c, err, http.StatusBadGateway)
+		  return
+		}
 
-	// Login to get the token.
-	token, err := client.UserLogin(account.Email, account.Password)
-	if err != nil {
-		reply.Error(c, err, http.StatusUnauthorized)
-		return
-	}
+		// Login to get the token.
+		token, err := client.UserLogin(account.Email, account.Password)
+		if err != nil {
+		  reply.Error(c, err, http.StatusUnauthorized)
+		  return
+		}
 
-	account.Token = token.Token
+		account.Token = token.Token
+	*/
 
 	// Save the account to the database.
 	if err := db.Create(account); err != nil {

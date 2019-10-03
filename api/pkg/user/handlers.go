@@ -37,7 +37,7 @@ func DeleteUser(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-	user := &User{ID: c.MustGet("userID").(uint)}
+	user := &User{ID: uint(c.MustGet("userID").(uint64))}
 	if err := c.BindJSON(user); err != nil {
 		reply.Error(c, err, http.StatusBadRequest)
 		return

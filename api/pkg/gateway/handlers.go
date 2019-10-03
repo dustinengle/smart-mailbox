@@ -72,7 +72,7 @@ func PostGateway(c *gin.Context) {
 		return
 	}
 
-	gateway.AccountID = c.MustGet("accountID").(uint)
+	gateway.AccountID = uint(c.MustGet("accountID").(uint64))
 
 	if err := db.Create(gateway); err != nil {
 		reply.Error(c, err, http.StatusBadRequest)

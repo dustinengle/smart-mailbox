@@ -72,7 +72,7 @@ func PostMailbox(c *gin.Context) {
 
 func PostMailboxes(c *gin.Context) {
 	mailboxes := make([]*Mailbox, 0)
-	if err := db.Find(mailboxes, ""); err != nil {
+	if err := db.Find(&mailboxes, ""); err != nil {
 		reply.Error(c, err, http.StatusInternalServerError)
 		return
 	}

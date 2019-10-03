@@ -18,7 +18,7 @@ import (
 )
 
 func accountToken(c *gin.Context) {
-	account := &account.Account{ID: c.MustGet("accountID").(uint)}
+	account := &account.Account{ID: uint(c.MustGet("accountID").(uint64))}
 	if err := db.Single(account); err != nil {
 		reply.Error(c, err, http.StatusUnauthorized)
 		return
@@ -31,39 +31,45 @@ func accountToken(c *gin.Context) {
 func authorize(c *gin.Context) {
 	auth := c.GetHeader("Authorization")
 	if auth == "" {
+		fmt.Println("authorization header empty")
 		reply.Error(c, fmt.Errorf("Unauthorized"), http.StatusUnauthorized)
 		return
 	}
+	fmt.Println(auth)
 
-	token, err := jwt.Parse(auth, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+	token, err := jwt.Parse(auth, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method")
 		}
 		secret := []byte(os.Getenv("JWT_SECRET"))
 		return secret, nil
 	})
 	if err != nil {
+		fmt.Println("unable to parse token")
 		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
 
-	claims, ok := token.Claims.(jwt.StandardClaims)
+	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		reply.Error(c, fmt.Errorf("claims not valid %v", claims), http.StatusUnauthorized)
+		reply.Error(c, fmt.Errorf("claims not valid %v %v", claims, token), http.StatusUnauthorized)
 		return
 	} else if !token.Valid {
+		fmt.Println("token is not valid")
 		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
 
-	accountID, err := strconv.ParseUint(claims.Id, 10, 64)
+	accountID, err := strconv.ParseUint(claims["jti"].(string), 10, 64)
 	if err != nil {
+		fmt.Println("unable to get account id from claims")
 		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
 
-	userID, err := strconv.ParseUint(claims.Subject, 10, 64)
+	userID, err := strconv.ParseUint(claims["sub"].(string), 10, 64)
 	if err != nil {
+		fmt.Println("unable to get user id from claims")
 		reply.Error(c, err, http.StatusUnauthorized)
 		return
 	}
