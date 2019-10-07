@@ -30,6 +30,7 @@ func routes(r *gin.Engine) {
 	{
 		m.Use(middleware.Authorize, middleware.AccountToken)
 		m.DELETE("/:mailboxID/pin/:pinID", handler.DeletePIN)
+		m.GET("/:mailboxID/message", handler.GetMessages)
 		m.GET("/:mailboxID/pin", handler.GetPIN)
 		m.POST("/pin", handler.PostPIN)
 		m.DELETE("/:mailboxID", handler.DeleteMailbox)

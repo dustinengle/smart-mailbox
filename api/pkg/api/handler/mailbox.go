@@ -98,6 +98,42 @@ func GetMailbox(c *gin.Context) {
 	reply.OK(c, results)
 }
 
+func GetMessages(c *gin.Context) {
+	// Get the account id.
+	accountID := c.MustGet("accountID").(uint)
+
+	// Load the mailbox id from the param.
+	mid := c.Param("mailboxID")
+
+	// Convert the id into a uint.
+	mailboxID, err := strconv.ParseUint(mid, 10, 64)
+	if err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+
+	// Load the mailbox from the database.
+	mailbox := &model.Mailbox{
+		AccountID: accountID,
+		ID:        uint(mailboxID),
+	}
+	if err = db.Single(mailbox); err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+
+	// Request channel message from StreamIOT.
+	results, err := client.ChannelMessageRead(mailbox.DeviceKey, mailbox.ChannelID, 100)
+	if err != nil {
+		fmt.Printf("ERROR: unable to read messages: channel=%s,deviceKey=%s\n", mailbox.ChannelID, mailbox.DeviceKey)
+		reply.BadGateway(c, err)
+		return
+	}
+
+	// Return messages.
+	reply.OK(c, results)
+}
+
 func GetPIN(c *gin.Context) {
 	// Get the account id.
 	accountID := c.MustGet("accountID").(uint)
