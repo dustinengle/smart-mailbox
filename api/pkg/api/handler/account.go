@@ -101,6 +101,27 @@ func PostLogin(c *gin.Context) {
 		return
 	}
 
+	// Attempt to login and update the account token.
+	account := &model.Account{
+		ID: user.AccountID,
+	}
+	if err = db.Single(account); err != nil {
+		reply.InternalServer(c, err)
+		return
+	}
+	accountToken, err := client.UserLogin(account.Email, account.Password)
+	if err != nil {
+		reply.BadGateway(c, err)
+		return
+	}
+
+	// Update the account token and save to the database.
+	account.Token = accountToken.Token
+	if err = db.Save(account); err != nil {
+		reply.InternalServer(c, err)
+		return
+	}
+
 	// Return the token.
 	reply.OK(c, token)
 }
