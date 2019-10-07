@@ -19,7 +19,7 @@ export const theme = {
     disabled: 'rgba(0, 0, 0, 0.5)',
     placeholder: 'rgba(0, 0, 0, 0.75)',
     backdrop: 'rgba(0, 0, 0, 0.5)',
-    notification: 'rgba(255, 0, 0, 0.75)',
+    notification: 'rgba(255, 0, 0, 0.95)',
   },
   fonts: {
     ...DefaultTheme.fonts,
@@ -34,15 +34,19 @@ export const theme = {
 }
 
 export const styles = StyleSheet.create({
+  alert: {
+    backgroundColor: theme.colors.notification,
+  },
   appBar: {
-    backgroundColor: 'none',
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.primary,
     borderWidth: 0,
     bottom: 0,
-    left: -15,
+    left: 0,
     position: 'absolute',
     right: 0,
     top: 0,
-    width: '100vw',
+    width: '100%',
   },
   button: {
     marginTop: 10,
@@ -56,10 +60,7 @@ export const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 10,
+    padding: 10,
   },
   fab: {
     bottom: 20,
@@ -90,11 +91,8 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   modal: {
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0,
+    backgroundColor: theme.colors.surface,
+    padding: 20,
   },
   paddings: {
     paddingBottom: 10,
@@ -102,14 +100,30 @@ export const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 10,
   },
+  scanner: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+  },
   spaceAround: {
     justifyContent: 'space-around',
+  },
+  textBig: {
+    fontSize: 18,
   },
   textCenter: {
     textAlign: 'center',
   },
+  textHuge: {
+    fontSize: 22,
+  },
   textPrimary: {
     color: theme.colors.primary,
+  },
+  textWhite: {
+    color: theme.colors.surface,
   },
 })
 

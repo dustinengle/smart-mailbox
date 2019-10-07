@@ -1,6 +1,6 @@
 
 import { isWeb } from '../../core/Device'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styles } from '../../core/Style'
 
 import { TextInput } from 'react-native-paper'
@@ -14,6 +14,12 @@ const valid = v => {
 const Password = props => {
   const [changed, setChanged] = useState(false)
   const [value, setValue] = useState(props.value || '')
+
+  useEffect(() => {
+    if (!!props.value && props.value !== value) {
+      setValue(props.value)
+    }
+  })
 
   const mobileFields = isWeb() ? {} : {
     autoCapitalize: 'none',

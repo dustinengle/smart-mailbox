@@ -1,6 +1,6 @@
 
 import { isWeb } from '../../core/Device'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styles } from '../../core/Style'
 
 import { TextInput } from 'react-native-paper'
@@ -18,14 +18,14 @@ const Name = props => {
   const mobileFields = isWeb() ? {} : {
     autoCapitalize: 'words',
     autoCompleteType: 'name',
-    autoFocus: true,
+    autoFocus: false,
   }
 
   return (
     <TextInput
       { ...mobileFields }
       error={ changed && !valid(value) }
-      label="Name"
+      label={ props.label || 'Name' }
       onChangeText={ text => {
         setChanged(true)
         setValue(text)

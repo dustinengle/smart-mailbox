@@ -4,8 +4,8 @@ import Storage from './Storage'
 
 function checkError(res) {
   try {
-    console.log(res)
     if (!res.ok) {
+      console.log(res)
       throw new Error(`${ res.status } - ${ res.statusText }`)
     }
 
@@ -29,7 +29,7 @@ async function setupOpts(opts) {
       'Accept': 'application/json',
       'Authorization': token,
       'Content-Type': 'application/json',
-      'User-Agent': 'SafeBox Mobile v1.0.0',
+      'User-Agent': 'SafeBox Mobile v0.1.0',
       ...opts.headers,
     },
     ...opts,

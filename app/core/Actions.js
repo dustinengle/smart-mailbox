@@ -1,17 +1,16 @@
 
 import { ACTION, API, STORE } from './Constants'
-import { Alert } from 'react-native'
 import { del, get, post, put } from './Fetch'
 import Storage from './Storage'
 
 const act = (dispatch, payload, type) => dispatch({ payload, type })
 const error = (dispatch, err) => {
-  act(dispatch, { message: err.message || err, title: 'Error' }, ACTION.ALERT)
-  return Promise.reject(err)
+  act(dispatch, { id: Date.now(), message: err.message || err, title: 'Error' }, ACTION.ALERT)
+  //return Promise.reject(err)
 }
 
 //const alert = a => dispatch => Alert.alert(a.title || 'Alert', a.message || a)
-export const alert = a => dispatch => act(dispatch, a, ACTION.ALERT)
+export const alert = a => dispatch => act(dispatch, { ...a, id: Date.now() }, ACTION.ALERT)
 export const dismiss = a => dispatch => act(dispatch, a, ACTION.DISMISS)
 
 // Account

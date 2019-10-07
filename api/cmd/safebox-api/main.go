@@ -7,13 +7,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/dustinengle/smart-mailbox/pkg/account"
 	"github.com/dustinengle/smart-mailbox/pkg/api"
 	_ "github.com/dustinengle/smart-mailbox/pkg/client"
 	"github.com/dustinengle/smart-mailbox/pkg/db"
-	"github.com/dustinengle/smart-mailbox/pkg/gateway"
-	"github.com/dustinengle/smart-mailbox/pkg/mailbox"
-	"github.com/dustinengle/smart-mailbox/pkg/user"
+	"github.com/dustinengle/smart-mailbox/pkg/model"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -30,11 +27,10 @@ func main() {
 	defer db.Close()
 
 	db.Migrate([]interface{}{
-		&account.Account{},
-		&gateway.Gateway{},
-		&mailbox.Mailbox{},
-		&mailbox.PIN{},
-		&user.User{},
+		&model.Account{},
+		&model.Mailbox{},
+		&model.PIN{},
+		&model.User{},
 	})
 
 	go func() {

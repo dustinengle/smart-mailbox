@@ -42,8 +42,11 @@ func ChannelCreate(token, name string) (err error) {
 }
 
 func ChannelRead(token string, limit, offset uint64) (res Channels, err error) {
-	res = *new(Channels)
-	url := fmt.Sprintf("%s?limit=%d&offset=%d", URL(GetChannels), limit, offset)
+	res = Channels{
+		Channels: make([]Channel, 0),
+	}
+	url := fmt.Sprintf("%s", URL(GetChannels))
+	fmt.Println(url, token)
 	err = Get(url, token, &res)
 	return
 }

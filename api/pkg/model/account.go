@@ -1,4 +1,4 @@
-package account
+package model
 
 import "time"
 
@@ -7,17 +7,8 @@ type Account struct {
 	DeletedAt *time.Time `gorm:"" json:"deletedAt,omitempty"`
 	Email     string     `gorm:"unique" json:"email"`
 	ID        uint       `gorm:"primary_key" json:"id,omitempty"`
-	Password  string     `gorm:"" json:"password,omitempty"`
+	Password  string     `gorm:"" json:"-"`
 	PublicKey string     `gorm:"unique" json:"publicKey,omitempty"`
 	Token     string     `gorm:"" json:"-"`
 	UpdatedAt time.Time  `gorm:"" json:"updatedAt,omitempty"`
-}
-
-func New(email, password string) (a *Account) {
-	a = &Account{
-		CreatedAt: time.Now().UTC(),
-		Email:     email,
-		Password:  password,
-	}
-	return
 }

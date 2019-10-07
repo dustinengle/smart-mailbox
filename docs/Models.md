@@ -63,6 +63,7 @@
   "email": "jane.doe@email.com",
   "id": 1,
   "mailboxId": 1,
+  "name": "Billy Bob",
   "number": 1234,
   "phone": "5555554321",
   "single": false,

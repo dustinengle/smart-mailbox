@@ -41,8 +41,10 @@ func ThingCreate(token, name, kind string) (err error) {
 }
 
 func ThingRead(token string, limit, offset uint64) (res Things, err error) {
-	res = *new(Things)
-	url := fmt.Sprintf("%s?limit=%d&offset=%d", URL(GetThings), limit, offset)
+	res = Things{
+		Things: make([]Thing, 0),
+	}
+	url := fmt.Sprintf("%s", URL(GetThings))
 	err = Get(url, token, &res)
 	return
 }

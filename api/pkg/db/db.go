@@ -35,6 +35,15 @@ func Find(vs interface{}, query string, args ...interface{}) (err error) {
 	return
 }
 
+func First(v interface{}, query string, args ...interface{}) (err error) {
+	d := db
+	if query != "" {
+		d = d.Where(query, args...)
+	}
+	err = d.First(v).Error
+	return
+}
+
 func Migrate(vs []interface{}) {
 	for _, v := range vs {
 		db.AutoMigrate(v)

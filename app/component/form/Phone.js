@@ -1,6 +1,6 @@
 
 import { isWeb } from '../../core/Device'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styles } from '../../core/Style'
 
 import { TextInput } from 'react-native-paper'
@@ -15,6 +15,12 @@ const Phone = props => {
   const [changed, setChanged] = useState(false)
   const [value, setValue] = useState(props.value || '')
 
+  useEffect(() => {
+    if (!!props.value && props.value !== value) {
+      setValue(props.value)
+    }
+  })
+
   const mobileFields = isWeb() ? {} : {
     autoCapitalize: 'none',
     autoCompleteType: 'tel',
@@ -25,7 +31,7 @@ const Phone = props => {
     <TextInput
       { ...mobileFields }
       error={ changed && !valid(value) }
-      label="Phone Address"
+      label="Phone Number"
       onChangeText={ text => {
         setChanged(true)
         setValue(text)

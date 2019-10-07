@@ -26,7 +26,7 @@ class Loading extends Component {
       this.props.dispatchAlert({ message: 'This is a test!', title: 'Notice' })
 
       this.handleLogin()
-    }, 3000)
+    }, 1000)
   }
 
   handleDashboard = () => this.props.navigation.navigate('Dashboard')

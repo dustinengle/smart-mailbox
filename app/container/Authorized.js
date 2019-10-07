@@ -2,14 +2,20 @@
 import { createAppContainer } from 'react-navigation'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
+import { ICON } from '../core/Constants'
 import React from 'react'
 
+import AttachModalScreen from '../screen/AttachModal'
+import BarcodeModalScreen from '../screen/BarcodeModal'
+import ContactModalScreen from '../screen/ContactModal'
 import DashboardScreen from '../screen/Dashboard'
-import GatewayScreen from '../screen/Gateway'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MailboxScreen from '../screen/Mailbox'
+import PINModalScreen from '../screen/PINModal'
+import RenameModalScreen from '../screen/RenameModal'
 import SettingsScreen from '../screen/Settings'
 import UserScreen from '../screen/User'
+import UserModalScreen from '../screen/UserModal'
 import WalletScreen from '../screen/Wallet'
 
 function getIcon(name) {
@@ -27,39 +33,49 @@ const Authorized = createBottomTabNavigator(
   {
     Dashboard: {
       navigationOptions: {
-        tabBarIcon: getIcon('view-dashboard'),
+        tabBarIcon: getIcon(ICON.DASHBOARD),
       },
-      screen: createStackNavigator({ Dashboard: DashboardScreen }),
-    },
-    Gateway: {
-      navigationOptions: {
-        tabBarIcon: getIcon('console-network'),
-      },
-      screen: createStackNavigator({ Gateway: GatewayScreen }),
+      screen: createStackNavigator({
+        Dashboard: DashboardScreen,
+        AttachModal: AttachModalScreen,
+        BarcodeModal: BarcodeModalScreen,
+      }),
     },
     Mailbox: {
       navigationOptions: {
-        tabBarIcon: getIcon('mailbox'),
+        tabBarIcon: getIcon(ICON.MAILBOX),
       },
-      screen: createStackNavigator({ Mailbox: MailboxScreen }),
+      screen: createStackNavigator({
+        Mailbox: MailboxScreen,
+        RenameModal: RenameModalScreen,
+        PINModal: PINModalScreen,
+        ContactModal: ContactModalScreen,
+      }),
     },
     User: {
       navigationOptions: {
-        tabBarIcon: getIcon('account-group'),
+        tabBarIcon: getIcon(ICON.USER),
       },
-      screen: createStackNavigator({ User: UserScreen }),
+      screen: createStackNavigator({
+        User: UserScreen,
+        UserModal: UserModalScreen,
+        ContactModal: ContactModalScreen,
+      }),
     },
     Wallet: {
       navigationOptions: {
-        tabBarIcon: getIcon('wallet'),
+        tabBarIcon: getIcon(ICON.WALLET),
       },
       screen: createStackNavigator({ Wallet: WalletScreen }),
     },
     Settings: {
       navigationOptions: {
-        tabBarIcon: getIcon('settings'),
+        tabBarIcon: getIcon(ICON.SETTINGS),
       },
-      screen: createStackNavigator({ Settings: SettingsScreen }),
+      screen: createStackNavigator({
+        Settings: SettingsScreen,
+        RenameModal: RenameModalScreen,
+      }),
     },
   },
   {

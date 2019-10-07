@@ -1,4 +1,4 @@
-package user
+package model
 
 import "time"
 
@@ -10,21 +10,10 @@ type User struct {
 	Google       bool       `gorm:"" json:"google,omitempty"`
 	ID           uint       `gorm:"primary_key" json:"id,omitempty"`
 	Name         string     `gorm:"" json:"name"`
-	Password     string     `gorm:"" json:"password,omitempty"`
+	Password     string     `gorm:"" json:"-"`
 	Phone        string     `gorm:"unique" json:"phone,omitempty"`
-	PushToken    string     `gorm:"unique" json:"pushToken,omitempty"`
-	RefreshToken string     `gorm:"unique" json:"refreshToken,omitempty"`
-	Token        string     `gorm:"unique" json:"token,omitempty"`
+	PushToken    string     `gorm:"unique" json:"-"`
+	RefreshToken string     `gorm:"unique" json:"-"`
+	Token        string     `gorm:"unique" json:"-y"`
 	UpdatedAt    time.Time  `gorm:"" json:"updatedAt,omitempty"`
-}
-
-func New(accountID uint, name, email, phone string) (u *User) {
-	u = &User{
-		AccountID: accountID,
-		CreatedAt: time.Now().UTC(),
-		Email:     email,
-		Name:      name,
-		Phone:     phone,
-	}
-	return
 }

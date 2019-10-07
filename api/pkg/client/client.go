@@ -18,7 +18,7 @@ func init() {
 	client = httpclient.NewHttpClient()
 	client.Defaults(httpclient.Map{
 		httpclient.OPT_DEBUG:     os.Getenv("DEBUG") != "",
-		httpclient.OPT_USERAGENT: "SafeBox API v1.0.0",
+		httpclient.OPT_USERAGENT: "SafeBox API v0.1.0",
 		"Accept":                 "application/json",
 		"Content-Type":           "application/json",
 	})

@@ -19,7 +19,7 @@ export const ACTION = {
 }
 
 export const API = {
-  HOST: 'http://localhost:10000',
+  HOST: 'http://192.168.0.164:10000',
 
   GET_ACCOUNT: '/account',
   GET_ACCOUNT_BALANCE: '/account/balance',
@@ -45,6 +45,40 @@ export const API = {
   POST_USER: '/user',
 }
 
+export const ICON = {
+  ADD: 'add',
+  BATTERY_100: 'battery',
+  BATTERY_90: 'battery-90',
+  BATTERY_80: 'battery-80',
+  BATTERY_70: 'battery-70',
+  BATTERY_60: 'battery-60',
+  BATTERY_50: 'battery-50',
+  BATTERY_40: 'battery-40',
+  BATTERY_30: 'battery-30',
+  BATTERY_20: 'battery-20',
+  BATTERY_10: 'battery-10',
+  CLOSE: 'close',
+  DASHBOARD: 'view-dashboard',
+  DELETE: 'delete',
+  DOWN: 'flag-outline',
+  EMAIL: 'email',
+  EMPTY: 'package-variant',
+  GATEWAY: 'console-network',
+  MAILBOX: 'mailbox',
+  LOCKED: 'lock',
+  PACKAGE: 'package-variant-closed',
+  PHONE: 'phone',
+  PIN: 'numeric',
+  SAVE: 'content-save',
+  SETTINGS: 'settings',
+  UNLOCKED: 'lock-open',
+  UP: 'flag',
+  USER: 'account-group',
+  WALLET: 'wallet',
+}
+
+export const DEMO = true
+
 export const STORE = {
   ACCOUNT: '@safebox.account',
   GATEWAYS: '@safebox.gateways',
@@ -57,5 +91,7 @@ export const STORE = {
 export default {
   ACTION,
   API,
+  DEMO,
+  ICON,
   STORE,
 }

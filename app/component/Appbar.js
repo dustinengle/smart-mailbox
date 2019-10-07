@@ -6,7 +6,7 @@ import { Appbar } from 'react-native-paper'
 
 const Bar = props => (
   <Appbar dark={ !theme.dark } style={ styles.appBar }>
-    <Appbar.Content subtitle="v1.0.0" title="SafeBox" />
+    <Appbar.Content subtitle="v0.1.0" title="SafeBox" />
   </Appbar>
 )
 

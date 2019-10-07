@@ -4,6 +4,7 @@ import { addConnectedListener, isConnected } from './core/Device'
 import { applyMiddleware, createStore } from 'redux'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createLogger } from 'redux-logger'
+import { isWeb } from './core/Device'
 import React from 'react';
 import Reducers from './core/Reducers'
 import Storage from './core/Storage'
@@ -16,7 +17,7 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import { Provider as StoreProvider } from 'react-redux'
 import Unauthorized from './container/Unauthorized'
 
-const middleware = applyMiddleware(createLogger(), thunk)
+const middleware = isWeb() ? applyMiddleware(createLogger(), thunk) : applyMiddleware(thunk)
 const store = createStore(Reducers, middleware)
 
 // Update the connection state in the store.

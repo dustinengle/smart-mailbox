@@ -1,6 +1,6 @@
 
 import { isWeb } from '../../core/Device'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styles } from '../../core/Style'
 
 import { TextInput } from 'react-native-paper'
@@ -18,7 +18,7 @@ const Email = props => {
   const mobileFields = isWeb() ? {} : {
     autoCapitalize: 'none',
     autoCompleteType: 'email',
-    autoFocus: true,
+    autoFocus: false,
   }
 
   return (

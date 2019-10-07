@@ -16,7 +16,11 @@ export default class Component extends React.PureComponent {
   }
 
   static navigationOptions = ({ navigation, navigationOptions }) => {
-    const modalRoutes = new Set(['Login', 'Register'])
+    const modalRoutes = new Set([
+      'GatewayModal',
+      'Login',
+      'Register',
+    ])
     const route = navigation.state.routeName
     if (modalRoutes.has(route)) {
       return {
@@ -32,7 +36,7 @@ export default class Component extends React.PureComponent {
         backgroundColor: theme.colors.primary,
         height: 56,
         margin: 0,
-        width: '100vw',
+        width: '100%',
       },
       headerTitle: (<Appbar onGo={ r => navigation.navigate(r) } />),
       headerTitleStyle: {
@@ -51,9 +55,13 @@ export default class Component extends React.PureComponent {
     }
   }
 
+  confirmClose = () => this.setState({ confirm: false, confirmData: null })
+
+  confirmOpen = confirmData => this.setState({ confirm: true, confirmData })
+
   handleChange = (k, v) => this.setState({ [k]: v })
 
-  handleEdit = data => this.setState({ data })
+  handleEdit = data => this.setState({ data }, this.toggleOpen)
 
   toggleOpen = (data = null) => this.setState({ data, open: !this.state.open })
 
