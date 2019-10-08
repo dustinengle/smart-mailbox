@@ -123,7 +123,11 @@ func PostLogin(c *gin.Context) {
 	}
 
 	// Return the token.
-	reply.OK(c, token)
+	reply.OK(c, map[string]interface{}{
+		"account": account,
+		"token":   token,
+		"user":    user,
+	})
 }
 
 func PostRegister(c *gin.Context) {
@@ -207,5 +211,9 @@ func PostRegister(c *gin.Context) {
 		return
 	}
 
-	reply.OK(c, token)
+	reply.OK(c, map[string]interface{}{
+		"account": account,
+		"token":   token,
+		"user":    user,
+	})
 }
