@@ -15,68 +15,10 @@ export const dismiss = a => dispatch => act(dispatch, a, ACTION.DISMISS)
 
 // Account
 
-export const getAccount = () => dispatch => {
-  return get(API.GET_ACCOUNT)
-    .then(res => {
-      act(dispatch, res.result, ACTION.ACCOUNT)
-      Storage.set(STORE.ACCOUNT, JSON.stringify(res.result))
-      return res
-    })
-    .catch(err => error(dispatch, err))
-}
-
 export const postAccount = data => dispatch => {
   return post(API.POST_ACCOUNT, data)
     .then(res => {
       act(dispatch, res.result, ACTION.ACCOUNT)
-      return res
-    })
-    .catch(err => error(dispatch, err))
-}
-
-// Gateway
-
-export const delGateway = data => dispatch => {
-  return del(API.DEL_GATEWAY, data)
-    .then(res => {
-      act(dispatch, res.result, ACTION.GATEWAY)
-      return res
-    })
-    .catch(err => error(dispatch, err))
-}
-
-export const getGatewayMessages = data => dispatch => {
-  return post(API.GET_GATEWAY_MESSAGES, data)
-    .then(res => {
-      act(dispatch, res.result, ACTION.MESSAGES)
-      return res
-    })
-    .catch(err => error(dispatch, err))
-}
-
-export const getGateways = () => dispatch => {
-  return post(API.GET_GATEWAYS)
-    .then(res => {
-      act(dispatch, res.result, ACTION.GATEWAYS)
-      Storage.set(STORE.GATEWAYS, JSON.stringify(res.result))
-      return res
-    })
-    .catch(err => error(dispatch, err))
-}
-
-export const postGateway = data => dispatch => {
-  return post(API.POST_GATEWAY, data)
-    .then(res => {
-      act(dispatch, res.result, ACTION.GATEWAY)
-      return res
-    })
-    .catch(err => error(dispatch, err))
-}
-
-export const postGatewayMessage = data => dispatch => {
-  return post(API.POST_GATEWAY_MESSAGE, data)
-    .then(res => {
-      act(dispatch, res.result, ACTION.GATEWAY)
       return res
     })
     .catch(err => error(dispatch, err))
@@ -187,14 +129,7 @@ export default {
   alert,
   dismiss,
 
-  getAccount,
   postAccount,
-
-  delGateway,
-  getGatewayMessages,
-  getGateways,
-  postGateway,
-  postGatewayMessage,
 
   postLogin,
   postLogout,
