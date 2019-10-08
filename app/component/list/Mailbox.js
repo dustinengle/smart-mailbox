@@ -33,39 +33,39 @@ const MailboxList = props => {
             <View style={ styles.flexRow }>
               <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
                 <Icon
-                  color={ row.state.package ? 'green' : 'black' }
-                  name={ row.state.package ? ICON.PACKAGE : ICON.EMPTY }
+                  color={ row.package ? 'green' : 'black' }
+                  name={ row.package ? ICON.PACKAGE : ICON.EMPTY }
                   size={ 24 } />
                 <Text>
-                  { row.state.package ? 'Package' : 'Empty' }
+                  { row.package ? 'Package' : 'Empty' }
                 </Text>
               </View>
               <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
-                <Battery power={ row.state.power } size={ 24 } />
+                <Battery power={ row.power } size={ 24 } />
                 <Text>
-                  { row.state.power }%
+                  { row.power }%
                 </Text>
               </View>
               <View style={[styles.flexFull]}>
-                <TouchableRipple onPress={ () => row.state.lock ? props.onUnlock(row) : props.onLock(row) }>
+                <TouchableRipple onPress={ () => row.lock ? props.onUnlock(row) : props.onLock(row) }>
                   <View style={[styles.flexColumn, styles.center]}>
                     <Icon
-                      color={ row.state.lock ? 'black' : 'red' }
-                      name={ row.state.lock ? ICON.LOCKED : ICON.UNLOCKED }
+                      color={ row.lock ? 'black' : 'red' }
+                      name={ row.lock ? ICON.LOCKED : ICON.UNLOCKED }
                       size={ 24 } />
                     <Text>
-                      { row.state.lock ? 'Locked' : 'Unlocked' }
+                      { row.lock ? 'Locked' : 'Unlocked' }
                     </Text>
                   </View>
                 </TouchableRipple>
               </View>
               <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
                 <Icon
-                  color={ row.state.flag ? 'green' : 'black' }
-                  name={ row.state.flag ? ICON.UP : ICON.DOWN }
+                  color={ row.flag ? 'green' : 'black' }
+                  name={ row.flag ? ICON.UP : ICON.DOWN }
                   size={ 24 } />
                 <Text>
-                  { row.state.flag ? 'Up' : 'Down' }
+                  { row.flag ? 'Up' : 'Down' }
                 </Text>
               </View>
               <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
@@ -78,21 +78,6 @@ const MailboxList = props => {
                 </Text>
               </View>
             </View>
-            <List.Section>
-              <List.Accordion title={ `${ row.pins.length } PIN(s)` }>
-                { row.pins.map(pin => (
-                  <List.Item
-                    key={ pin.id }
-                    right={ subProps => (
-                      <IconButton
-                        { ...subProps }
-                        icon={ ICON.DELETE }
-                        onPress={ () => props.onDeletePIN(pin) } />
-                    ) }
-                    title={ `${ pin.name } - ${ pin.number }` } />
-                )) }
-              </List.Accordion>
-            </List.Section>
           </Card.Content>
         </Card>
       )) }

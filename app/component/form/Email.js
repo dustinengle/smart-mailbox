@@ -29,7 +29,7 @@ const Email = props => {
       onChangeText={ text => {
         setChanged(true)
         setValue(text)
-        if (props.onChange) props.onChange(valid(value) ? value : '')
+        if (props.onChange) props.onChange(text)
       }}
       style={ styles.input }
       value={ value } />

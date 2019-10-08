@@ -15,9 +15,9 @@ class Register extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email: 'john.doe@email.com',
-      name: 'John Doe',
-      password: 'Password!1',
+      email: props.me.email,
+      name: props.me.name,
+      password: '',
     }
   }
 
@@ -75,7 +75,7 @@ const mapDispatch = dispatch => ({
 })
 
 const mapState = state => ({
-
+  me: state.me,
 })
 
 export default connect(mapState, mapDispatch)(Register)

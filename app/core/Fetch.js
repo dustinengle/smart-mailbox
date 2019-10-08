@@ -16,7 +16,9 @@ function checkError(res) {
 }
 
 function request(route, opts) {
-  const url = `${ API.HOST }${ route }`
+  let url = `${ API.HOST }${ route }`
+  if (url.substr(0, url.length - 1) !== '/') url += '/'
+
   return setupOpts(opts)
     .then(options => fetch(url, options).then(checkError))
 }

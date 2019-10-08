@@ -18,7 +18,10 @@ export const dismiss = a => dispatch => act(dispatch, a, ACTION.DISMISS)
 export const postAccount = data => dispatch => {
   return post(API.POST_ACCOUNT, data)
     .then(res => {
-      act(dispatch, res.result, ACTION.ACCOUNT)
+      act(dispatch, res.result.account, ACTION.ACCOUNT)
+      act(dispatch, res.result.token, ACTION.TOKEN)
+      act(dispatch, res.result.user, ACTION.ME)
+      Storage.set(STORE.TOKEN, res.result.token)
       return res
     })
     .catch(err => error(dispatch, err))
@@ -29,9 +32,10 @@ export const postAccount = data => dispatch => {
 export const postLogin = data => dispatch => {
   return post(API.POST_LOGIN, data)
     .then(res => {
-      act(dispatch, { email: data.email }, ACTION.ME)
-      act(dispatch, res.result, ACTION.TOKEN)
-      Storage.set(STORE.TOKEN, res.result)
+      act(dispatch, res.result.account, ACTION.ACCOUNT)
+      act(dispatch, res.result.token, ACTION.TOKEN)
+      act(dispatch, res.result.user, ACTION.ME)
+      Storage.set(STORE.TOKEN, res.result.token)
       return res
     })
     .catch(err => error(dispatch, err))
@@ -40,8 +44,10 @@ export const postLogin = data => dispatch => {
 export const postLogout = () => dispatch => {
   return post(API.POST_LOGOUT)
     .then(res => {
-      act(dispatch, {}, ACTION.ME)
+      act(dispatch, {}, ACTION.ACCOUNT)
+      act(dispatch, { email: '', name: '' }, ACTION.ME)
       act(dispatch, '', ACTION.TOKEN)
+      Storage.set(STORE.TOKEN, '')
       return res
     })
     .catch(err => error(dispatch, err))
@@ -68,7 +74,7 @@ export const delMailboxPIN = data => dispatch => {
 }
 
 export const getMailboxes = () => dispatch => {
-  return post(API.GET_MAILBOXES)
+  return get(API.GET_MAILBOXES)
     .then(res => {
       act(dispatch, res.result, ACTION.MAILBOXES)
       Storage.set(STORE.MAILBOXES, JSON.stringify(res.result))

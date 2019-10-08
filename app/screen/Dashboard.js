@@ -1,7 +1,7 @@
 
 import Component from '../core/Component'
 import { connect } from 'react-redux'
-import { dismiss } from '../core/Actions'
+import { dismiss, getMailboxes } from '../core/Actions'
 import { ICON } from '../core/Constants'
 import React from 'react'
 import { styles } from '../core/Style'
@@ -12,6 +12,10 @@ import Mailbox from '../component/Mailbox'
 import { ScrollView, View } from 'react-native'
 
 class Dashboard extends Component {
+  componentDidMount() {
+    this.props.dispatchGetMailboxes()
+  }
+
   handleDismiss = data => {
     console.log('dismiss alert:', data)
     this.props.dispatchDismiss(data)
@@ -25,7 +29,6 @@ class Dashboard extends Component {
     console.log(this.props.alerts)
     const rows = this.props.mailboxes.map(o => ({
       ...o,
-      gateway: this.props.gateways.find(v => v.id === o.gatewayId),
     }))
 
     return (
@@ -55,11 +58,11 @@ class Dashboard extends Component {
 
 const mapDispatch = dispatch => ({
   dispatchDismiss: v => dispatch(dismiss(v)),
+  dispatchGetMailboxes: () => dispatch(getMailboxes()),
 })
 
 const mapState = state => ({
   alerts: state.alerts,
-  gateways: state.gateways,
   mailboxes: state.mailboxes,
 })
 

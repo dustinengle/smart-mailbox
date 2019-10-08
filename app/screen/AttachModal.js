@@ -20,19 +20,19 @@ class AttachModal extends Component {
     console.log('attach submit:', this.state)
   }
 
-  isValid = () => !!this.state.name && !!this.state.mailboxSN && !!this.state.gatewaySN
+  isValid = () => !!this.state.name && !!this.state.sn && !!this.state.gateway
 
   render() {
     return (
       <View style={ styles.content }>
         <Subheading>Mailbox</Subheading>
         <NameInput onChange={ v => this.handleChange('name', v) } value={ this.state.name } />
-        <SNInput onChange={ v => this.handleChange('mailboxSN', v) } value={ this.state.mailboxSN } />
+        <SNInput onChange={ v => this.handleChange('sn', v) } value={ this.state.sn } />
         { !isWeb() &&
           <Button
             mode="outlined"
             onPress={ () => this.props.navigation.navigate('BarcodeModal', {
-              callback: v => this.handleChange('mailboxSN', v),
+              callback: v => this.handleChange('sn', v),
             }) }
             style={ styles.button }>
             Scan SN
@@ -40,12 +40,12 @@ class AttachModal extends Component {
         }
         <Divider style={{ marginTop: 10 }} />
         <Subheading>Gateway</Subheading>
-        <SNInput onChange={ v => this.handleChange('gatewaySN', v) } value={ this.state.gatewaySN } />
+        <SNInput onChange={ v => this.handleChange('gateway', v) } value={ this.state.gateway } />
         { !isWeb() &&
           <Button
             mode="outlined"
             onPress={ () => this.props.navigation.navigate('BarcodeModal', {
-              callback: v => this.handleChange('gatewaySN', v),
+              callback: v => this.handleChange('gateway', v),
             }) }
             style={ styles.button }>
             Scan SN

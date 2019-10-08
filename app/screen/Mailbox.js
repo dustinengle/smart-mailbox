@@ -82,7 +82,6 @@ const mapDispatch = dispatch => ({
 })
 
 const mapState = state => ({
-  gateways: state.gateways,
   mailboxes: state.mailboxes,
 })
 

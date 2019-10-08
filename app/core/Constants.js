@@ -36,7 +36,7 @@ export const API = {
 
   DEL_MAILBOX: '/mailbox',
   DEL_MAILBOX_PIN: '/mailbox/pin',
-  GET_MAILBOXES: '/mailbox/all',
+  GET_MAILBOXES: '/mailbox',
   POST_MAILBOX: '/mailbox',
   POST_MAILBOX_PIN: '/mailbox/pin',
 
@@ -78,7 +78,7 @@ export const ICON = {
   WALLET: 'wallet',
 }
 
-export const DEMO = true
+export const DEMO = false
 
 export const STORE = {
   ACCOUNT: '@safebox.account',

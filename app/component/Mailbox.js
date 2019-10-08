@@ -19,39 +19,39 @@ const Mailbox = props => (
     <Card.Content style={[styles.flexRow, styles.spaceAround]}>
       <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
         <Icon
-          color={ props.state.package ? 'green' : 'black' }
-          name={ props.state.package ? ICON.PACKAGE : ICON.EMPTY }
+          color={ props.package ? 'green' : 'black' }
+          name={ props.package ? ICON.PACKAGE : ICON.EMPTY }
           size={ 48 } />
         <Text>
-          { props.state.package ? 'Package' : 'Empty' }
+          { props.package ? 'Package' : 'Empty' }
         </Text>
       </View>
       <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
-        <Battery power={ props.state.power } size={ 48 } />
+        <Battery power={ props.power } size={ 48 } />
         <Text>
-          { props.state.power }%
+          { props.power }%
         </Text>
       </View>
       <View style={[styles.flexFull]}>
-        <TouchableRipple onPress={ () => props.state.lock ? props.onUnlock(props) : props.onLock(props) }>
+        <TouchableRipple onPress={ () => props.lock ? props.onUnlock(props) : props.onLock(props) }>
           <View style={[styles.flexColumn, styles.center]}>
             <Icon
-              color={ props.state.lock ? 'black' : 'red' }
-              name={ props.state.lock ? ICON.LOCKED : ICON.UNLOCKED }
+              color={ props.lock ? 'black' : 'red' }
+              name={ props.lock ? ICON.LOCKED : ICON.UNLOCKED }
               size={ 48 } />
             <Text>
-              { props.state.lock ? 'Locked' : 'Unlocked' }
+              { props.lock ? 'Locked' : 'Unlocked' }
             </Text>
           </View>
         </TouchableRipple>
       </View>
       <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
         <Icon
-          color={ props.state.flag ? 'green' : 'black' }
-          name={ props.state.flag ? ICON.UP : ICON.DOWN }
+          color={ props.flag ? 'green' : 'black' }
+          name={ props.flag ? ICON.UP : ICON.DOWN }
           size={ 48 } />
         <Text>
-          { props.state.flag ? 'Up' : 'Down' }
+          { props.flag ? 'Up' : 'Down' }
         </Text>
       </View>
     </Card.Content>

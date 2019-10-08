@@ -17,8 +17,8 @@ class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email: 'john.doe@email.com',
-      password: 'Password!1',
+      email: props.me.email,
+      password: '',
     }
   }
 
@@ -46,11 +46,8 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password,
     }
-    /*
     this.props.dispatchPostLogin(data)
       .then(res => this.props.navigation.navigate('Dashboard'))
-    */
-    this.props.navigation.navigate('Dashboard')
   }
 
   handleRegister = () => {
@@ -102,7 +99,7 @@ const mapDispatch = dispatch => ({
 })
 
 const mapState = state => ({
-
+  me: state.me,
 })
 
 export default connect(mapState, mapDispatch)(Login)

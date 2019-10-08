@@ -173,7 +173,7 @@ const meInit = {
   pushToken: '10926f415fc6',
   token: '17dc28f9-26a4-44f2-9695-10926f415fc6',
 }
-const me = (state = meInit, { payload, type }) => {
+const me = (state = DEMO ? meInit : { email: '', name: '' }, { payload, type }) => {
   if (type === ACTION.ME) return { ...payload }
   return state
 }
