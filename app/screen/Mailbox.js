@@ -43,7 +43,6 @@ class Mailbox extends Component {
     const pin = this.state.confirmData ? this.state.confirmData.number : ''
     const rows = this.props.mailboxes.map(o => ({
       ...o,
-      gateway: this.props.gateways.find(v => v.id === o.gatewayId),
     }))
 
     return (
@@ -68,7 +67,9 @@ class Mailbox extends Component {
           rows={ rows }
           onCreatePIN={ data => this.setState({ data }, this.toggleOpenPIN) }
           onDeletePIN={ this.confirmOpen }
-          onRename={ data => this.setState({ data }, this.toggleOpenRename) } />
+          onLock={ data => console.log('lock:', data) }
+          onRename={ data => this.setState({ data }, this.toggleOpenRename) }
+          onUnlock={ data => console.log('unlock:', data) } />
       </ScrollView>
     )
   }

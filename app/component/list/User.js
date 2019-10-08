@@ -12,34 +12,36 @@ const UserList = props => {
     <View>
       { props.rows.map(row => (
         <Card key={ row.id } style={ styles.margins }>
-          <Card.Title title={ row.name } />
+          <Card.Title
+            left={ subProps => (
+              <Icon color="rgba(0, 0, 0, 0.25)" { ...subProps } name={ ICON.USER } />
+            ) }
+            right={ subProps => (
+              <View style={[styles.flexRow, styles.margin]}>
+              <TouchableRipple onPress={ () => props.onEdit(row) } style={ styles.margins }>
+                <Text>MANAGE</Text>
+              </TouchableRipple>
+              <TouchableRipple onPress={ () => props.onDelete(row) } style={ styles.margins }>
+                <Text>DELETE</Text>
+              </TouchableRipple>
+              </View>
+            ) }
+            title={ row.name } />
           <Card.Content style={ styles.flexColumn }>
             <View style={[styles.center, styles.flexRow, styles.spaceAround]}>
               <TouchableRipple onPress={ () => props.onEmail(row) }>
-                <View style={ styles.center }>
-                  <Icon name={ ICON.EMAIL } size={ 48 } />
+                <View style={[styles.flexRow]}>
+                  <Icon name={ ICON.EMAIL } size={ 18 } style={{ marginRight: 10 }} />
                   <Text>{ row.email }</Text>
                 </View>
               </TouchableRipple>
               <TouchableRipple onPress={ () => props.onSMS(row) }>
-                <View style={ styles.center }>
-                  <Icon name={ ICON.PHONE } size={ 48 } />
+                <View style={[styles.flexRow]}>
+                  <Icon name={ ICON.PHONE } size={ 18 } style={{ marginRight: 10 }} />
                   <Text>{ row.phone }</Text>
                 </View>
               </TouchableRipple>
             </View>
-            <Button
-              mode="outlined"
-              onPress={ () => props.onEdit(row) }
-              style={ styles.button }>
-              Manage
-            </Button>
-            <Button
-              mode="outlined"
-              onPress={ () => props.onDelete(row) }
-              style={ styles.button }>
-              Delete
-            </Button>
           </Card.Content>
         </Card>
       )) }

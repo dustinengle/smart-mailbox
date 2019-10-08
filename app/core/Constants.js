@@ -60,6 +60,7 @@ export const ICON = {
   CLOSE: 'close',
   DASHBOARD: 'view-dashboard',
   DELETE: 'delete',
+  DETAIL: 'eye',
   DOWN: 'flag-outline',
   EMAIL: 'email',
   EMPTY: 'package-variant',

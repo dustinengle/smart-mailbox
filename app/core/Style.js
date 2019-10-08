@@ -11,7 +11,7 @@ export const theme = {
     primary: '#0345fc',
     accent: '#0345fc',
     background: '#ffffff',
-    surface: '#efefef',
+    surface: '#ffffff',
     error: '#B00020',
     text: '#000000',
     onBackground: '#000000',

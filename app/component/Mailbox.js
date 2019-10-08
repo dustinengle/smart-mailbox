@@ -12,12 +12,9 @@ const Mailbox = props => (
   <Card style={ styles.margins }>
     <Card.Title
       left={ props => (
-        <Icon
-          color="rgba(0, 0, 0, 0.25)"
-          { ...props }
-          name={ ICON.MAILBOX } />
+        <Icon color="rgba(0, 0, 0, 0.25)" { ...props } name={ ICON.MAILBOX } />
       ) }
-      subtitle={ `SN: ${ props.sn }` }
+      subtitle={ `#${ props.sn }` }
       title={ props.name } />
     <Card.Content style={[styles.flexRow, styles.spaceAround]}>
       <View style={[styles.flexColumn, styles.flexFull, styles.center]}>

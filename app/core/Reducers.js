@@ -68,7 +68,7 @@ const loading = (state = true, { payload, type }) => {
 const mailboxesInit = [
   {
     accountId: 1,
-    gatewayId: 1,
+    gateway: '456789',
     id: 1,
     name: 'Home',
     sn: '456789',
@@ -95,7 +95,7 @@ const mailboxesInit = [
   },
   {
     accountId: 1,
-    gatewayId: 1,
+    gateway: '563423',
     id: 2,
     name: 'AirBnB',
     sn: '563423',

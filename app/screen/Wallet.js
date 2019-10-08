@@ -13,28 +13,26 @@ class Wallet extends Component {
   render() {
     return (
       <ScrollView style={ styles.content }>
-        <View style={ styles.flexColumn }>
-          <Card>
-            <Card.Title
-              left={ () => (<Icon name={ ICON.WALLET } size={ 20 } />) }
-              title="Account Balance" />
-            <Card.Content>
-              <Text style={[styles.textCenter, styles.textHuge]}>
-              { (Math.random() * 10000.0).toFixed(8) }
-              </Text>
-            </Card.Content>
-          </Card>
+        <View style={[styles.flexColumn]}>
+          <View style={[styles.center, styles.flexColumn, styles.margins]}>
+            <Text style={{ fontSize: 30 }}>
+            <Icon name={ ICON.WALLET } size={ 30 } /> StreamIOT Balance
+            </Text>
+            <Text style={{ fontSize: 32 }}>
+              { (Math.random() * 1000.0).toFixed(8) }
+            </Text>
+          </View>
           { this.props.mailboxes.map(mailbox => (
-            <Card key={ mailbox.id } style={ styles.margins }>
-              <Card.Title
-                left={ () => (<Icon name={ ICON.MAILBOX } size={ 20 } />) }
-                title={ mailbox.name } />
-              <Card.Content>
-                <Text style={[styles.textCenter, styles.textHuge]}>
-                  { (Math.random() * 1000.0).toFixed(8) }
-                </Text>
-              </Card.Content>
-            </Card>
+            <View
+              key={ mailbox.id }
+              style={[styles.center, styles.flexColumn, styles.margins]}>
+              <Text style={{ fontSize: 22 }}>
+                <Icon name={ ICON.MAILBOX } size={ 22 } /> { mailbox.name }
+              </Text>
+              <Text style={{ fontSize: 24 }}>
+                { (Math.random() * 1000.0).toFixed(8) }
+              </Text>
+            </View>
           )) }
         </View>
       </ScrollView>
