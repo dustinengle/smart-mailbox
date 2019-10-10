@@ -29,18 +29,22 @@ const UserList = props => {
             title={ row.name } />
           <Card.Content style={ styles.flexColumn }>
             <View style={[styles.center, styles.flexRow, styles.spaceAround]}>
-              <TouchableRipple onPress={ () => props.onEmail(row) }>
-                <View style={[styles.flexRow]}>
-                  <Icon name={ ICON.EMAIL } size={ 18 } style={{ marginRight: 10 }} />
-                  <Text>{ row.email }</Text>
-                </View>
-              </TouchableRipple>
-              <TouchableRipple onPress={ () => props.onSMS(row) }>
-                <View style={[styles.flexRow]}>
-                  <Icon name={ ICON.PHONE } size={ 18 } style={{ marginRight: 10 }} />
-                  <Text>{ row.phone }</Text>
-                </View>
-              </TouchableRipple>
+              { !!row.email &&
+                <TouchableRipple onPress={ () => props.onEmail(row) }>
+                  <View style={[styles.flexRow]}>
+                    <Icon name={ ICON.EMAIL } size={ 18 } style={{ marginRight: 10 }} />
+                    <Text>{ row.email }</Text>
+                  </View>
+                </TouchableRipple>
+              }
+              { !!row.phone &&
+                <TouchableRipple onPress={ () => props.onSMS(row) }>
+                  <View style={[styles.flexRow]}>
+                    <Icon name={ ICON.PHONE } size={ 18 } style={{ marginRight: 10 }} />
+                    <Text>{ row.phone }</Text>
+                  </View>
+                </TouchableRipple>
+              }
             </View>
           </Card.Content>
         </Card>

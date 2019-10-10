@@ -8,6 +8,7 @@ import (
 	"github.com/dustinengle/smart-mailbox/pkg/db"
 	"github.com/dustinengle/smart-mailbox/pkg/model"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 )
 
 func DeleteUser(c *gin.Context) {
@@ -55,6 +56,23 @@ func GetUser(c *gin.Context) {
 	reply.OK(c, results)
 }
 
+func PostLogout(c *gin.Context) {
+	userID := c.MustGet("userID").(uint)
+	user := &model.User{
+		ID: userID,
+	}
+	if err := db.Single(user); err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+	user.Token = ""
+	if err := db.Save(user); err != nil {
+		reply.InternalServer(c, err)
+		return
+	}
+	reply.OK(c, "OK")
+}
+
 func PostUser(c *gin.Context) {
 	// Validate and bind the request.
 	req := new(User)
@@ -76,9 +94,10 @@ func PostUser(c *gin.Context) {
 		Email:     req.Email,
 		Google:    req.Google,
 		Name:      req.Name,
-		Password:  req.Password,
-		Phone:     req.Phone,
-		PushToken: req.PushToken,
+		//Password:  req.Password,
+		Phone:        req.Phone,
+		PushToken:    req.PushToken,
+		RefreshToken: uuid.NewV4().String(),
 	}
 	if err := db.Create(user); err != nil {
 		reply.BadRequest(c, err)
@@ -119,7 +138,9 @@ func PutUser(c *gin.Context) {
 	}
 
 	// Update the user in the database.
+	user.Email = req.Email
 	user.Name = req.Name
+	user.Phone = req.Phone
 	if err := db.Save(user); err != nil {
 		reply.BadRequest(c, err)
 		return

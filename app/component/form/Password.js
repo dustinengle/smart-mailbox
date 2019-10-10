@@ -15,12 +15,6 @@ const Password = props => {
   const [changed, setChanged] = useState(false)
   const [value, setValue] = useState(props.value || '')
 
-  useEffect(() => {
-    if (!!props.value && props.value !== value) {
-      setValue(props.value)
-    }
-  })
-
   const mobileFields = isWeb() ? {} : {
     autoCapitalize: 'none',
     autoCompleteType: 'password',

@@ -16,8 +16,7 @@ function checkError(res) {
 }
 
 function request(route, opts) {
-  let url = `${ API.HOST }${ route }`
-  if (url.substr(0, url.length - 1) !== '/') url += '/'
+  const url = `${ API.HOST }${ route }/`
 
   return setupOpts(opts)
     .then(options => fetch(url, options).then(checkError))
@@ -27,6 +26,8 @@ async function setupOpts(opts) {
   const token = await Storage.get(STORE.TOKEN)
 
   return {
+    ...opts,
+    cache: 'no-cache',
     headers: {
       'Accept': 'application/json',
       'Authorization': token,
@@ -34,7 +35,9 @@ async function setupOpts(opts) {
       'User-Agent': 'SafeBox Mobile v0.1.0',
       ...opts.headers,
     },
-    ...opts,
+    mode: 'cors',
+    redirect: 'follow',
+    referrer: 'no-referrer',
   }
 }
 
@@ -47,9 +50,11 @@ export const get = (route, opts = {}) => {
 }
 
 export const post = (route, data = {}, opts = {}) => {
-  return request(route, { ...opts, body: JSON.stringify(data), method: 'POST' })
+  if (typeof(data) !== 'string') data = JSON.stringify(data)
+  return request(route, { ...opts, body: data, method: 'POST' })
 }
 
 export const put = (route, data = {}, opts = {}) => {
-  return request(route, { ...opts, body: JSON.stringify(data), method: 'PUT' })
+  if (typeof(data) !== 'string') data = JSON.stringify(data)
+  return request(route, { ...opts, body: data, method: 'PUT' })
 }

@@ -187,6 +187,15 @@ const messages = (state = [], { payload, type }) => {
   return state
 }
 
+const pins = (state = [], { payload, type }) => {
+  if (type === ACTION.PIN) {
+    return [ ...state, { ...payload }]
+  } else if (type === ACTION.PINS) {
+    return [ ...payload ]
+  }
+  return state
+}
+
 const tokenInit = '17dc28f9-26a4-44f2-9695-10926f415fc6'
 const token = (state = tokenInit, { payload, type }) => {
   if (type === ACTION.TOKEN) return payload
@@ -253,6 +262,7 @@ export default combineReducers({
   mailboxes,
   me,
   messages,
+  pins,
   token,
   users,
 })

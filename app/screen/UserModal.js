@@ -18,7 +18,7 @@ class UserModal extends Component {
     const data = props.navigation.getParam('data', null)
     if (!!data) {
       for (let [k, v] of Object.entries(data)) {
-        state[k] = v
+        if (!state[k] && !!v) state[k] = v
       }
       return state
     }
@@ -39,11 +39,13 @@ class UserModal extends Component {
 
   handleSubmit = () => {
     const data = {
+      accountId: this.props.me.accountId,
       id: this.state.id,
       email: this.state.email,
       name: this.state.name,
       phone: this.state.phone,
     }
+    console.log(data, this.state)
     this.props.dispatchPostUser(data)
       .then(() => this.props.navigation.goBack())
   }
@@ -58,7 +60,7 @@ class UserModal extends Component {
 
   render() {
     return (
-      <View key={ new Date() } style={ styles.content }>
+      <View style={ styles.content }>
         <NameInput onChange={ v => this.handleChange('name', v) } value={ this.state.name } />
         <EmailInput onChange={ v => this.handleChange('email', v) } value={ this.state.email } />
         <PhoneInput onChange={ v => this.handleChange('phone', v) } value={ this.state.phone } />
@@ -79,7 +81,7 @@ const mapDispatch = dispatch => ({
 })
 
 const mapState = state => ({
-
+  me: state.me,
 })
 
 export default connect(mapState, mapDispatch)(UserModal)

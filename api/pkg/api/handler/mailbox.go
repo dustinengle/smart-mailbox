@@ -95,7 +95,14 @@ func GetMailbox(c *gin.Context) {
 		return
 	}
 
-	reply.OK(c, results)
+	// Get the pins for each mailbox.
+	pins := make([]*model.PIN, 0)
+	if err := db.Find(&pins, "account_id == ?", &accountID); err != nil {
+		reply.Unauthorized(c, err)
+		return
+	}
+
+	reply.OK(c, gin.H{"mailboxes": results, "pins": pins})
 }
 
 func GetMessages(c *gin.Context) {
@@ -261,6 +268,7 @@ func PostPIN(c *gin.Context) {
 		AccountID: req.AccountID,
 		Email:     req.Email,
 		MailboxID: req.MailboxID,
+		Name:      req.Name,
 		Number:    req.Number,
 		Phone:     req.Phone,
 		Single:    req.Single,

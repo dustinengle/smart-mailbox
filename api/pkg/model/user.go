@@ -11,9 +11,9 @@ type User struct {
 	ID           uint       `gorm:"primary_key" json:"id,omitempty"`
 	Name         string     `gorm:"" json:"name"`
 	Password     string     `gorm:"" json:"-"`
-	Phone        string     `gorm:"unique" json:"phone,omitempty"`
-	PushToken    string     `gorm:"unique" json:"-"`
-	RefreshToken string     `gorm:"unique" json:"-"`
-	Token        string     `gorm:"unique" json:"-y"`
+	Phone        string     `gorm:"" json:"phone,omitempty"`
+	PushToken    string     `gorm:"" json:"-"`
+	RefreshToken string     `gorm:"" json:"-"`
+	Token        string     `gorm:"" json:"-"`
 	UpdatedAt    time.Time  `gorm:"" json:"updatedAt,omitempty"`
 }

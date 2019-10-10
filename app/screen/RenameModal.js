@@ -2,7 +2,7 @@
 import Component from '../core/Component'
 import { connect } from 'react-redux'
 import React from 'react'
-import { postMailbox } from '../core/Actions'
+import { putMailbox } from '../core/Actions'
 import { styles } from '../core/Style'
 
 import NameInput from '../component/form/Name'
@@ -31,10 +31,10 @@ class RenameModal extends Component {
   }
 
   handleSubmit = () => {
-    const data = {
-      name: this.state.name,
-    }
-    this.props.dispatchPostUser(data)
+    const data = this.props.navigation.getParam('data', null)
+    if (!data) return
+    data.name = this.state.name
+    this.props.dispatchPutMailbox(data)
       .then(() => this.props.navigation.goBack())
   }
 
@@ -51,7 +51,7 @@ class RenameModal extends Component {
 }
 
 const mapDispatch = dispatch => ({
-  dispatchPostMailbox: v => dispatch(postMailbox(v)),
+  dispatchPutMailbox: v => dispatch(putMailbox(v)),
 })
 
 const mapState = state => ({

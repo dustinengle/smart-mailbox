@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native'
 export const get = async key => {
   try {
     const val = await AsyncStorage.getItem(key)
-    return val
+    return val.substr(0, 1) === '{' ? JSON.parse(val) : val
   } catch(err) {
     console.log('Storage.get:', err)
     return null
@@ -21,6 +21,7 @@ export const remove = async key => {
 
 export const set = async (key, val) => {
   try {
+    if (typeof(val) !== 'string') val = JSON.stringify(val)
     return await AsyncStorage.setItem(key, val)
   } catch(err) {
     console.log('Storage.set:', err)

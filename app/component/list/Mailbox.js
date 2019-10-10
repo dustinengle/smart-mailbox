@@ -19,12 +19,12 @@ const MailboxList = props => {
             ) }
             right={ subProps => (
               <View style={[styles.flexRow, styles.margin]}>
-              <TouchableRipple onPress={ () => props.onCreatePIN(row) } style={ styles.margins }>
-                <Text>ADD PIN</Text>
-              </TouchableRipple>
-              <TouchableRipple onPress={ () => props.onRename(row) } style={ styles.margins }>
-                <Text>RENAME</Text>
-              </TouchableRipple>
+                <TouchableRipple onPress={ () => props.onCreatePIN(row) } style={ styles.margins }>
+                  <Text>ADD PIN</Text>
+                </TouchableRipple>
+                <TouchableRipple onPress={ () => props.onRename(row) } style={ styles.margins }>
+                  <Text>RENAME</Text>
+                </TouchableRipple>
               </View>
             ) }
             subtitle={ `#${ row.sn }` }
@@ -78,6 +78,22 @@ const MailboxList = props => {
                 </Text>
               </View>
             </View>
+            { !!row.pins.length &&
+              <List.Section>
+                <List.Accordion title="PINs">
+                  { row.pins.map(pin => (
+                    <List.Item
+                      key={ pin.id }
+                      right={ subProps => (
+                        <TouchableRipple onPress={ () => props.onDeletePIN(pin) }>
+                          <Icon { ...subProps } name={ ICON.DELETE } size={ 16 } />
+                        </TouchableRipple>
+                      ) }
+                      title={ `${ pin.name ? `${ pin.name } - ` : '' }${ pin.number }` } />
+                  )) }
+                </List.Accordion>
+              </List.Section>
+            }
           </Card.Content>
         </Card>
       )) }

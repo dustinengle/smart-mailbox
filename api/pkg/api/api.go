@@ -13,39 +13,40 @@ func routes(r *gin.Engine) {
 
 	// Public
 
-	r.POST("/activate", handler.PostActivate)
-	r.POST("/login", handler.PostLogin)
-	r.POST("/register", handler.PostRegister)
+	r.POST("/activate/", handler.PostActivate)
+	r.POST("/login/", handler.PostLogin)
+	r.POST("/register/", handler.PostRegister)
 
 	// Private
 
 	a := r.Group("/account")
 	{
 		a.Use(middleware.Authorize, middleware.AccountToken)
-		a.GET("/balance", handler.GetBalance)
-		a.GET("/totals", handler.GetTotal)
+		a.GET("/balance/", handler.GetBalance)
+		a.GET("/totals/", handler.GetTotal)
 	}
 
 	m := r.Group("/mailbox")
 	{
 		m.Use(middleware.Authorize, middleware.AccountToken)
-		m.DELETE("/:mailboxID/pin/:pinID", handler.DeletePIN)
-		m.GET("/:mailboxID/message", handler.GetMessages)
-		m.GET("/:mailboxID/pin", handler.GetPIN)
-		m.POST("/pin", handler.PostPIN)
-		m.DELETE("/:mailboxID", handler.DeleteMailbox)
+		m.DELETE("/:mailboxID/pin/:pinID/", handler.DeletePIN)
+		m.GET("/:mailboxID/message/", handler.GetMessages)
+		m.GET("/:mailboxID/pin/", handler.GetPIN)
+		m.POST("/pin/", handler.PostPIN)
+		m.DELETE("/:mailboxID/", handler.DeleteMailbox)
 		m.GET("/", handler.GetMailbox)
 		m.POST("/", handler.PostMailbox)
-		m.PUT("/:mailboxID", handler.PutMailbox)
+		m.PUT("/:mailboxID/", handler.PutMailbox)
 	}
 
 	u := r.Group("/user")
 	{
 		u.Use(middleware.Authorize, middleware.AccountToken)
-		u.DELETE("/:userID", handler.DeleteUser)
+		u.DELETE("/:userID/", handler.DeleteUser)
+		u.POST("/logout/", handler.PostLogout)
 		u.GET("/", handler.GetUser)
 		u.POST("/", handler.PostUser)
-		u.PUT("/:userID", handler.PutUser)
+		u.PUT("/:userID/", handler.PutUser)
 	}
 }
 

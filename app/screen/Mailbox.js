@@ -15,9 +15,10 @@ class Mailbox extends Component {
     this.props.dispatchCreatePIN(pin)
   }
 
-  handleDeletePIN = pin => {
-    console.log('delete pin:', pin)
-    this.props.dispatchDeletePIN(pin.id).then(() => this.confirmClose())
+  handleDeletePIN = () => {
+    console.log('delete pin:', this.state.confirmData)
+    this.props.dispatchDeletePIN(this.state.confirmData)
+      .then(() => this.confirmClose())
   }
 
   handleRename = mailbox => {
@@ -28,7 +29,7 @@ class Mailbox extends Component {
   toggleOpenPIN = () => {
     this.props.navigation.navigate('PINModal', {
       callback: this.handleCreatePIN,
-      data: this.state.data,
+      data: { mailboxId: this.state.data.id },
     })
   }
 
@@ -41,8 +42,9 @@ class Mailbox extends Component {
 
   render() {
     const pin = this.state.confirmData ? this.state.confirmData.number : ''
-    const rows = this.props.mailboxes.map(o => ({
-      ...o,
+    const rows = this.props.mailboxes.map(row => ({
+      ...row,
+      pins: this.props.pins.filter(pin => pin.mailboxId === row.id),
     }))
 
     return (
@@ -83,6 +85,7 @@ const mapDispatch = dispatch => ({
 
 const mapState = state => ({
   mailboxes: state.mailboxes,
+  pins: state.pins,
 })
 
 export default connect(mapState, mapDispatch)(Mailbox)

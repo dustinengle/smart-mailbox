@@ -13,6 +13,10 @@ import { ScrollView, View } from 'react-native'
 
 class Dashboard extends Component {
   componentDidMount() {
+    if (!this.props.me.accountId) {
+      this.props.navigation.navigate('Login')
+      return
+    }
     this.props.dispatchGetMailboxes()
   }
 
@@ -64,6 +68,7 @@ const mapDispatch = dispatch => ({
 const mapState = state => ({
   alerts: state.alerts,
   mailboxes: state.mailboxes,
+  me: state.me,
 })
 
 export default connect(mapState, mapDispatch)(Dashboard)

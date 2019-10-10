@@ -1,6 +1,7 @@
 
 import Component from '../core/Component'
 import { connect } from 'react-redux'
+import { delUser, getUsers } from '../core/Actions'
 import { ICON } from '../core/Constants'
 import * as MailComposer from 'expo-mail-composer'
 import React from 'react'
@@ -12,9 +13,13 @@ import { ScrollView, Text, View } from 'react-native'
 import UserList from '../component/list/User'
 
 class User extends Component {
+  componentDidMount() {
+    this.props.dispatchGetUsers()
+  }
+
   handleDelete = () => {
     console.log('delete user:', this.state.confirmData)
-    this.confirmClose()
+    this.confirmClose().then(() => this.props.dispatchDelUser(this.state.confirmData.id))
   }
 
   handleEdit = data => {
@@ -84,17 +89,19 @@ class User extends Component {
           onEdit={ this.handleEdit }
           onEmail={ this.handleEmail }
           onSMS={ this.handleSMS }
-          rows={ this.props.users } />
+          rows={ this.props.users.filter(o => o.id !== this.props.me.id) } />
       </ScrollView>
     )
   }
 }
 
 const mapDispatch = dispatch => ({
-
+  dispatchDelUser: v => dispatch(delUser(v)),
+  dispatchGetUsers: () => dispatch(getUsers()),
 })
 
 const mapState = state => ({
+  me: state.me,
   users: state.users,
 })
 

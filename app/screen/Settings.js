@@ -2,7 +2,7 @@
 import Component from '../core/Component'
 import { connect } from 'react-redux'
 import React from 'react'
-import { postUser } from '../core/Actions'
+import { postLogout, postMe } from '../core/Actions'
 import { styles } from '../core/Style'
 
 import { Button, Divider } from 'react-native-paper'
@@ -23,14 +23,19 @@ class Settings extends Component {
     return null
   }
 
+  handleLogout = () => {
+    this.props.dispatchPostLogout().then(() => this.props.navigation.navigate('Login'))
+  }
+
   handleSubmit = () => {
     const data = {
+      accountId: this.props.me.accountId,
       id: this.state.id,
       email: this.state.email,
       name: this.state.name,
       phone: this.state.phone,
     }
-    this.props.dispatchPostUser(data)
+    this.props.dispatchPostMe(data)
       .then(() => this.props.navigation.goBack())
   }
 
@@ -47,7 +52,7 @@ class Settings extends Component {
         <Divider style={{ marginTop: 10 }} />
         <Button
           mode="outlined"
-          onPress={ () => this.props.navigation.navigate('Login') }
+          onPress={ this.handleLogout }
           style={ styles.button }>
           Logout
         </Button>
@@ -57,7 +62,8 @@ class Settings extends Component {
 }
 
 const mapDispatch = dispatch => ({
-  dispatchPostUser: v => dispatch(postUser(v)),
+  dispatchPostLogout: () => dispatch(postLogout()),
+  dispatchPostMe: v => dispatch(postMe(v)),
 })
 
 const mapState = state => ({

@@ -22,6 +22,12 @@ class Login extends Component {
     }
   }
 
+  componentDidMount() {
+    if (!!this.props.token) {
+
+    }
+  }
+
   handleChange = (k, v) => this.setState({ [k]: v })
 
   handleGoogle = async () => {

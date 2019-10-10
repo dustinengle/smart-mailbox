@@ -9,6 +9,7 @@ type PIN struct {
 	Email     string     `gorm:"" json:"email"`
 	ID        uint       `gorm:"primary_key" json:"id"`
 	MailboxID uint       `gorm:"" json:"mailboxId"`
+	Name      string     `gorm:"" json:"name"`
 	Number    uint32     `gorm:"" json:"number"`
 	Phone     string     `gorm:"" json:"phone"`
 	Single    bool       `gorm:"" json:"single"`

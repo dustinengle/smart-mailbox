@@ -15,12 +15,6 @@ const SN = props => {
   const [changed, setChanged] = useState(false)
   const [value, setValue] = useState(props.value || '')
 
-  useEffect(() => {
-    if (!!props.value && props.value !== value) {
-      setValue(props.value)
-    }
-  })
-
   const mobileFields = isWeb() ? {} : {
     autoCapitalize: 'none',
     autoCompleteType: 'off',
@@ -36,7 +30,7 @@ const SN = props => {
       onChangeText={ text => {
         setChanged(true)
         setValue(text)
-        if (props.onChange) props.onChange(valid(value) ? value : '')
+        if (props.onChange) props.onChange(text)
       }}
       style={ styles.input }
       value={ value } />

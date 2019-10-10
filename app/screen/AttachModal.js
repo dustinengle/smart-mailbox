@@ -2,6 +2,7 @@
 import Component from '../core/Component'
 import { connect } from 'react-redux'
 import { isWeb } from '../core/Device'
+import { postMailbox } from '../core/Actions'
 import React from 'react'
 import { styles } from '../core/Style'
 
@@ -17,7 +18,16 @@ class AttachModal extends Component {
   }
 
   handleSubmit = () => {
-    console.log('attach submit:', this.state)
+    const data = {
+      accountId: this.props.me.accountId,
+      gateway: this.state.gateway,
+      key: Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6),
+      name: this.state.name,
+      sn: this.state.sn,
+    }
+    console.log('attach submit:', data)
+    this.props.dispatchPostMailbox(data)
+      .then(() => this.props.navigation.goBack())
   }
 
   isValid = () => !!this.state.name && !!this.state.sn && !!this.state.gateway
@@ -59,11 +69,12 @@ class AttachModal extends Component {
 }
 
 const mapDispatch = dispatch => ({
-
+  dispatchPostMailbox: v => dispatch(postMailbox(v)),
 })
 
 const mapState = state => ({
   mailboxes: state.mailboxes,
+  me: state.me,
 })
 
 export default connect(mapState, mapDispatch)(AttachModal)

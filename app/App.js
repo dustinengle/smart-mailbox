@@ -30,11 +30,14 @@ addConnectedListener(payload => {
 })
 
 // Load local data and push to the store.
+Storage.get(STORE.ACCOUNT).then(payload => {
+  if (!!payload) store.dispatch({ payload, type: ACTION.ACCOUNT })
+})
 Storage.get(STORE.TOKEN).then(payload => {
   if (!!payload) store.dispatch({ payload, type: ACTION.TOKEN })
 })
 Storage.get(STORE.USER).then(payload => {
-  if (!!payload) store.dispatch({ payload, type: ACTION.USER })
+  if (!!payload) store.dispatch({ payload, type: ACTION.ME })
 })
 
 // Setup a root component to load the switch nav.

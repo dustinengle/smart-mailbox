@@ -132,7 +132,7 @@ func PostLogin(c *gin.Context) {
 
 func PostRegister(c *gin.Context) {
 	// Bind and validate request.
-	req := new(User)
+	req := new(Register)
 	if err := c.BindJSON(req); err != nil {
 		reply.BadRequest(c, err)
 		return

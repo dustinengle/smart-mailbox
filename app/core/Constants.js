@@ -13,6 +13,8 @@ export const ACTION = {
   ME: '@action.me',
   MESSAGE: '@action.message',
   MESSAGES: '@action.messages',
+  PIN: '@action.pin',
+  PINS: '@action.pins',
   TOKEN: '@action.token',
   USER: '@action.user',
   USERS: '@action.users',
@@ -25,23 +27,20 @@ export const API = {
   GET_ACCOUNT_BALANCE: '/account/balance',
   POST_ACCOUNT: '/register',
 
-  DEL_GATEWAY: '/gateway',
-  GET_GATEWAY_MESSAGES: '/gateway/message',
-  GET_GATEWAYS: '/gateway/all',
-  POST_GATEWAY: '/gateway',
-  POST_GATEWAY_MESSAGE: '/gateway/message',
-
   POST_LOGIN: '/login',
-  POST_LOGOUT: '/logout',
+  POST_LOGOUT: '/user/logout',
 
   DEL_MAILBOX: '/mailbox',
-  DEL_MAILBOX_PIN: '/mailbox/pin',
+  DEL_MAILBOX_PIN: '/mailbox/{mid}/pin/{pid}',
   GET_MAILBOXES: '/mailbox',
+  GET_MAILBOX_MESSAGES: '/mailbox/{mid}/message',
   POST_MAILBOX: '/mailbox',
+  POST_MAILBOX_MESSAGE: '/mailbox/{mid}/message',
   POST_MAILBOX_PIN: '/mailbox/pin',
+  PUT_MAILBOX: '/mailbox/{mid}',
 
   DEL_USER: '/user',
-  GET_USERS: '/user/all',
+  GET_USERS: '/user',
   POST_USER: '/user',
 }
 
@@ -84,6 +83,7 @@ export const STORE = {
   ACCOUNT: '@safebox.account',
   GATEWAYS: '@safebox.gateways',
   MAILBOXES: '@safebox.mailboxes',
+  PINS: '@safebox.pins',
   TOKEN: '@safebox.token',
   USER: '@safebox.user',
   USERS: '@safebox.users',
