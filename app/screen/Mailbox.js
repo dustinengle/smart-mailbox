@@ -1,8 +1,9 @@
 
 import Component from '../core/Component'
 import { connect } from 'react-redux'
-import { delMailboxPIN, postMailboxPIN, postMailbox } from '../core/Actions'
+import { delMailboxPIN, postMailboxPIN, postMailbox, postMailboxMessage } from '../core/Actions'
 import React from 'react'
+import SenML from '../core/SenML'
 import { styles } from '../core/Style'
 
 import { Button, Dialog, Portal } from 'react-native-paper'
@@ -19,6 +20,29 @@ class Mailbox extends Component {
     console.log('delete pin:', this.state.confirmData)
     this.props.dispatchDeletePIN(this.state.confirmData)
       .then(() => this.confirmClose())
+  }
+
+  handleMessages = mailbox => {
+    console.log('mailbox messages:', mailbox)
+    this.props.navigation.navigate('MessageModal', { data: mailbox })
+  }
+
+  handleMessageLock = data => {
+    console.log('lock:', data)
+    this.props.dispatchPostMailboxMessage({
+      accountId: this.props.me.accountId,
+      mailboxId: data.id,
+      senML: SenML.lock(data.deviceId),
+    })
+  }
+
+  handleMessageUnlock = data => {
+    console.log('unlock:', data)
+    this.props.dispatchPostMailboxMessage({
+      accountId: this.props.me.accountId,
+      mailboxId: data.id,
+      senML: SenML.unlock(data.deviceId),
+    })
   }
 
   handleRename = mailbox => {
@@ -69,9 +93,10 @@ class Mailbox extends Component {
           rows={ rows }
           onCreatePIN={ data => this.setState({ data }, this.toggleOpenPIN) }
           onDeletePIN={ this.confirmOpen }
-          onLock={ data => console.log('lock:', data) }
+          onLock={ this.handleMessageLock }
+          onMessages={ this.handleMessages }
           onRename={ data => this.setState({ data }, this.toggleOpenRename) }
-          onUnlock={ data => console.log('unlock:', data) } />
+          onUnlock={ this.handleMessageUnlock } />
       </ScrollView>
     )
   }
@@ -80,11 +105,13 @@ class Mailbox extends Component {
 const mapDispatch = dispatch => ({
   dispatchCreatePIN: v => dispatch(postMailboxPIN(v)),
   dispatchDeletePIN: v => dispatch(delMailboxPIN(v)),
+  dispatchPostMailboxMessage: v => dispatch(postMailboxMessage(v)),
   dispatchRename: v => dispatch(postMailbox(v)),
 })
 
 const mapState = state => ({
   mailboxes: state.mailboxes,
+  me: state.me,
   pins: state.pins,
 })
 

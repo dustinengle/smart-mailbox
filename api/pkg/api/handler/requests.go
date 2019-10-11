@@ -19,6 +19,12 @@ type Mailbox struct {
 	SN        string `binding:"required,alphanum,min=6" json:"sn"`
 }
 
+type Message struct {
+	AccountID uint                     `binding:"required,min=1" json:"accountId"`
+	MailboxID uint                     `binding:"required,min=1" json:"mailboxId"`
+	SenML     []map[string]interface{} `binding:"required" json:"senML"`
+}
+
 type PIN struct {
 	AccountID uint   `binding:"required,min=1" json:"accountId"`
 	Email     string `binding:"omitempty,email" json:"email,omitempty"`

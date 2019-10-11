@@ -84,6 +84,13 @@ export const styles = StyleSheet.create({
     height: 238,
     width: 238,
   },
+  mailboxMessage: {
+    backgroundColor: theme.colors.surface,
+    borderBottomColor: theme.colors.accent,
+    borderBottomWidth: 1,
+    margin: 10,
+    padding: 10,
+  },
   margins: {
     marginBottom: 10,
     marginLeft: 10,

@@ -70,14 +70,41 @@ func DeletePIN(c *gin.Context) {
 	// Get the account id.
 	accountID := c.MustGet("accountID").(uint)
 
-	// Remove the pin from the mailbox and return OK.
+	// Pull the mailbox from the database.
+	mailbox := &model.Mailbox{
+		AccountID: accountID,
+		ID:        uint(mid),
+	}
+	if err := db.Single(mailbox); err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+
+	// Remove the pin from the mailbox in the database.
 	pin := &model.PIN{
 		AccountID: accountID,
 		ID:        uint(pid),
-		MailboxID: uint(mid),
+		MailboxID: mailbox.ID,
+	}
+	if err = db.Single(pin); err != nil {
+		reply.BadRequest(c, err)
+		return
 	}
 	if err = db.Delete(pin); err != nil {
 		reply.InternalServer(c, err)
+		return
+	}
+
+	// Send UNAUTH to StreamIOT.
+	data := make([]map[string]interface{}, 0, 1)
+	data = append(data, map[string]interface{}{
+		"bn": fmt.Sprintf("%s_", mailbox.DeviceID),
+		"n":  "UNAUTH",
+		"u":  "PIN",
+		"v":  pin.Number,
+	})
+	if err = client.ChannelMessageCreate(mailbox.DeviceKey, mailbox.ChannelID, data); err != nil {
+		reply.BadGateway(c, err)
 		return
 	}
 
@@ -248,6 +275,41 @@ func PostMailbox(c *gin.Context) {
 	reply.OK(c, mailbox)
 }
 
+func PostMessage(c *gin.Context) {
+	// Validate and bind the request.
+	req := new(Message)
+	if err := c.BindJSON(req); err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+
+	// Validate the account id.
+	accountID := c.MustGet("accountID").(uint)
+	if accountID != req.AccountID {
+		reply.BadRequest(c, fmt.Errorf("account ids do not match"))
+		return
+	}
+
+	// Get the mailbox from the database.
+	mailbox := &model.Mailbox{
+		AccountID: req.AccountID,
+		ID:        req.MailboxID,
+	}
+	if err := db.Single(mailbox); err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+
+	// Send the SenML data to StreamIOT.
+	if err := client.ChannelMessageCreate(mailbox.DeviceKey, mailbox.ChannelID, req.SenML); err != nil {
+		reply.BadGateway(c, err)
+		return
+	}
+
+	// Return the pin object.
+	reply.OK(c, "OK")
+}
+
 func PostPIN(c *gin.Context) {
 	// Validate and bind the request.
 	req := new(PIN)
@@ -260,6 +322,16 @@ func PostPIN(c *gin.Context) {
 	accountID := c.MustGet("accountID").(uint)
 	if accountID != req.AccountID {
 		reply.BadRequest(c, fmt.Errorf("account ids do not match"))
+		return
+	}
+
+	// Pull the mailbox from the database.
+	mailbox := &model.Mailbox{
+		AccountID: accountID,
+		ID:        req.MailboxID,
+	}
+	if err := db.Single(mailbox); err != nil {
+		reply.BadRequest(c, err)
 		return
 	}
 
@@ -276,6 +348,19 @@ func PostPIN(c *gin.Context) {
 	}
 	if err := db.Create(pin); err != nil {
 		reply.BadRequest(c, err)
+		return
+	}
+
+	// Send UNAUTH to StreamIOT.
+	data := make([]map[string]interface{}, 0, 1)
+	data = append(data, map[string]interface{}{
+		"bn": fmt.Sprintf("%s_", mailbox.DeviceID),
+		"n":  "AUTH",
+		"u":  "PIN",
+		"v":  pin.Number,
+	})
+	if err := client.ChannelMessageCreate(mailbox.DeviceKey, mailbox.ChannelID, data); err != nil {
+		reply.BadGateway(c, err)
 		return
 	}
 

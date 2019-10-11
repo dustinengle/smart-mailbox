@@ -6,6 +6,9 @@ function checkError(res) {
   try {
     if (!res.ok) {
       console.log(res)
+
+      // TODO: attempt to login again after a 401.
+
       throw new Error(`${ res.status } - ${ res.statusText }`)
     }
 

@@ -29,10 +29,11 @@ func routes(r *gin.Engine) {
 	m := r.Group("/mailbox")
 	{
 		m.Use(middleware.Authorize, middleware.AccountToken)
+		m.POST("/message/", handler.PostMessage)
+		m.POST("/pin/", handler.PostPIN)
 		m.DELETE("/:mailboxID/pin/:pinID/", handler.DeletePIN)
 		m.GET("/:mailboxID/message/", handler.GetMessages)
 		m.GET("/:mailboxID/pin/", handler.GetPIN)
-		m.POST("/pin/", handler.PostPIN)
 		m.DELETE("/:mailboxID/", handler.DeleteMailbox)
 		m.GET("/", handler.GetMailbox)
 		m.POST("/", handler.PostMailbox)

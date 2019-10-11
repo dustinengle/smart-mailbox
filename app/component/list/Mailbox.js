@@ -19,11 +19,14 @@ const MailboxList = props => {
             ) }
             right={ subProps => (
               <View style={[styles.flexRow, styles.margin]}>
+                <TouchableRipple onPress={ () => props.onMessages(row) } style={ styles.margins }>
+                  <Icon name={ ICON.MESSAGES } size={ 24 } />
+                </TouchableRipple>
                 <TouchableRipple onPress={ () => props.onCreatePIN(row) } style={ styles.margins }>
-                  <Text>ADD PIN</Text>
+                  <Icon name={ ICON.PIN } size={ 24 } />
                 </TouchableRipple>
                 <TouchableRipple onPress={ () => props.onRename(row) } style={ styles.margins }>
-                  <Text>RENAME</Text>
+                  <Icon name={ ICON.EDIT } size={ 24 } />
                 </TouchableRipple>
               </View>
             ) }

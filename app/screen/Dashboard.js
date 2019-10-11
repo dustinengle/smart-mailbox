@@ -1,9 +1,10 @@
 
 import Component from '../core/Component'
 import { connect } from 'react-redux'
-import { dismiss, getMailboxes } from '../core/Actions'
+import { dismiss, getMailboxes, postMailboxMessage } from '../core/Actions'
 import { ICON } from '../core/Constants'
 import React from 'react'
+import SenML from '../core/SenML'
 import { styles } from '../core/Style'
 
 import Alert from '../component/Alert'
@@ -25,12 +26,29 @@ class Dashboard extends Component {
     this.props.dispatchDismiss(data)
   }
 
+  handleMessageLock = data => {
+    console.log('lock:', data)
+    this.props.dispatchPostMailboxMessage({
+      accountId: this.props.me.accountId,
+      mailboxId: data.id,
+      senML: SenML.lock(data.deviceId),
+    })
+  }
+
+  handleMessageUnlock = data => {
+    console.log('unlock:', data)
+    this.props.dispatchPostMailboxMessage({
+      accountId: this.props.me.accountId,
+      mailboxId: data.id,
+      senML: SenML.unlock(data.deviceId),
+    })
+  }
+
   toggleOpen = () => {
     this.props.navigation.navigate('AttachModal')
   }
 
   render() {
-    console.log(this.props.alerts)
     const rows = this.props.mailboxes.map(o => ({
       ...o,
     }))
@@ -52,8 +70,8 @@ class Dashboard extends Component {
           <Mailbox
             { ...row }
             key={ row.id }
-            onLock={ data => console.log('lock:', data) }
-            onUnlock={ data => console.log('unlock:', data) } />
+            onLock={ this.handleMessageLock }
+            onUnlock={ this.handleMessageUnlock } />
         )) }
       </ScrollView>
     )
@@ -63,6 +81,7 @@ class Dashboard extends Component {
 const mapDispatch = dispatch => ({
   dispatchDismiss: v => dispatch(dismiss(v)),
   dispatchGetMailboxes: () => dispatch(getMailboxes()),
+  dispatchPostMailboxMessage: v => dispatch(postMailboxMessage(v)),
 })
 
 const mapState = state => ({

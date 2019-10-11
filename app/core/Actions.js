@@ -100,11 +100,29 @@ export const getMailboxes = () => dispatch => {
     .catch(err => error(dispatch, err))
 }
 
+export const getMailboxMessages = data => dispatch => {
+  const url = API.GET_MAILBOX_MESSAGES.replace('{mid}', data.id)
+  return get(url)
+    .then(res => {
+      act(dispatch, res.result.messages, ACTION.MESSAGES)
+      return res
+    })
+    .catch(err => error(dispatch, err))
+}
+
 export const postMailbox = data => dispatch => {
   return post(API.POST_MAILBOX, data)
     .then(res => {
       //act(dispatch, res.result, ACTION.MAILBOX)
       dispatch(getMailboxes())
+      return res
+    })
+    .catch(err => error(dispatch, err))
+}
+
+export const postMailboxMessage = data => dispatch => {
+  return post(API.POST_MAILBOX_MESSAGE, data)
+    .then(res => {
       return res
     })
     .catch(err => error(dispatch, err))
@@ -188,7 +206,9 @@ export default {
   delMailbox,
   delMailboxPIN,
   getMailboxes,
+  getMailboxMessages,
   postMailbox,
+  postMailboxMessage,
   postMailboxPIN,
   putMailbox,
 

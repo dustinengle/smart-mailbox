@@ -11,6 +11,7 @@ import ContactModalScreen from '../screen/ContactModal'
 import DashboardScreen from '../screen/Dashboard'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MailboxScreen from '../screen/Mailbox'
+import MessageModalScreen from '../screen/MessageModal'
 import PINModalScreen from '../screen/PINModal'
 import RenameModalScreen from '../screen/RenameModal'
 import SettingsScreen from '../screen/Settings'
@@ -50,6 +51,7 @@ const Authorized = createBottomTabNavigator(
         RenameModal: RenameModalScreen,
         PINModal: PINModalScreen,
         ContactModal: ContactModalScreen,
+        MessageModal: MessageModalScreen,
       }),
     },
     User: {
