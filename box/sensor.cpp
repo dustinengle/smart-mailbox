@@ -10,7 +10,7 @@
 #define IN4 13
 #define STEPS 2048
 
-AccelStepper stepper(4, IN1, IN3, IN2, IN4);
+AccelStepper stepper(AccelStepper::FULL4WIRE, IN1, IN3, IN2, IN4);
 
 void sensor_init(){
     stepper.setMaxSpeed(500);
