@@ -21,7 +21,7 @@ export const ACTION = {
 }
 
 export const API = {
-  HOST: 'http://192.168.0.164:10000',
+  HOST: 'http://75.108.19.180:10000', // 192.168.0.164
 
   GET_ACCOUNT: '/account',
   GET_ACCOUNT_BALANCE: '/account/balance',

@@ -7,7 +7,7 @@ import { Image } from 'react-native'
 
 export default class Logo extends Component {
   static defaultProps = {
-    path: require('../assets/logo.png'),
+    path: require('../assets/mailbox.png'),
   }
 
   render() {

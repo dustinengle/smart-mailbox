@@ -1,7 +1,12 @@
 
 import Component from '../core/Component'
 import { connect } from 'react-redux'
-import { dismiss, getMailboxes, postMailboxMessage } from '../core/Actions'
+import {
+  dismiss,
+  getMailboxes,
+  getMailboxMessages,
+  postMailboxMessage,
+} from '../core/Actions'
 import { ICON } from '../core/Constants'
 import React from 'react'
 import SenML from '../core/SenML'
@@ -13,6 +18,11 @@ import Mailbox from '../component/Mailbox'
 import { RefreshControl, ScrollView, View } from 'react-native'
 
 class Dashboard extends Component {
+  constructor(props) {
+    super(props)
+    this.messageTimer = null
+  }
+
   componentDidMount() {
     if (!this.props.me.accountId) {
       this.props.navigation.navigate('Login')
@@ -20,6 +30,10 @@ class Dashboard extends Component {
     }
     this.props.dispatchGetMailboxes()
       .then(() => this.setState({ refreshing: false }))
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.messageTimer)
   }
 
   handleDismiss = data => {
@@ -43,6 +57,15 @@ class Dashboard extends Component {
       mailboxId: data.id,
       senML: SenML.unlock(data.deviceId),
     })
+  }
+
+  loadMessages = mailbox => {
+    clearTimeout(this.messageTimer)
+    this.messagesTimer = this.props.dispatchGetMailboxMessages(mailbox)
+      .then(messages => {
+        console.log('messages:', mailbox, messages)
+        this.loadMessages()
+      })
   }
 
   toggleOpen = () => {
@@ -88,6 +111,7 @@ class Dashboard extends Component {
 const mapDispatch = dispatch => ({
   dispatchDismiss: v => dispatch(dismiss(v)),
   dispatchGetMailboxes: () => dispatch(getMailboxes()),
+  dispatchGetMailboxMessages: v => dispatch(getMailboxMessages(v)),
   dispatchPostMailboxMessage: v => dispatch(postMailboxMessage(v)),
 })
 
