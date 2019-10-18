@@ -5,14 +5,15 @@ import { StyleSheet } from 'react-native'
 export const theme = {
   ...DefaultTheme,
   dark: false,
-  roundness: 4,
+  roundness: 10,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#0345fc',
-    accent: '#0345fc',
-    background: '#ffffff',
-    surface: '#ffffff',
+    primary: '#FF6A29',
+    accent: '#437C90',
+    background: '#FFFFFF',
+    surface: '#FFCE36',
     error: '#B00020',
+    black: '#000000',
     text: '#000000',
     onBackground: '#000000',
     onSurface: '#000000',
@@ -20,13 +21,18 @@ export const theme = {
     placeholder: 'rgba(0, 0, 0, 0.75)',
     backdrop: 'rgba(0, 0, 0, 0.5)',
     notification: 'rgba(255, 0, 0, 0.95)',
+    green: 'rgba(0, 255, 0, 0.9)',
+    red: 'rgba(255, 0, 0, 0.9)',
+    white: '#ffffff',
+    whiteOpacity: 'rgba(255, 255, 255, 0.5)',
   },
   fonts: {
     ...DefaultTheme.fonts,
-    //regular: '',
-    //medium: '',
-    //light: '',
-    //thin: '',
+    bold: 'modelica-bold',
+    regular: 'modelica',
+    medium: 'modelica',
+    light: 'modelica-light',
+    thin: 'modelica',
   },
   animation: {
     scale: 1.0,
@@ -48,7 +54,16 @@ export const styles = StyleSheet.create({
     top: 0,
     width: '100%',
   },
+  backgroundSurface: {
+    backgroundColor: theme.colors.surface,
+  },
   button: {
+    marginTop: 10,
+    width: '100%',
+  },
+  cardButton: {
+    backgroundColor: theme.colors.background,
+    borderColor: theme.colors.accent,
     marginTop: 10,
     width: '100%',
   },
@@ -59,6 +74,7 @@ export const styles = StyleSheet.create({
 
   },
   content: {
+    backgroundColor: theme.colors.background,
     flex: 1,
     padding: 10,
   },
@@ -85,7 +101,7 @@ export const styles = StyleSheet.create({
     width: 238,
   },
   mailboxMessage: {
-    backgroundColor: theme.colors.surface,
+    //backgroundColor: theme.colors.surface,
     borderBottomColor: theme.colors.accent,
     borderBottomWidth: 1,
     margin: 10,
@@ -99,6 +115,7 @@ export const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: theme.colors.surface,
+    color: theme.colors.accent,
     padding: 20,
   },
   paddings: {
@@ -117,6 +134,9 @@ export const styles = StyleSheet.create({
   spaceAround: {
     justifyContent: 'space-around',
   },
+  textAccent: {
+    color: theme.colors.accent,
+  },
   textBig: {
     fontSize: 18,
   },
@@ -130,7 +150,10 @@ export const styles = StyleSheet.create({
     color: theme.colors.primary,
   },
   textWhite: {
-    color: theme.colors.surface,
+    color: theme.colors.white,
+  },
+  textWhiteOpacity: {
+    color: theme.colors.whiteOpacity,
   },
 })
 

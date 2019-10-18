@@ -89,6 +89,7 @@ class MQTT:
                 if m.is_valid():
                     if m.for_device() and not m.get_name() in ['CONNECTED', 'REGISTERED', 'TX']:
                         self.queue.put(m)
+                        publish(m, channel='inbound')
                     else:
                         publish(m, channel='inbound')
         except Exception as ex:

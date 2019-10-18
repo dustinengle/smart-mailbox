@@ -3,6 +3,7 @@ import { ACTION, DEMO } from './Constants'
 import { combineReducers } from 'redux'
 
 const accountInit = {
+  balance: 0.0,
   id: 1,
   email: 'john.doe@email.com',
   password: 'password!1',

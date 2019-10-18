@@ -3,7 +3,7 @@ import Component from '../core/Component'
 import { connect } from 'react-redux'
 import React from 'react'
 import { putMailbox } from '../core/Actions'
-import { styles } from '../core/Style'
+import { styles, theme } from '../core/Style'
 
 import NameInput from '../component/form/Name'
 import SubmitButton from '../component/form/Submit'
@@ -20,6 +20,10 @@ class RenameModal extends Component {
   }
 
   static navigationOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.accent,
+    },
+    headerTintColor: theme.colors.white,
     title: 'Rename',
   }
 

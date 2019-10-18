@@ -25,6 +25,7 @@ export const API = {
 
   GET_ACCOUNT: '/account',
   GET_ACCOUNT_BALANCE: '/account/balance',
+  GET_ACCOUNT_TOTALS: '/account/totals',
   POST_ACCOUNT: '/register',
 
   POST_LOGIN: '/login',

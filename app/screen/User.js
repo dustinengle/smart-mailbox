@@ -31,7 +31,7 @@ class User extends Component {
     if (!!user.email) {
       const result = await MailComposer.composeAsync({
         recipients: [user.email],
-        subject: 'SafeBox User Test',
+        subject: 'It\'s Here User Test',
         body: 'This is a test email message from the user screen.',
         isHtml: false,
       })

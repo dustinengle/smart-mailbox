@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
 import { ICON } from '../core/Constants'
 import React from 'react'
+import { theme } from '../core/Style'
 
 import AttachModalScreen from '../screen/AttachModal'
 import BarcodeModalScreen from '../screen/BarcodeModal'
@@ -28,6 +29,17 @@ function getIcon(name) {
         size={ 24 } />
     )
   }
+}
+
+const tabBarOptions = {
+  activeBackgroundColor: theme.colors.accent,
+  activeTintColor: theme.colors.white,
+  inactiveBackgroundColor: theme.colors.accent,
+  inactiveTintColor: theme.colors.whiteOpacity,
+  style: {
+    backgroundColor: theme.colors.background,
+    borderWidth: 0,
+  },
 }
 
 const Authorized = createBottomTabNavigator(
@@ -81,7 +93,7 @@ const Authorized = createBottomTabNavigator(
     },
   },
   {
-
+    tabBarOptions,
   },
 )
 

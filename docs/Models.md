@@ -1,4 +1,4 @@
-# SafeBox - Models
+# It's Here - Models
 
 - All models will also contain `createdAt`, `deletedAt`, and `updatedAt` fields in addition to those listed below.
 

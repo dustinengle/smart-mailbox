@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { isWeb } from '../core/Device'
 import { postUser } from '../core/Actions'
 import React from 'react'
-import { styles } from '../core/Style'
+import { styles, theme } from '../core/Style'
 
 import { Button, Divider } from 'react-native-paper'
 import EmailInput from '../component/form/Email'
@@ -26,6 +26,10 @@ class UserModal extends Component {
   }
 
   static navigationOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.accent,
+    },
+    headerTintColor: theme.colors.white,
     title: 'Manage User',
   }
 

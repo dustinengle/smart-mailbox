@@ -3,8 +3,9 @@ import Component from '../core/Component'
 import { connect } from 'react-redux'
 import React from 'react'
 import { getMailboxMessages } from '../core/Actions'
-import { styles } from '../core/Style'
+import { styles, theme } from '../core/Style'
 
+import Loader from '../component/Loader'
 import MessageList from '../component/list/Message'
 import { View } from 'react-native'
 
@@ -12,21 +13,38 @@ class MessageModal extends Component {
   static getDerivedStateFromProps(props, state) {
     const data = props.navigation.getParam('data', null)
     if (data && data.id && !state.id) {
-      state.id = data.id
-      return state
+      return { ...state, ...data }
     }
     return null
   }
 
   static navigationOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.accent,
+    },
+    headerTintColor: theme.colors.white,
     title: 'Mailbox Messages',
   }
 
+  constructor(props) {
+    super(props)
+    this.state = { loading: true }
+  }
+
   componentDidMount() {
-    if (this.state.id) this.props.dispatchGetMailboxMessages({ id: this.state.id })
+    if (this.state.id) {
+      this.props.dispatchGetMailboxMessages({ id: this.state.id })
+        .then(() => this.setState({ loading: false }))
+    }
   }
 
   render() {
+    if (this.state.loading) {
+      return (
+        <Loader />
+      )
+    }
+
     const rows = this.props.messages
       .filter(v => v.publisher !== this.state.id)
       .map(v => ({

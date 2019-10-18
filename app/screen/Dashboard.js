@@ -10,7 +10,7 @@ import { styles } from '../core/Style'
 import Alert from '../component/Alert'
 import { Button, Portal } from 'react-native-paper'
 import Mailbox from '../component/Mailbox'
-import { ScrollView, View } from 'react-native'
+import { RefreshControl, ScrollView, View } from 'react-native'
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -19,6 +19,7 @@ class Dashboard extends Component {
       return
     }
     this.props.dispatchGetMailboxes()
+      .then(() => this.setState({ refreshing: false }))
   }
 
   handleDismiss = data => {
@@ -54,7 +55,13 @@ class Dashboard extends Component {
     }))
 
     return (
-      <ScrollView style={[styles.content, styles.flexColumn]}>
+      <ScrollView
+        refreshControl={ (
+          <RefreshControl
+            refreshing={ this.state.refreshing }
+            onRefresh={ () => this.setState({ refreshing: true }, this.componentDidMount) } />
+        ) }
+        style={[styles.flexColumn, styles.margins]}>
         <Portal>
           { this.props.alerts.map(alert => (
             <Alert { ...alert } key={ alert.id } onDismiss={ this.handleDismiss } />

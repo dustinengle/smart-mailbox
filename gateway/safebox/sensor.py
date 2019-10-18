@@ -27,35 +27,38 @@ def destroy():
     unsubscribe()
     lora.close()
 
+def get_channel():
+  channel = os.environ['KIT_CHANNEL']
+  topics = []
+  if isinstance(channel, basestring):
+      topics = channel.split(',')
+  return topics[0]
+
 def get_topic():
     # Handle topics string or slice.
-    channel = os.environ['KIT_CHANNEL']
-    topics = []
-    if isinstance(channel, basestring):
-        topics = channel.split(',')
-
-    return 'channels/'+topics[0]+'/messages'
+    channel = get_channel()
+    return 'channels/'+channel+'/messages'
 
 def handle(msg):
     try:
         info('handle', str(msg))
-        if msg.get_base_name() != 'Mailbox_':
-            return
+        #if msg.get_base_name() != base_name:
+        #    return
 
         name = msg.get_name()
-        if name == 'Allow':
+        if name == 'AUTH':
             print('allow', name, str(msg))
             lora.send_allow(msg.get_value())
-        elif name == 'Deny':
+        elif name == 'UNAUTH':
             print('deny', name, str(msg))
             lora.send_deny(msg.get_value())
-        elif name == 'Lock':
+        elif name == 'LOCK':
             print('lock', name, str(msg))
             lora.send_lock()
-        elif name == 'Status':
+        elif name == 'STATUS':
             print('status', name, str(msg))
             lora.send_status()
-        elif name == 'Unlock':
+        elif name == 'UNLOCK':
             print('unlock', name, str(msg))
             lora.send_unlock()
     except Exception as ex:
@@ -67,11 +70,12 @@ def loop():
         if not packet: return
         info('loop', 'recv packet {}'.format(lora.packet_str(packet)))
 
+        base_name = '{}_'.format(get_channel())
         data = []
         op = packet[0]
         size = len(packet)
         if op == config.OP_ACK:
-            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
+            data.append({'bn': base_name, 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
             data.append({'n': 'Lock', 'u': 'Lock', 'v': packet[10]})
             data.append({'n': 'Package', 'u': 'Package', 'v': packet[11]})
             data.append({'n': 'Power', 'u': 'Power', 'v': packet[12]})
@@ -80,7 +84,7 @@ def loop():
             box_checksum = packet[1:9]
             info('loop', 'box checksum {}'.format(lora.packet_str(box_checksum)))
         elif op == config.OP_CONNECT:
-            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[0]})
+            data.append({'bn': base_name, 'n': 'Flag', 'u': 'Flag', 'v': packet[0]})
             data.append({'n': 'Lock', 'u': 'Lock', 'v': packet[1]})
             data.append({'n': 'Package', 'u': 'Package', 'v': packet[2]})
             data.append({'n': 'Power', 'u': 'Power', 'v': packet[3]})
@@ -89,7 +93,7 @@ def loop():
             box_key = packet[5:]
             info('loop', 'box key {}'.format(lora.packet_str(box_key)))
         elif op == config.OP_STATUS:
-            data.append({'bn': 'Mailbox_', 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
+            data.append({'bn': base_name, 'n': 'Flag', 'u': 'Flag', 'v': packet[9]})
             data.append({'n': 'Lock', 'u': 'Lock', 'v': packet[10]})
             data.append({'n': 'Package', 'u': 'Package', 'v': packet[11]})
             data.append({'n': 'Power', 'u': 'Power', 'v': packet[12]})

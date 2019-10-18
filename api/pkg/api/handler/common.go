@@ -13,7 +13,7 @@ func createToken(id, accountID uint) (token string, err error) {
 	claims := &jwt.StandardClaims{
 		ExpiresAt: time.Now().Add(30 * 24 * time.Hour).UTC().Unix(), // 30 days
 		Id:        fmt.Sprintf("%d", id),
-		Issuer:    "SafeBox v0.1.0",
+		Issuer:    "It's Here v0.1.0",
 		Subject:   fmt.Sprintf("%d", accountID),
 	}
 

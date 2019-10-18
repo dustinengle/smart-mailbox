@@ -35,7 +35,7 @@ async function setupOpts(opts) {
       'Accept': 'application/json',
       'Authorization': token,
       'Content-Type': 'application/json',
-      'User-Agent': 'SafeBox Mobile v0.1.0',
+      'User-Agent': 'It\'s Here Mobile v0.1.0',
       ...opts.headers,
     },
     mode: 'cors',

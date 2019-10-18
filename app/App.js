@@ -4,6 +4,7 @@ import { addConnectedListener, isConnected } from './core/Device'
 import { applyMiddleware, createStore } from 'redux'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createLogger } from 'redux-logger'
+import * as Font from 'expo-font'
 import { isWeb } from './core/Device'
 import React from 'react';
 import Reducers from './core/Reducers'
@@ -12,6 +13,7 @@ import { theme } from './core/Style'
 import thunk from 'redux-thunk';
 
 import Authorized from './container/Authorized'
+import { Image, View } from 'react-native'
 import LoadingScreen from './screen/Loading'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { Provider as StoreProvider } from 'react-redux'
@@ -49,12 +51,38 @@ const Root = createAppContainer(
   }, { initialRouteName: 'Loading' })
 )
 
-export default function App() {
-  return (
-    <StoreProvider store={ store }>
-      <PaperProvider theme={ theme }>
-        <Root />
-      </PaperProvider>
-    </StoreProvider>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { loading: true }
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'modelica': require('./assets/fonts/BwModelica-Regular.otf'),
+      'modelica-bold': require('./assets/fonts/BwModelica-Bold.otf'),
+      'modelica-italic': require('./assets/fonts/BwModelica-RegularItalic.otf'),
+      'modelica-light': require('./assets/fonts/BwModelica-Light.otf'),
+    })
+
+    this.setState({ loading: false })
+  }
+
+  render() {
+    if (this.state.loading) {
+      return (
+        <View>
+          <Image source={ require('./assets/splash.png') } />
+        </View>
+      )
+    }
+
+    return (
+      <StoreProvider store={ store }>
+        <PaperProvider theme={ theme }>
+          <Root />
+        </PaperProvider>
+      </StoreProvider>
+    )
+  }
 }

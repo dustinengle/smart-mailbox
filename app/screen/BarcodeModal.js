@@ -1,7 +1,7 @@
 
 import Component from '../core/Component'
 import React from 'react'
-import { styles } from '../core/Style'
+import { styles, theme } from '../core/Style'
 
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { Button } from 'react-native-paper'
@@ -10,6 +10,10 @@ import { StyleSheet, Text, View } from 'react-native'
 
 export default class BarcodeModal extends Component {
   static navigationOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.accent,
+    },
+    headerTintColor: theme.colors.white,
     title: 'Scan Code',
   }
 

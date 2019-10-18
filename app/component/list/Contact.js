@@ -1,9 +1,9 @@
 
 import { ICON } from '../../core/Constants'
-import React, { useEffect, useState } from 'react'
-import { styles } from '../../core/Style'
+import React from 'react'
+import { styles, theme } from '../../core/Style'
 
-import { ActivityIndicator, Text, TouchableRipple } from 'react-native-paper'
+import { Card, Text, TouchableRipple } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { ScrollView, View } from 'react-native'
 
@@ -40,26 +40,14 @@ const getNumber = (numbers = []) => {
 }
 
 const ContactList = props => {
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    if (!!props.rows.length) setLoading(false)
-  })
-
   return (
-    <ScrollView style={[styles.flexColumn, styles.flexFull]}>
-      { !!loading &&
-        <View style={[styles.center, styles.flexColumn, styles.flexFull, styles.spaceAround]}>
-          <ActivityIndicator />
-          <Text>Loading contacts, this could take a moment.</Text>
-        </View>
-      }
-      { !props.rows.length && !loading &&
+    <ScrollView>
+      { !props.rows.length &&
         <View style={[styles.center]}>
           <Text>There are no contacts to list.</Text>
         </View>
       }
-      { !loading && props.rows.map(row => (
+      { props.rows.map(row => (
         <TouchableRipple
           key={ row.id }
           onPress={ () => props.onSelect({
@@ -68,20 +56,24 @@ const ContactList = props => {
             id: row.id,
             phone: getNumber(row.phoneNumbers),
           }) }
-          style={[styles.flexRow, styles.margins]}>
-          <View style={ styles.flexColumn }>
-            <Text>{ row.name }</Text>
-            { row.emails &&
-              <Text>
-                <Icon name={ ICON.EMAIL } /> { getEmail(row.emails) }
-              </Text>
-            }
-            { row.phoneNumbers &&
-              <Text>
-                <Icon name={ ICON.PHONE } /> { getNumber(row.phoneNumbers) }
-              </Text>
-            }
-          </View>
+          style={[styles.margins]}>
+          <Card style={[styles.backgroundSurface, styles.flexColumn, styles.padding]}>
+            <Card.Title
+              title={ row.name }
+              titleStyle={[styles.textAccent]} />
+            <Card.Content style={ styles.flexColumn }>
+              { row.emails &&
+                <Text style={{ color: theme.colors.accent }}>
+                  <Icon name={ ICON.EMAIL } /> { getEmail(row.emails) }
+                </Text>
+              }
+              { row.phoneNumbers &&
+                <Text style={{ color: theme.colors.accent }}>
+                  <Icon name={ ICON.PHONE } /> { getNumber(row.phoneNumbers) }
+                </Text>
+              }
+            </Card.Content>
+          </Card>
         </TouchableRipple>
       )) }
     </ScrollView>

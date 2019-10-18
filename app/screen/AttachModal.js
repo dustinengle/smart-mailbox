@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { isWeb } from '../core/Device'
 import { postMailbox } from '../core/Actions'
 import React from 'react'
-import { styles } from '../core/Style'
+import { styles, theme } from '../core/Style'
 
 import { Button, Divider, Subheading } from 'react-native-paper'
 import NameInput from '../component/form/Name'
@@ -14,6 +14,10 @@ import { View } from 'react-native'
 
 class AttachModal extends Component {
   static navigationOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.accent,
+    },
+    headerTintColor: theme.colors.white,
     title: 'Attach Mailbox & Gateway',
   }
 

@@ -15,6 +15,22 @@ export const dismiss = a => dispatch => act(dispatch, a, ACTION.DISMISS)
 
 // Account
 
+export const getAccountBalance = () => dispatch => {
+  return get(API.GET_ACCOUNT_BALANCE)
+    .then(res => {
+      return res.result
+    })
+    .catch(err => error(dispatch, err))
+}
+
+export const getAccountTotals = () => dispatch => {
+  return get(API.GET_ACCOUNT_TOTALS)
+    .then(res => {
+      return res.result
+    })
+    .catch(err => error(dispatch, err))
+}
+
 export const postAccount = data => dispatch => {
   return post(API.POST_ACCOUNT, data)
     .then(res => {
@@ -198,6 +214,8 @@ export default {
   alert,
   dismiss,
 
+  getAccountBalance,
+  getAccountTotals,
   postAccount,
 
   postLogin,

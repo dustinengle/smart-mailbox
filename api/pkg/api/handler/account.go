@@ -32,7 +32,7 @@ func GetBalance(c *gin.Context) {
 	fmt.Printf("BALANCE: %s\n", balance)
 
 	// Return the balance map.
-	reply.OK(c, 0.0)
+	reply.OK(c, balance)
 }
 
 func GetTotal(c *gin.Context) {

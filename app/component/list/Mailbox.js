@@ -1,7 +1,7 @@
 
 import { ICON } from '../../core/Constants'
-import React, { useState } from 'react'
-import { styles } from '../../core/Style'
+import React from 'react'
+import { styles, theme } from '../../core/Style'
 
 import Battery from '../Battery'
 import { Button, Card, IconButton, List, TouchableRipple } from 'react-native-paper'
@@ -10,77 +10,43 @@ import { Text, View } from 'react-native'
 
 const MailboxList = props => {
   return (
-    <View>
+    <View style={{ paddingBottom: 10 }}>
       { props.rows.map(row => (
         <Card key={ row.id } style={ styles.margins }>
           <Card.Title
-            left={ subProps => (
-              <Icon color="rgba(0, 0, 0, 0.25)" { ...subProps } name={ ICON.MAILBOX } />
-            ) }
-            right={ subProps => (
-              <View style={[styles.flexRow, styles.margin]}>
-                <TouchableRipple onPress={ () => props.onMessages(row) } style={ styles.margins }>
-                  <Icon name={ ICON.MESSAGES } size={ 24 } />
-                </TouchableRipple>
-                <TouchableRipple onPress={ () => props.onCreatePIN(row) } style={ styles.margins }>
-                  <Icon name={ ICON.PIN } size={ 24 } />
-                </TouchableRipple>
-                <TouchableRipple onPress={ () => props.onRename(row) } style={ styles.margins }>
-                  <Icon name={ ICON.EDIT } size={ 24 } />
-                </TouchableRipple>
-              </View>
-            ) }
-            subtitle={ `#${ row.sn }` }
-            title={ row.name } />
+            title={ row.name }
+            titleStyle={[styles.textAccent]} />
           <Card.Content style={ styles.flexColumn }>
             <View style={ styles.flexRow }>
-              <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
-                <Icon
-                  color={ row.package ? 'green' : 'black' }
-                  name={ row.package ? ICON.PACKAGE : ICON.EMPTY }
-                  size={ 24 } />
-                <Text>
-                  { row.package ? 'Package' : 'Empty' }
-                </Text>
+              <View style={[styles.flexColumn, styles.flexFull]}>
+                <Text>SN#: { row.sn }</Text>
+                <Text>GW#: { row.gateway }</Text>
+                <Text>PWR: { row.power }%</Text>
               </View>
-              <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
-                <Battery power={ row.power } size={ 24 } />
-                <Text>
-                  { row.power }%
-                </Text>
-              </View>
-              <View style={[styles.flexFull]}>
-                <TouchableRipple onPress={ () => row.lock ? props.onUnlock(row) : props.onLock(row) }>
-                  <View style={[styles.flexColumn, styles.center]}>
-                    <Icon
-                      color={ row.lock ? 'black' : 'red' }
-                      name={ row.lock ? ICON.LOCKED : ICON.UNLOCKED }
-                      size={ 24 } />
-                    <Text>
-                      { row.lock ? 'Locked' : 'Unlocked' }
-                    </Text>
-                  </View>
-                </TouchableRipple>
-              </View>
-              <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
-                <Icon
-                  color={ row.flag ? 'green' : 'black' }
-                  name={ row.flag ? ICON.UP : ICON.DOWN }
-                  size={ 24 } />
-                <Text>
-                  { row.flag ? 'Up' : 'Down' }
-                </Text>
-              </View>
-              <View style={[styles.flexColumn, styles.flexFull, styles.center]}>
-                <Icon
-                  color={ 'black' }
-                  name={ ICON.GATEWAY }
-                  size={ 24 } />
-                <Text>
-                  #{ row.gateway }
-                </Text>
+              <View style={[styles.flexColumn, styles.flexFull]}>
+                <Text>Flag: { row.flag ? 'Up' : 'Down' }</Text>
+                <Text>Lock: { row.lock ? 'Locked' : 'Unlocked' }</Text>
+                <Text>Body: { row.package ? 'Package' : 'Empty' }%</Text>
               </View>
             </View>
+            <Button
+              mode="outlined"
+              onPress={ () => props.onRename(row) }
+              style={ styles.cardButton }>
+              Rename
+            </Button>
+            <Button
+              mode="outlined"
+              onPress={ () => props.onMessages(row) }
+              style={ styles.cardButton }>
+              View Messages
+            </Button>
+            <Button
+              mode="outlined"
+              onPress={ () => props.onCreatePIN(row) }
+              style={ styles.cardButton }>
+              Create PIN
+            </Button>
             { !!row.pins.length &&
               <List.Section>
                 <List.Accordion title="PINs">

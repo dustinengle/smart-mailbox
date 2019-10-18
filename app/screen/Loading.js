@@ -3,10 +3,9 @@ import { alert, postLogin } from '../core/Actions'
 import Component from '../core/Component'
 import { connect } from 'react-redux'
 import React from 'react'
-import { styles } from '../core/Style'
+import { styles, theme } from '../core/Style'
 
-import { ActivityIndicator } from 'react-native-paper'
-import { Text, View } from 'react-native'
+import Loader from '../component/Loader'
 
 class Loading extends Component {
   componentDidMount() {
@@ -34,20 +33,8 @@ class Loading extends Component {
   handleLogin = () => this.props.navigation.navigate('Login')
 
   render() {
-    const style = [
-      styles.container,
-      styles.flexColumn,
-      styles.flexFull,
-      styles.spaceAround,
-    ]
-
     return (
-      <View style={ style }>
-        <View style={ styles.center }>
-          <ActivityIndicator size="large" style={ styles.margins } />
-          <Text style={ styles.center }>Loading</Text>
-        </View>
-      </View>
+      <Loader background />
     )
   }
 }

@@ -52,6 +52,7 @@ export default class Component extends React.PureComponent {
     this.state = {
       data: null,
       open: false,
+      refreshing: false,
     }
   }
 

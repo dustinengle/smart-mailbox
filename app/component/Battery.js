@@ -1,6 +1,7 @@
 
 import { ICON } from '../core/Constants'
 import React from 'react'
+import { theme } from '../core/Style'
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -19,7 +20,11 @@ const getBatteryIcon = power => {
 
 const Battery = ({ power, ...props }) => (
   <Icon
-    color={ power < 20 ? 'red' : power < 50 ? 'orange' : 'black' }
+    color={ power < 20
+      ? theme.colors.primary
+      : power < 50
+        ? theme.colors.white
+        : theme.colors.white }
     { ...props }
     name={ getBatteryIcon(power) } />
 )
