@@ -28,11 +28,12 @@ int lora_send(unsigned char *buffer, int size);
 
 // ALLOW
 int allow_init();
-int allow_del(uint16_t pin);
-int allow_get(uint16_t pin);
-int allow_set(uint16_t pin);
+int allow_del(String pin);
+int allow_get(String pin);
+int allow_set(String pin);
 
 // Sensors
+void sensor_init();
 uint8_t get_flag();
 uint8_t get_lock();
 uint8_t get_package();

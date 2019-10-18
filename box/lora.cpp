@@ -66,7 +66,7 @@ int lora_handle(const uint8_t *data, int size) {
         case OP_ALLOW:
             if (size != OP_ALLOW_SIZE) return E_LORA_MAX_SIZE;
             pin = (data[13] << 8) | data[14];
-            result = allow_set(pin);
+            result = allow_set(String(pin));
             break;
         case OP_CONNECT:
             if (size != OP_CONNECT_SIZE) return E_LORA_MAX_SIZE;
@@ -74,7 +74,7 @@ int lora_handle(const uint8_t *data, int size) {
         case OP_DENY:
             if (size != OP_DENY_SIZE) return E_LORA_MAX_SIZE;
             pin = (data[13] << 8) | data[14];
-            result = allow_del(pin);
+            result = allow_del(String(pin));
             break;
         case OP_LOCK:
             if (size != OP_LOCK_SIZE) return E_LORA_MAX_SIZE;

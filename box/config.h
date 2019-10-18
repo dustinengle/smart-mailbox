@@ -68,9 +68,9 @@
 #define LORA_DIO0_PIN   26
 #define LORA_FREQUENCY  915E6 // 433E6, 868E6, 915E6
 #define LORA_MAX_SIZE   51
-#define LORA_RST_PIN    3
+#define LORA_RST_PIN    14
 #define LORA_SPREADING  7
-#define LORA_SS_PIN     16
+#define LORA_SS_PIN     18
 #define LORA_SYNC_WORD  0x12
 
 // Serial
