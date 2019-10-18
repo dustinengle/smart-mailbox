@@ -1,9 +1,16 @@
 {
   "expo": {
-    "name": "Smart mailbox solution.",
-    "slug": "app",
+    "name": "It's Here",
+    "slug": "its-here",
     "privacy": "public",
     "sdkVersion": "35.0.0",
+    "ios": {
+      "bundleIdentifier": "io.pagarba.itshere",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "io.pagarba.itshere"
+    },
     "platforms": [
       "ios",
       "android",
@@ -22,9 +29,6 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    }
+    ]
   }
 }

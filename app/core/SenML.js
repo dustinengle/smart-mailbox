@@ -12,7 +12,7 @@ export const connect = deviceId => ([
 ])
 
 export const lock = deviceId => ([
-  { bn: `${ deviceId }_`, n: 'LOCK', u: 'LOCK', v: 1 },
+  { bn: `${ deviceId }_`, n: 'LOCK', u: 'Lock', v: 1 },
 ])
 
 export const register = deviceId => ([
@@ -28,7 +28,7 @@ export const unauth = (deviceId, pin) => ([
 ])
 
 export const unlock = deviceId => ([
-  { bn: `${ deviceId }_`, n: 'UNLOCK', u: 'LOCK', v: 1 },
+  { bn: `${ deviceId }_`, n: 'UNLOCK', u: 'Lock', v: 0 },
 ])
 
 export default {

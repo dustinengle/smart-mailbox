@@ -1,4 +1,5 @@
 
+import { ACTION, ICON } from '../core/Constants'
 import Component from '../core/Component'
 import { connect } from 'react-redux'
 import {
@@ -7,7 +8,6 @@ import {
   getMailboxMessages,
   postMailboxMessage,
 } from '../core/Actions'
-import { ICON } from '../core/Constants'
 import React from 'react'
 import SenML from '../core/SenML'
 import { styles } from '../core/Style'
@@ -28,8 +28,56 @@ class Dashboard extends Component {
       this.props.navigation.navigate('Login')
       return
     }
+
+    const deviceMap = new Map()
     this.props.dispatchGetMailboxes()
-      .then(() => this.setState({ refreshing: false }))
+      .then(({ result: { mailboxes } }) => {
+        const promises = [];
+        mailboxes.forEach(v => {
+          deviceMap.set(v.deviceId, v)
+          promises.push(this.props.dispatchGetMailboxMessages(v))
+        })
+        return Promise.all(promises)
+      })
+      .then(res => {
+        res
+          .map(r => r.result.messages.reverse())
+          .forEach(r => r.forEach(v => {
+            if (deviceMap.has(v.publisher)) {
+              const mailbox = deviceMap.get(v.publisher)
+
+              switch(v.unit) {
+                case 'FLAG':
+                case 'Flag':
+                  mailbox.flag = !!v.value
+                  break
+                case 'LOCK':
+                case 'Lock':
+                  mailbox.lock = !!v.value
+                  break
+                case 'PACKAGE':
+                case 'Package':
+                  mailbox.package = !!v.value
+                  break
+                case 'POWER':
+                case 'Power':
+                  mailbox.power = v.value
+                  break
+                default:
+                  break
+              }
+
+              deviceMap.set(v.publisher, mailbox)
+            }
+          }))
+
+        deviceMap.forEach(v => {
+          this.props.dispatchPutMailbox(v)
+        })
+
+        this.setState({ refreshing: false })
+      })
+      .catch(err => this.setState({ refreshing: false }))
   }
 
   componentWillUnmount() {
@@ -47,6 +95,8 @@ class Dashboard extends Component {
       accountId: this.props.me.accountId,
       mailboxId: data.id,
       senML: SenML.lock(data.deviceId),
+    }).then(() => {
+      this.props.dispatchPutMailbox({ ...data, lock: true })
     })
   }
 
@@ -56,6 +106,8 @@ class Dashboard extends Component {
       accountId: this.props.me.accountId,
       mailboxId: data.id,
       senML: SenML.unlock(data.deviceId),
+    }).then(() => {
+      this.props.dispatchPutMailbox({ ...data, lock: false })
     })
   }
 
@@ -73,9 +125,15 @@ class Dashboard extends Component {
   }
 
   render() {
-    const rows = this.props.mailboxes.map(o => ({
-      ...o,
-    }))
+    const rows = this.props.mailboxes
+      .sort((a, b) => {
+        if (a.name < b.name) return -1
+        if (a.name > b.name) return 1
+        return 0
+      })
+      .map(o => ({
+        ...o,
+      }))
 
     return (
       <ScrollView
@@ -113,6 +171,7 @@ const mapDispatch = dispatch => ({
   dispatchGetMailboxes: () => dispatch(getMailboxes()),
   dispatchGetMailboxMessages: v => dispatch(getMailboxMessages(v)),
   dispatchPostMailboxMessage: v => dispatch(postMailboxMessage(v)),
+  dispatchPutMailbox: v => dispatch({ payload: v, type: ACTION.MAILBOX }),
 })
 
 const mapState = state => ({

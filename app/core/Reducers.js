@@ -157,7 +157,7 @@ const mailboxesInit = [
 ]
 const mailboxes = (state = DEMO ? mailboxesInit : [], { payload, type }) => {
   if (type === ACTION.MAILBOX) {
-    return [ ...state, { ...payload }]
+    return [ ...state.filter(v => v.id !== payload.id), { ...payload }]
   } else if (type === ACTION.MAILBOXES) {
     return [ ...payload ]
   }
