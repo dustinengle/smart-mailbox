@@ -78,7 +78,7 @@ func Authorize(c *gin.Context) {
 		ID:        userID,
 	}
 	if err = db.Single(user); err != nil {
-		fmt.Println("unable to find user with matching id and account id")
+		fmt.Printf("unable to find user with matching id(%d) and account id(%d)\n", userID, accountID)
 		reply.Unauthorized(c, err)
 		return
 	} else if user.Token == "" || user.Token != auth {
