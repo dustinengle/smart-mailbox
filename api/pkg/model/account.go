@@ -8,7 +8,7 @@ type Account struct {
 	Email     string    `gorm:"unique" json:"email"`
 	ID        uint      `gorm:"primary_key" json:"id,omitempty"`
 	Password  string    `gorm:"" json:"-"`
-	PublicKey string    `gorm:"unique" json:"publicKey,omitempty"`
+	PublicKey string    `gorm:"" json:"publicKey,omitempty"`
 	Token     string    `gorm:"" json:"-"`
 	UpdatedAt time.Time `gorm:"" json:"updatedAt,omitempty"`
 }
