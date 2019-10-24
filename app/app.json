@@ -1,15 +1,21 @@
 {
   "expo": {
-    "name": "It's Here",
+    "name": "Its Here",
     "slug": "its-here",
     "privacy": "public",
     "sdkVersion": "35.0.0",
+    "scheme": "itshere",
     "ios": {
-      "bundleIdentifier": "io.pagarba.itshere",
+      "bundleIdentifier": "io.pagarba.ItsHere",
       "supportsTablet": true
     },
     "android": {
-      "package": "io.pagarba.itshere"
+      "package": "io.pagarba.ItsHere",
+      "permissions": [
+        "CAMERA",
+        "READ_CONTACTS",
+        "READ_PHONE_STATE"
+      ]
     },
     "platforms": [
       "ios",

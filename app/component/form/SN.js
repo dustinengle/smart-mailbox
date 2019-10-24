@@ -13,7 +13,11 @@ const valid = v => {
 
 const SN = props => {
   const [changed, setChanged] = useState(false)
-  const [value, setValue] = useState(props.value || '')
+  const [value, setValue] = useState('')
+
+  useEffect(() => {
+    if (!changed && !!props.value) setValue(props.value)
+  })
 
   const mobileFields = isWeb() ? {} : {
     autoCapitalize: 'none',
@@ -24,7 +28,7 @@ const SN = props => {
   return (
     <TextInput
       { ...mobileFields }
-      disabled={ !isWeb() }
+      //disabled={ !isWeb() }
       error={ changed && !valid(value) }
       label="SN"
       onChangeText={ text => {

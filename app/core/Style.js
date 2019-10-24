@@ -67,6 +67,14 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
   },
+  cardButtonNoLeft: {
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+  },
+  cardButtonNoRight: {
+    borderBottomRightRadius: 0,
+    borderTopRightRadius: 0,
+  },
   center: {
     alignItems: 'center',
   },

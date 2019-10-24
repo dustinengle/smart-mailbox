@@ -58,7 +58,7 @@ class User extends Component {
   }
 
   render() {
-    const user = this.state.confirmData ? this.state.confirmData.name : ''
+    const { id, name } = this.state.confirmData || {}
 
     return (
       <ScrollView style={ styles.content }>
@@ -66,7 +66,7 @@ class User extends Component {
           <Dialog onDismiss={ this.confirmClose } visible={ this.state.confirm }>
             <Dialog.Title>Confirm</Dialog.Title>
             <Dialog.Content>
-              <Text>This action cannot be reversed, continue deleting "{ user }"?</Text>
+              <Text>This action cannot be reversed, continue deleting "{ !!name ? name : id }"?</Text>
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={ this.handleDelete }>

@@ -82,7 +82,8 @@ export const postLogout = () => dispatch => {
 // Mailbox
 
 export const delMailbox = data => dispatch => {
-  return del(API.DEL_MAILBOX, data)
+  const url = API.DEL_MAILBOX.replace('{mid}', data.id)
+  return del(url)
     .then(res => {
       //act(dispatch, res.result, ACTION.MAILBOX)
       dispatch(getMailboxes())

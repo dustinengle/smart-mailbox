@@ -3,8 +3,13 @@ import { ICON } from '../../core/Constants'
 import React from 'react'
 import { styles, theme } from '../../core/Style'
 
-import Battery from '../Battery'
-import { Button, Card, IconButton, List, TouchableRipple } from 'react-native-paper'
+import {
+  Button,
+  Card,
+  IconButton,
+  List,
+  TouchableRipple,
+} from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Text, View } from 'react-native'
 
@@ -29,12 +34,20 @@ const MailboxList = props => {
                 <Text>Body: { row.package ? 'Package' : 'Empty' }%</Text>
               </View>
             </View>
-            <Button
-              mode="outlined"
-              onPress={ () => props.onRename(row) }
-              style={ styles.cardButton }>
-              Rename
-            </Button>
+            <View style={[styles.flexRow]}>
+              <Button
+                mode="outlined"
+                onPress={ () => props.onDelete(row) }
+                style={[styles.cardButton, styles.cardButtonNoRight, styles.flexFull]}>
+                Delete
+              </Button>
+              <Button
+                mode="outlined"
+                onPress={ () => props.onRename(row) }
+                style={[styles.cardButton, styles.cardButtonNoLeft, styles.flexFull]}>
+                Rename
+              </Button>
+            </View>
             <Button
               mode="outlined"
               onPress={ () => props.onMessages(row) }

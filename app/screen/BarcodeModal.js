@@ -41,7 +41,7 @@ export default class BarcodeModal extends Component {
       if (!!callback) callback(data)
       this.props.navigation.goBack()
     })
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`)
+    //alert(`Bar code with type ${type} and data ${data} has been scanned!`)
   }
 
   render() {

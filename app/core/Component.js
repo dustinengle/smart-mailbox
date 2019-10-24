@@ -50,6 +50,8 @@ export default class Component extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
+      confirm: false,
+      confirmData: {},
       data: null,
       open: false,
       refreshing: false,

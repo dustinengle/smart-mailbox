@@ -31,7 +31,7 @@ export const API = {
   POST_LOGIN: '/login',
   POST_LOGOUT: '/user/logout',
 
-  DEL_MAILBOX: '/mailbox',
+  DEL_MAILBOX: '/mailbox/{mid}',
   DEL_MAILBOX_PIN: '/mailbox/{mid}/pin/{pid}',
   GET_MAILBOXES: '/mailbox',
   GET_MAILBOX_MESSAGES: '/mailbox/{mid}/message',
