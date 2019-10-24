@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/dustinengle/smart-mailbox/pkg/api/reply"
+	"github.com/dustinengle/smart-mailbox/pkg/client"
 	"github.com/dustinengle/smart-mailbox/pkg/db"
 	"github.com/dustinengle/smart-mailbox/pkg/model"
 	"github.com/gin-gonic/gin"
@@ -54,6 +55,86 @@ func GetUser(c *gin.Context) {
 	}
 
 	reply.OK(c, results)
+}
+
+func PostLogin(c *gin.Context) {
+	// Bind and validate request.
+	req := new(Login)
+	if err := c.BindJSON(req); err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+
+	// Pull the matching user from the database.
+	user := &model.User{
+		Email: req.Email,
+	}
+	if err := db.Single(user); err != nil {
+		reply.BadRequest(c, err)
+		return
+	}
+
+	fmt.Println("user:", user)
+	if user.Password == "" {
+		// Is user does not have a password assume that they were
+		// invited and set the provided password as the user password
+		// and log them in.
+		user.Password = req.Password
+		if err := db.Save(user); err != nil {
+			reply.InternalServer(c, err)
+			return
+		}
+	} else if req.Password != user.Password {
+		// If the user has a set password then validate the provided
+		// password with the one stored.
+		reply.Unauthorized(c, fmt.Errorf("Unauthorized"))
+		return
+	} else if user.Google {
+		// Validate using Google OAuth.
+		// TODO: validate provided password token with email from Google.
+		// For now we will just authenticate.
+	}
+
+	token, err := createToken(user.ID, user.AccountID)
+	if err != nil {
+		reply.InternalServer(c, err)
+		return
+	}
+
+	// Update the user token in the database.
+	user.Token = token
+	if err = db.Save(user); err != nil {
+		reply.InternalServer(c, err)
+		return
+	}
+
+	// Attempt to login and update the account token.
+	account := &model.Account{
+		ID: user.AccountID,
+	}
+	if err = db.Single(account); err != nil {
+		reply.InternalServer(c, err)
+		return
+	}
+	accountToken, err := client.UserLogin(account.Email, account.Password)
+	if err != nil {
+		reply.BadGateway(c, err)
+		return
+	}
+
+	// Update the account token and save to the database.
+	account.Token = accountToken.Token
+	if err = db.Save(account); err != nil {
+		reply.InternalServer(c, err)
+		return
+	}
+
+	// Return the token.
+	reply.OK(c, map[string]interface{}{
+		"account": account,
+		"token":   token,
+		"user":    user,
+	})
 }
 
 func PostLogout(c *gin.Context) {
