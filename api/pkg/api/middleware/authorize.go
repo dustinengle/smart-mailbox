@@ -56,7 +56,7 @@ func Authorize(c *gin.Context) {
 		return
 	}
 
-	aid, err := strconv.ParseUint(claims["jti"].(string), 10, 64)
+	aid, err := strconv.ParseUint(claims["sub"].(string), 10, 64)
 	if err != nil {
 		fmt.Println("unable to get account id from claims")
 		reply.Unauthorized(c, err)
@@ -64,7 +64,7 @@ func Authorize(c *gin.Context) {
 	}
 	accountID := uint(aid)
 
-	uid, err := strconv.ParseUint(claims["sub"].(string), 10, 64)
+	uid, err := strconv.ParseUint(claims["jti"].(string), 10, 64)
 	if err != nil {
 		fmt.Println("unable to get user id from claims")
 		reply.Unauthorized(c, err)
