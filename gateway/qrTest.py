@@ -131,6 +131,12 @@ class Gateway(Frame):
     def sensor_setup(self):
         print('sensor_setup')
         #subprocess.call("safebox/sensor.py", shell=True)
+        sensor = mp.Process(target=self.sensor_start)
+        sensor.start()
+        return 0
+
+    def sensor_start(self):
+        print('sensor_start')
         os.system('python safebox/sensor.py')
         return 0
 
