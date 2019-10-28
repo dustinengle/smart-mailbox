@@ -199,7 +199,7 @@ class Gateway(Frame):
         #response = self.append_env(tempDevID,tempDevKey,tempChanID)
         response = requests.post("http://165.22.183.203:10000/activate",json={"gateway":self.get_gatewayID()})
         json_response = response.json()
-        print(json_response['result']['deviceId'])
+        #print(json_response['result']['deviceId'])
         try:
             data = json_response['result']
             print(data)
