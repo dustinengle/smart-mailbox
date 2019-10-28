@@ -11,8 +11,8 @@ from logger import error, info
 from message import Message
 
 class Signer(Account):
-    def __init__(self):
-        Account.__init__(self)
+    def __init__(self, pw = None):
+        Account.__init__(self, pw)
 
         info('signer', 'init')
         self.queue = Queue()
@@ -186,4 +186,3 @@ class Signer(Account):
             pass
         except Exception as ex:
             error('signer', 'stop error: '+str(ex))
-

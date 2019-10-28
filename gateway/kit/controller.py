@@ -78,11 +78,11 @@ class Controller():
         except Exception as ex:
             error('controller', 'handle admin error: '+str(ex))
 
-    def setup(self):
+    def setup(self, pw = None):
         info('controller', 'setup')
         self.receiver = Receiver()
         self.sender = Sender()
-        self.signer = Signer()
+        self.signer = Signer(pw)
 
         info('controller', 'sender process')
         self.sendPipe, sendPipe = mp.Pipe()

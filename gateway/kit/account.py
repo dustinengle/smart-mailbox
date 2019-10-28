@@ -33,22 +33,23 @@ class Account():
     seed = ''
     sequence = 0
 
-    def __init__(self):
+    def __init__(self, pw = None):
         info('account', 'init')
         self.id = os.environ['KIT_DEVICE_ID']
         self.path = os.environ['KIT_SECRET_PATH']
         self.network = os.environ['KIT_TESTNET'] == '1' and 'TESTNET' or 'PUBLIC'
+        self.password = pw
+        if pw == None:
+            self.password = getpass('Please provide your password: ')
 
-        self.password = getpass('Please provide your password: ')
-
-        # If the secret data does not exist we will set it up now.
-        if not is_file(self.path):
-            confirm = getpass('Please confirm your password: ')
-            if self.password != confirm:
-                error('account', 'init error: passwords do not match')
-                sys.exit(1)
-            else:
-                self.new()
+            # If the secret data does not exist we will set it up now.
+            if not is_file(self.path):
+                confirm = getpass('Please confirm your password: ')
+                if self.password != confirm:
+                    error('account', 'init error: passwords do not match')
+                    sys.exit(1)
+                else:
+                    self.new()
 
         print 'Ready.'
 
@@ -404,4 +405,3 @@ class Account():
             error('account', 'transfer error: '+str(ex))
 
         return xdr
-
