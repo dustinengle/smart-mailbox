@@ -124,8 +124,14 @@ class Gateway(Frame):
         controller.setup(pw)
         controller.start()
 
+        time.sleep(10)
+        self.send_register()
         # Wait for SIGINT.
         signal.pause()
+        return 0
+
+    def send_register(self):
+        response = requests.post("http://165.22.183.203:10000/connect",json={"gateway":self.get_gatewayID()})
         return 0
 
     def sensor_setup(self):
@@ -199,9 +205,9 @@ class Gateway(Frame):
 
     def send_activate(self,gID,mID):
         #send request to /activate
-        tempDevID = ''
-        tempDevKey = ''
-        tempChanID = ''
+        #tempDevID = ''
+        #tempDevKey = ''
+        #tempChanID = ''
         #response = self.append_env(tempDevID,tempDevKey,tempChanID)
         response = requests.post("http://165.22.183.203:10000/activate",json={"gateway":self.get_gatewayID()})
         json_response = response.json()
