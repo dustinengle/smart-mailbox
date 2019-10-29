@@ -43,13 +43,16 @@ class Account():
             self.password = getpass('Please provide your password: ')
 
             # If the secret data does not exist we will set it up now.
-            if not is_file(self.path):
+        if not is_file(self.path):
+            if pw == None:
                 confirm = getpass('Please confirm your password: ')
                 if self.password != confirm:
                     error('account', 'init error: passwords do not match')
                     sys.exit(1)
                 else:
                     self.new()
+            else:
+                self.new()
 
         print 'Ready.'
 
