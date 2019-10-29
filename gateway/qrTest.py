@@ -133,7 +133,7 @@ class Gateway(Frame):
 
     def send_register(self):
         response = requests.post("http://165.22.183.203:10000/connect",json={"gateway":self.get_gatewayID()})
-        print(resopnse)
+        print(response)
         return 0
 
     def sensor_setup(self):
