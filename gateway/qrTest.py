@@ -98,6 +98,7 @@ class Gateway(Frame):
         pwwin.destroy()
         return pw
 
+    #starts kit as a multiprocess and sends register request to api
     def kit_setup(self, pw=None):
         kit = mp.Process(target=lambda: self.kit_start(pw))
         kit.start()
@@ -132,6 +133,7 @@ class Gateway(Frame):
 
     def send_register(self):
         response = requests.post("http://165.22.183.203:10000/connect",json={"gateway":self.get_gatewayID()})
+        print(resopnse)
         return 0
 
     def sensor_setup(self):
