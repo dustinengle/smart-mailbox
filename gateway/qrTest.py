@@ -102,6 +102,8 @@ class Gateway(Frame):
     def kit_setup(self, pw=None):
         kit = mp.Process(target=lambda: self.kit_start(pw))
         kit.start()
+        time.sleep(10)
+        self.send_register()
 
     def kit_start(self, pw=None):
         print('kit_setup')
@@ -125,8 +127,6 @@ class Gateway(Frame):
         controller.setup(pw)
         controller.start()
 
-        time.sleep(10)
-        self.send_register()
         # Wait for SIGINT.
         signal.pause()
         return 0
