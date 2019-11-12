@@ -16,6 +16,9 @@ if '/safebox' in pwd:
     pwd = '../'
 sys.path.insert(0, pwd)
 
+#mailbox number variable
+boxNum = 0
+
 import kit.env as env
 from kit.crypto import decrypt, encrypt
 from kit.file import read_file, write_file
@@ -32,7 +35,7 @@ def get_channel():
   topics = []
   if isinstance(channel, basestring):
       topics = channel.split(',')
-  return topics[0]
+  return topics[boxNum]
 
 def get_topic():
     # Handle topics string or slice.
@@ -44,6 +47,9 @@ def handle(msg):
         info('handle', str(msg))
         #if msg.get_base_name() != base_name:
         #    return
+
+        if(msg.get_topic() != self.get_topic()):
+            return
 
         name = msg.get_name()
         if name == 'AUTH':
@@ -125,10 +131,13 @@ def loop():
     finally:
         time.sleep(0)
 
-def setup():
+def setup(box):
     print('Program is starting ... ')
     print('Press Ctrl-C to exit.')
     lora.init()
+
+    boxNum = box
+    print('Mailbox Number: ' boxNum)
 
     info('send', 'STATUS')
     packet = bytearray(config.OP_STATUS_SIZE)
@@ -143,12 +152,14 @@ def setup():
     info('send', 'ACK {}'.format(lora.packet_str(packet)))
 
 if __name__ == '__main__':
+    boxNum = sys.argv[1]
     setup()
     looping = True
 
     try:
         env.load(envPath)
-        subscribe(fn=handle, channel='inbound')
+        #subscribe(fn=handle, channel='inbound')
+        subscribe(fn=handle, channel=get_topic())
 
         while looping:
             get_message()
