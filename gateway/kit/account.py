@@ -10,14 +10,14 @@ from codec import decode, encode
 from crypto import decrypt, encrypt, hash
 from file import is_file, read_file, rename, write_file
 from logger import error, info
-from stellar_base.address import Address
-from stellar_base.builder import Builder
-from stellar_base.horizon import horizon_livenet, horizon_testnet
-from stellar_base.keypair import Keypair
-from stellar_base.memo import HashMemo
-from stellar_base.operation import CreateAccount
-from stellar_base.transaction import Transaction
-from stellar_base.transaction_envelope import TransactionEnvelope as TE
+from sdk.address import Address
+from sdk.builder import Builder
+from sdk.horizon import horizon_livenet, horizon_testnet
+from sdk.keypair import Keypair
+from sdk.memo import HashMemo
+from sdk.operation import CreateAccount
+from sdk.transaction import Transaction
+from sdk.transaction_envelope import TransactionEnvelope as TE
 
 class Account():
     """The :class:`Account` handles the interaction between the blockchain
