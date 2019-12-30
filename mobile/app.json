@@ -1,0 +1,35 @@
+{
+    "expo": {
+        "name": "ItsHere",
+        "slug": "itshere",
+        "privacy": "public",
+        "sdkVersion": "35.0.0",
+        "platforms": [
+            "ios",
+            "android",
+            "web"
+        ],
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/icon.png",
+        "splash": {
+        "image": "./assets/images/splash.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "bundleIdentifier": "io.itshere.mobile",
+            "icon": "./assets/images/icon_white.png",
+            "supportsTablet": true
+        },
+        "android": {
+            "package": "io.itshere.mobile"
+        }
+    }
+}

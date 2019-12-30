@@ -7,7 +7,8 @@ import (
 
 const (
 	// Host is the StreamIOT host address for requests.
-	Host = "https://streamiot.dev"
+	Host = "https://test-dashboard.streamiot.com"
+	//Host = "https://streamiot.dev"
 )
 
 // Routes
@@ -43,6 +44,10 @@ const (
 	// Post
 	PostUser = "/api/trigxaccount"
 )
+
+func init() {
+	fmt.Printf("Connecting to host: %s\n", Host)
+}
 
 // URL will replace identifiers will the supplied value.
 // Can handle up to two identifiers that should follow:

@@ -33,8 +33,8 @@ func (ts Things) String() (s string) {
 	return
 }
 
-func ThingCreate(token, name, kind string) (err error) {
-	data := &Thing{Name: name, Type: kind}
+func ThingCreate(token, name, kind, meta string) (err error) {
+	data := &Thing{Meta: meta, Name: name, Type: kind}
 	url := URL(PostThing)
 	err = Post(url, token, data, nil)
 	return

@@ -1,0 +1,50 @@
+
+export const ACTION = {
+  ACCOUNT: '@action-account',
+  GATEWAYS: '@action-gateways',
+  LOADING: '@action-loading',
+  MAILBOXES: '@action-mailboxes',
+  PINS: '@action-pins',
+  USER: '@action-user',
+  USERS: '@action-users',
+}
+
+export const ICON = {
+  ADD: 'plus',
+  BATTERY_100: 'battery',
+  BATTERY_90: 'battery-90',
+  BATTERY_80: 'battery-80',
+  BATTERY_70: 'battery-70',
+  BATTERY_60: 'battery-60',
+  BATTERY_50: 'battery-50',
+  BATTERY_40: 'battery-40',
+  BATTERY_30: 'battery-30',
+  BATTERY_20: 'battery-20',
+  BATTERY_10: 'battery-10',
+  CLOSE: 'close',
+  DASHBOARD: 'view-dashboard',
+  DELETE: 'delete',
+  DETAIL: 'eye',
+  DOWN: 'flag-outline',
+  EDIT: 'pencil',
+  EMAIL: 'email',
+  EMPTY: 'package-variant',
+  GATEWAY: 'console-network',
+  MAILBOX: 'mailbox',
+  MESSAGES: 'android-messages',
+  LOCKED: 'lock',
+  PACKAGE: 'package-variant-closed',
+  PHONE: 'phone',
+  PIN: 'numeric',
+  SAVE: 'content-save',
+  SETTINGS: 'settings',
+  UNLOCKED: 'lock-open',
+  UP: 'flag',
+  USER: 'account-group',
+  WALLET: 'wallet',
+}
+
+export default {
+  ACTION,
+  ICON,
+}
